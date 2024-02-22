@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -24,5 +26,6 @@ public class Member extends BaseTimeEntity {
     private String email;
     private Boolean advertisement;
 
-
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<MemberPill> memberPills = new ArrayList<>();
 }
