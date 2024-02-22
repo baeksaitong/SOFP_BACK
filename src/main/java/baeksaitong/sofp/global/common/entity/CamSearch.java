@@ -20,5 +20,5 @@ public class CamSearch {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "history_id")
-    private Member member;
+    private History history;
 }
