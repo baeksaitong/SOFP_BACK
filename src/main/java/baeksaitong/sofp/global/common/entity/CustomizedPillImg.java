@@ -19,5 +19,6 @@ public class CustomizedPillImg {
     private String imgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "favorite_id")
     private Favorite favorite;
 }

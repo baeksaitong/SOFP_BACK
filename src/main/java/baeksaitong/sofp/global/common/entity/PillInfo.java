@@ -19,6 +19,6 @@ public class PillInfo {
     private String effect;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "pill_id")
+    @JoinColumn(name = "pill_id")
     private Pill pill;
 }

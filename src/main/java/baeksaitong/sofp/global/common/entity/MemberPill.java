@@ -16,10 +16,10 @@ public class MemberPill {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "pill_id")
+    @JoinColumn(name = "pill_id")
     private Pill pill;
 }
