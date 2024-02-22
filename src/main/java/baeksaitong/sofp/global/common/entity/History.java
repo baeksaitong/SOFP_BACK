@@ -28,4 +28,8 @@ public class History {
     @BatchSize(size = 100)
     @OneToMany(mappedBy = "history",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CamSearch> camSearches = new ArrayList<>();
+
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "history",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<FilterSearch> filterSearches = new ArrayList<>();
 }
