@@ -2,10 +2,11 @@ package baeksaitong.sofp.global.common.entity;
 
 import baeksaitong.sofp.global.common.entity.enums.SearchType;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.BatchSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -23,4 +24,8 @@ public class History {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "history",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CamSearch> camSearches = new ArrayList<>();
 }
