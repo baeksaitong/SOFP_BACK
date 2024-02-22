@@ -6,6 +6,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -27,4 +31,8 @@ public class Favorite {
     @Enumerated(EnumType.STRING)
     @Column(name = "search_type")
     private SearchType searchType;
+
+    @BatchSize(size = 100)
+    @OneToMany(mappedBy = "favorite",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CustomizedPillImg> customizedPillImgs = new ArrayList<>();
 }
