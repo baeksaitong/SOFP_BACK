@@ -25,7 +25,4 @@ public class Member extends BaseTimeEntity {
 
     private String email;
     private Boolean advertisement;
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<MemberPill> memberPills = new ArrayList<>();
 }
