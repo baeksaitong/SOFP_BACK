@@ -1,0 +1,5 @@
+package baeksaitong.sofp.global.common.entity.enums;
+
+public enum ColorType {
+    WHITE,YELLOW,ORANGE,PINK,RED,BROWN,LIGHTGREEN,GREEN,TURQUOISE,BLUE,INDIGO,VIOLET,PURPLE,GRAY,BLACK,TRANSPARENT,ALL
+}
