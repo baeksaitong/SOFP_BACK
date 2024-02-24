@@ -1,7 +1,7 @@
 package baeksaitong.sofp.domain.verification.service;
 
 import baeksaitong.sofp.global.common.service.RedisService;
-import baeksaitong.sofp.global.error.dto.MailErrorCode;
+import baeksaitong.sofp.domain.verification.error.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.error.dto;
+package baeksaitong.sofp.domain.verification.error;
 
 import baeksaitong.sofp.global.error.code.ErrorCode;
 import lombok.AllArgsConstructor;

@@ -1,9 +1,7 @@
-package baeksaitong.sofp.global.error.dto;
+package baeksaitong.sofp.global.error.code;
 
-import baeksaitong.sofp.global.error.code.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
@@ -20,7 +18,7 @@ public enum CommonErrorCode implements ErrorCode {
     FORBIDDEN(HttpStatus.FORBIDDEN,"C-008","접근이 허용되지 않았습니다."),
     NULL_POINT(HttpStatus.NOT_FOUND, "C-009", "null pointer exception 발생");
 
-    private HttpStatus status;
-    private String code;
-    private String message;
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
 }

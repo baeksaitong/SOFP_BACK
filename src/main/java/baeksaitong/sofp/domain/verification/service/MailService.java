@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.verification.service;
 
-import baeksaitong.sofp.global.error.dto.MailErrorCode;
+import baeksaitong.sofp.domain.verification.error.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
