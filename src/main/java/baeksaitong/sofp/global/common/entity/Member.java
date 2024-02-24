@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -23,6 +22,5 @@ public class Member extends BaseTimeEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    private String email;
     private Boolean advertisement;
 }
