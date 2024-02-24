@@ -22,7 +22,10 @@ public class SecurityConfig {
             "/health",
 
             /* auth */
-            "/app/auth/**"
+            "/app/auth/**",
+
+            /* verification */
+            "/app/verification"
     };
 
     @Bean

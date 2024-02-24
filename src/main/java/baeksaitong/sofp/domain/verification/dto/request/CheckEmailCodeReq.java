@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.auth.dto.request;
+package baeksaitong.sofp.domain.verification.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.auth.service;
+package baeksaitong.sofp.domain.verification.service;
 
 import baeksaitong.sofp.global.error.dto.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
