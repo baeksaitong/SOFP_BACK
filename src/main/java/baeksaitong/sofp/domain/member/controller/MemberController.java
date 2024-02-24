@@ -22,4 +22,10 @@ public class MemberController {
         memberService.sendEmailCode(email);
         return BaseResponse.ok("인증 코드를 발송하였습니다.");
     }
+
+    @PostMapping("/mail/checkCode")
+    public ResponseEntity<Boolean> checkEmailCode(@RequestBody @Valid CheckEmailCodeReq req){
+        boolean verified = memberService.checkEmailCode(req.getEmail(), req.getCode());
+        return BaseResponse.ok(verified);
+    }
 }

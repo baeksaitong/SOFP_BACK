@@ -1,12 +1,16 @@
 package baeksaitong.sofp.domain.member.service;
 
 import baeksaitong.sofp.global.common.service.RedisService;
+import baeksaitong.sofp.global.error.dto.MailErrorCode;
+import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Random;
+
+import static baeksaitong.sofp.global.common.Constants.SING_UP_FLAG;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +21,8 @@ public class MemberService {
 
     private final int CODE_LENGTH = 6;
 
-    @Value("${auth-code-expiration-minutes}")
-    private final long CODE_MINUTE;
+    @Value("${spring.mail.auth-code-expiration-minutes}")
+    private int CODE_MINUTE;
 
     public void sendEmailCode(String email) {
         String code = makeRandomNumber();
@@ -27,9 +31,10 @@ public class MemberService {
                 "인증번호 : " +  code +
                         "<br> 유효시간은 " + CODE_MINUTE + "분 입니다." +
                         "<br> 인증번호를 제대로 입력해주세요";
+        String key = SING_UP_FLAG + code;
 
         mailService.mailSend(email,title,content);
-        redisService.setValues(email, code, Duration.ofMinutes(CODE_MINUTE));
+        redisService.setValues(email, key, Duration.ofMinutes(CODE_MINUTE));
     }
 
     private String makeRandomNumber() {
@@ -40,5 +45,20 @@ public class MemberService {
         }
 
         return randomNumber.toString();
+    }
+
+    public boolean checkEmailCode(String email, String code) {
+        String key = SING_UP_FLAG + email;
+        
+        if(!redisService.hasKey(key)){
+            throw new BusinessException(MailErrorCode.EXPIRED_VERIFICATION_CODE);
+        }
+
+        if(!code.equals(redisService.getValues(key))){
+            throw new BusinessException(MailErrorCode.INCORRECT_VERIFICATION_CODE);
+        }
+        redisService.deleteValues(key);
+
+        return true;
     }
 }
