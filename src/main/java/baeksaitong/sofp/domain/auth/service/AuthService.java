@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.member.service;
+package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.global.common.service.RedisService;
 import baeksaitong.sofp.global.error.dto.MailErrorCode;
@@ -14,7 +14,7 @@ import static baeksaitong.sofp.global.common.Constants.SING_UP_FLAG;
 
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class AuthService {
 
     private final MailService mailService;
     private final RedisService redisService;
