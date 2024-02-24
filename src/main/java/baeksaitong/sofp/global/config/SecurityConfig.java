@@ -21,8 +21,8 @@ public class SecurityConfig {
             /* health check */
             "/health",
 
-            /* member */
-            "/app/member/**"
+            /* auth */
+            "/app/auth/**"
     };
 
     @Bean
