@@ -1,5 +1,6 @@
 package baeksaitong.sofp.global.common.entity;
 
+import baeksaitong.sofp.global.common.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Member extends BaseTimeEntity {
+public class Member extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,4 +24,7 @@ public class Member extends BaseTimeEntity {
     private String phoneNumber;
 
     private Boolean advertisement;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
 }
