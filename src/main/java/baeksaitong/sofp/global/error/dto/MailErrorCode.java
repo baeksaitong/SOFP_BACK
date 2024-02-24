@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum BusinessErrorCode implements ErrorCode {
+public enum MailErrorCode implements ErrorCode {
     FAILED_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR,"M-000","메일 전송에 실패했습니다.");
 
     private HttpStatus status;

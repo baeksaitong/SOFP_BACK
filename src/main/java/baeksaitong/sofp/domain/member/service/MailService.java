@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.member.service;
 
-import baeksaitong.sofp.global.error.dto.BusinessErrorCode;
+import baeksaitong.sofp.global.error.dto.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -29,7 +29,7 @@ public class MailService {
             helper.setText(content,true);
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new BusinessException(BusinessErrorCode.FAILED_SEND_EMAIL);
+            throw new BusinessException(MailErrorCode.FAILED_SEND_EMAIL);
         }
 
 
