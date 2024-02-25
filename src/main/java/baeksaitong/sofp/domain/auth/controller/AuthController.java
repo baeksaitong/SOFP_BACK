@@ -21,7 +21,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(tags = "1. Member", summary = "회원 가입", description = "회원 가입을 진행합니다.")
+    @Operation(tags = "1. Auth", summary = "회원 가입", description = "회원 가입을 진행합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 가입에 성공했습니다."),
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 이미 존재하는 아이디입니다.",
@@ -33,7 +33,7 @@ public class AuthController {
         return BaseResponse.ok("회원 가입에 성공했습니다.");
     }
 
-    @Operation(tags = "1. Member", summary = "아이디 중복 검사", description = "아이디 중복 여부를 검사합니다.")
+    @Operation(tags = "1. Auth", summary = "아이디 중복 검사", description = "아이디 중복 여부를 검사합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "사용가능 한 아이디입니다."),
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 이미 존재하는 아이디입니다.",
