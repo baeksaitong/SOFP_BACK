@@ -1,7 +1,9 @@
 package baeksaitong.sofp.domain.auth.controller;
 
 import baeksaitong.sofp.domain.auth.dto.request.CheckIdReq;
+import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
 import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
+import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.service.AuthService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
@@ -44,4 +46,11 @@ public class AuthController {
         authService.checkId(req);
         return BaseResponse.ok("사용가능 한 아이디입니다.");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginRes> login(@RequestBody LoginReq req){
+        return BaseResponse.ok(new LoginRes(authService.login(req)));
+    }
+
+
 }
