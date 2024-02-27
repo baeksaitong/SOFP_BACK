@@ -1,7 +1,7 @@
 package baeksaitong.sofp.global.error.handler;
 
 import baeksaitong.sofp.global.error.code.ErrorCode;
-import baeksaitong.sofp.global.error.dto.CommonErrorCode;
+import baeksaitong.sofp.global.error.code.CommonErrorCode;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import jakarta.validation.ConstraintViolationException;
