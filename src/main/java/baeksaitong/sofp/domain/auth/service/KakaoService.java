@@ -24,13 +24,13 @@ public class KakaoService {
     private final AuthService authService;
 
 
-    @Value("${social.kakao.secret.client-id}")
+    @Value("${social.kakao.client.id}")
     private String clientId;
-    @Value("${social.kakao.redirect-url}")
+    @Value("${social.kakao.url.redirect}")
     private String redirectUrl;
-    @Value("${social.kakao.token-url}")
+    @Value("${social.kakao.url.token}")
     private String tokenUrl;
-    @Value("${social.kakao.profile-url}")
+    @Value("${social.kakao.url.profile}")
     private String profileUrl;
 
     public String login(String code) {
