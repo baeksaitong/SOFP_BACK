@@ -2,6 +2,8 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.kakao.KakaoProfile;
 import baeksaitong.sofp.domain.auth.dto.kakao.KakaoToken;
+import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
+import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.KakaoFeignClient;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
@@ -34,7 +36,26 @@ public class KakaoService {
     public String login(String code) {
         KakaoToken kakaoToken = getToken(code);
         KakaoProfile profile = getProfile(kakaoToken.accessToken());
-        return "테스트";
+
+        if(!memberRepository.existsByUid(profile.getEmail())){
+            authService.singUp(
+                    SignUpReq.builder()
+                            .email(profile.getEmail())
+                            .phone(profile.getPhone())
+                            .password(profile.getId().toString())
+                            .birthday(profile.getBirthday())
+                            .name(profile.getName())
+                            .advertisement(true)
+                            .build());
+        }
+
+
+        return authService.login(
+                LoginReq.builder()
+                        .id(profile.getEmail())
+                        .password(profile.getId().toString())
+                        .build()
+        );
     }
 
     private KakaoProfile getProfile(String token){
