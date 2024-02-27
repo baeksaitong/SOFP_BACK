@@ -2,8 +2,11 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.naver.NaverProfile;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
+import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
+import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.NaverFeignClient;
+import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,8 @@ import static baeksaitong.sofp.global.common.Constants.*;
 public class NaverService {
 
     private final NaverFeignClient naverFeignClient;
+    private final MemberRepository memberRepository;
+    private final AuthService authService;
 
     @Value("${social.naver.client.id}")
     private String clientId;
@@ -38,7 +43,25 @@ public class NaverService {
         NaverToken token = getToken(code);
         NaverProfile profile = getInfo(token.accessToken());
 
-        return null;
+        if(!memberRepository.existsByUid(profile.getEmail())){
+            authService.singUp(
+                    SignUpReq.builder()
+                            .email(profile.getEmail())
+                            .phone(profile.getPhone())
+                            .password(profile.getId().toString())
+                            .birthday(profile.getBirthday())
+                            .name(profile.getName())
+                            .advertisement(true)
+                            .build());
+        }
+
+
+        return authService.login(
+                LoginReq.builder()
+                        .id(profile.getEmail())
+                        .password(profile.getId().toString())
+                        .build()
+        );
     }
 
     private NaverToken getToken(String code){
