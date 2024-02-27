@@ -28,7 +28,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public void singUp(SignUpReq req) {
-        if(!memberRepository.existsByUid(req.getEmail())){
+        if(memberRepository.existsByUid(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
 
@@ -46,7 +46,7 @@ public class AuthService {
     }
 
     public void checkId(CheckIdReq req) {
-        if(!memberRepository.existsByUid(req.getEmail())){
+        if(memberRepository.existsByUid(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
     }
