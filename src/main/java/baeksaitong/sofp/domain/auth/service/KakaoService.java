@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 
+import static baeksaitong.sofp.global.common.Constants.*;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -70,7 +72,7 @@ public class KakaoService {
 
     private KakaoToken getToken(String code) {
         try {
-            return kakaoFeignClient.getToken(new URI(tokenUrl),"authorization_code", clientId, redirectUrl, code);
+            return kakaoFeignClient.getToken(new URI(tokenUrl), OAUTH_GRANT_TYPE, clientId, redirectUrl, code);
         } catch (Exception e) {
             log.error("error while getting kakao user token: ", e);
             throw new BusinessException(AuthErrorCode.KAKAO_ERROR);
