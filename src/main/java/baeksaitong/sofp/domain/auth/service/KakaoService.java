@@ -2,11 +2,8 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.kakao.KakaoProfile;
 import baeksaitong.sofp.domain.auth.dto.kakao.KakaoToken;
-import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
-import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.KakaoFeignClient;
-import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +19,6 @@ import static baeksaitong.sofp.global.common.Constants.*;
 @RequiredArgsConstructor
 public class KakaoService {
     private final KakaoFeignClient kakaoFeignClient;
-    private final MemberRepository memberRepository;
     private final AuthService authService;
 
 
@@ -39,25 +35,7 @@ public class KakaoService {
         KakaoToken kakaoToken = getToken(code);
         KakaoProfile profile = getProfile(kakaoToken.accessToken());
 
-        if(!memberRepository.existsByUid(profile.getEmail())){
-            authService.singUp(
-                    SignUpReq.builder()
-                            .email(profile.getEmail())
-                            .phone(profile.getPhone())
-                            .password(profile.getId().toString())
-                            .birthday(profile.getBirthday())
-                            .name(profile.getName())
-                            .advertisement(true)
-                            .build());
-        }
-
-
-        return authService.login(
-                LoginReq.builder()
-                        .id(profile.getEmail())
-                        .password(profile.getId().toString())
-                        .build()
-        );
+        return authService.oauthLogin(profile.getEmail(), profile.getId().toString(), profile.getPhone(), profile.getBirthday(), profile.getName());
     }
 
     private KakaoProfile getProfile(String token){

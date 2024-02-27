@@ -16,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 import static baeksaitong.sofp.global.common.entity.enums.MemberRole.ROLE_USER;
 
 @Service
@@ -70,5 +72,25 @@ public class AuthService {
                 .authenticate(usernamePasswordAuthenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return jwtTokenProvider.createAccessToken(authentication);
+    }
+
+    public String oauthLogin(
+            String email, String id, String phone, LocalDate birthday, String name
+    ){
+        if(!memberRepository.existsByUid(email)){
+            singUp(SignUpReq.builder()
+                    .email(email)
+                    .phone(phone)
+                    .password(id)
+                    .birthday(birthday)
+                    .name(name)
+                    .advertisement(true)
+                    .build());
+        }
+
+        return login(LoginReq.builder()
+                .id(email)
+                .password(id)
+                .build());
     }
 }
