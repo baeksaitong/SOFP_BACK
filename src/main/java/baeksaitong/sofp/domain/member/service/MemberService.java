@@ -4,14 +4,12 @@ import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Slf4j
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -25,6 +23,11 @@ public class MemberService {
 
         String imgUrl = awsS3Service.upload(img, member.getId());
         member.setImgUrl(imgUrl);
+        memberRepository.save(member);
+    }
+
+    public void setNickName(String nickname, Member member) {
+        member.setNickname(nickname);
         memberRepository.save(member);
     }
 }

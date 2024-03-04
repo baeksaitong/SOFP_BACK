@@ -36,4 +36,15 @@ public class MemberController {
         memberService.setProfileImg(req.getProfileImg(),member);
         return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
     }
+
+
+    @Operation(tags = "3. Member", summary = "닉네임 등록", description = "닉네임을 등록합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "닉네임을 등록에 성공했습니다")
+    })
+    @GetMapping("/nickname")
+    ResponseEntity<String> setNickname(@RequestParam String nickname, @AuthenticationPrincipal Member member){
+        memberService.setNickName(nickname, member);
+        return BaseResponse.ok("닉네임을 등록에 성공했습니다");
+    }
 }
