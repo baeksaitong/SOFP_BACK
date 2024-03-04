@@ -1,8 +1,11 @@
 package baeksaitong.sofp.domain.health.service;
 
 import baeksaitong.sofp.domain.health.dto.response.AllergyRes;
+import baeksaitong.sofp.domain.health.dto.response.DiseaseRes;
 import baeksaitong.sofp.domain.health.repository.AllergyRepository;
+import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
 import baeksaitong.sofp.global.common.entity.Allergy;
+import baeksaitong.sofp.global.common.entity.Disease;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,7 @@ import java.util.stream.Collectors;
 public class HealthService {
 
     private final AllergyRepository allergyRepository;
+    private final DiseaseRepository diseaseRepository;
 
     public AllergyRes getAllergyList() {
 
@@ -25,5 +29,14 @@ public class HealthService {
                 .collect(Collectors.toList());
 
         return new AllergyRes(allergyList);
+    }
+
+    public DiseaseRes getDiseaseList() {
+        List<String> diseaseList = diseaseRepository.findAll()
+                .stream()
+                .map(Disease::getName)
+                .collect(Collectors.toList());
+
+        return new DiseaseRes(diseaseList);
     }
 }

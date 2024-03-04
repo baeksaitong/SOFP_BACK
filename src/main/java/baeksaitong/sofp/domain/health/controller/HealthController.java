@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.health.controller;
 
 import baeksaitong.sofp.domain.health.dto.response.AllergyRes;
+import baeksaitong.sofp.domain.health.dto.response.DiseaseRes;
 import baeksaitong.sofp.domain.health.service.HealthService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,10 @@ public class HealthController {
     @GetMapping("/allergy")
     ResponseEntity<AllergyRes> getAllergyList(){
         return BaseResponse.ok(healthService.getAllergyList());
+    }
+
+    @GetMapping("/disease")
+    ResponseEntity<DiseaseRes> getDiseaseList(){
+        return BaseResponse.ok(healthService.getDiseaseList());
     }
 }
