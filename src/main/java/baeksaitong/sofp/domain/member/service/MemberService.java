@@ -1,12 +1,13 @@
 package baeksaitong.sofp.domain.member.service;
 
 import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
+import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
 import baeksaitong.sofp.domain.health.repository.AllergyRepository;
+import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
 import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
+import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
-import baeksaitong.sofp.global.common.entity.Allergy;
-import baeksaitong.sofp.global.common.entity.Member;
-import baeksaitong.sofp.global.common.entity.MemberAllergy;
+import baeksaitong.sofp.global.common.entity.*;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,9 @@ public class MemberService {
     private final AwsS3Service awsS3Service;
     private final MemberRepository memberRepository;
     private final MemberAllergyRepository memberAllergyRepository;
+    private final MemberDiseaseRepository memberDiseaseRepository;
     private final AllergyRepository allergyRepository;
+    private final DiseaseRepository diseaseRepository;
 
     public void setProfileImg(MultipartFile img, Member member) {
         if(member.getImgUrl() != null) {
@@ -56,6 +59,24 @@ public class MemberService {
                     .build();
 
             memberAllergyRepository.save(memberAllergy);
+        }
+    }
+
+    public void setDisease(List<String> diseaseList, Member member) {
+        if(diseaseList.isEmpty()){
+            return;
+        }
+
+        for (String name : diseaseList) {
+            Disease disease = diseaseRepository.findByName(name).orElseThrow(
+                    () -> new BusinessException(DiseaseErrorCode.NO_SUCH_DISEASE)
+            );
+            MemberDisease memberDisease = MemberDisease.builder()
+                    .member(member)
+                    .disease(disease)
+                    .build();
+
+            memberDiseaseRepository.save(memberDisease);
         }
     }
 }
