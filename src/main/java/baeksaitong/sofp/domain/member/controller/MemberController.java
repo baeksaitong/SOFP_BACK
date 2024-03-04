@@ -49,9 +49,15 @@ public class MemberController {
         return BaseResponse.ok("닉네임을 등록에 성공했습니다");
     }
 
+    @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "알레르기 정보 등록에 성공했습니다"),
+            @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/allergy")
     ResponseEntity<String> setAllergy(@RequestBody AllergyReq req, @AuthenticationPrincipal Member member){
         memberService.setAllergy(req.getAllergyList(), member);
-        return BaseResponse.ok("알레르기 등록에 성공했습니다");
+        return BaseResponse.ok("알레르기 정보 등록에 성공했습니다");
     }
 }
