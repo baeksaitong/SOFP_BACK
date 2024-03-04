@@ -40,7 +40,6 @@ public class AuthService {
                 .uid(req.getEmail())
                 .birthday(req.getBirthday())
                 .pwd(passwordEncoder.encode(req.getPassword()))
-                .phoneNumber(req.getPhone())
                 .advertisement(req.getAdvertisement())
                 .role(ROLE_USER)
                 .build();
@@ -84,14 +83,13 @@ public class AuthService {
     }
 
     public LoginRes oauthLogin(
-            String email, String id, String phone, LocalDate birthday, String name
+            String email, String id, LocalDate birthday, String name
     ){
         boolean isNew = false;
 
         if(!memberRepository.existsByUid(email)){
             singUp(SignUpReq.builder()
                     .email(email)
-                    .phone(phone)
                     .password(id)
                     .birthday(birthday)
                     .name(name)

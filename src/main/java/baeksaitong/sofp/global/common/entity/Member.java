@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
 @Getter
 public class Member extends BaseTimeEntity implements UserDetails {
     @Id
@@ -25,8 +26,9 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private LocalDate birthday;
     private String uid;
     private String pwd;
-    @Column(name = "phone_number")
-    private String phoneNumber;
+
+    @Column(name = "img_url")
+    private String imgUrl;
 
     private Boolean advertisement;
 
@@ -45,7 +47,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return id.toString();
+        return uid;
     }
 
     @Override

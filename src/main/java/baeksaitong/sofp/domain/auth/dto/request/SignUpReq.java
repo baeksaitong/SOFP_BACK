@@ -27,10 +27,6 @@ public class SignUpReq {
     @NotBlank
     private String password;
 
-    @NotBlank
-    @Pattern(regexp = PHONE_NUM_REGEXP, message = "올바르지 않은 전화번호 입니다.")
-    private String phone;
-
     @NotNull
     private Boolean advertisement;
 }
