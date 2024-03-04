@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class AllergyReq {
-    List<String> AllergyList = new ArrayList<>();
+    List<String> allergyList = new ArrayList<>();
 }

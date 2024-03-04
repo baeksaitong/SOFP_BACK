@@ -9,5 +9,5 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class DiseaseReq {
-    List<String> DiseaseList = new ArrayList<>();
+    List<String> diseaseList = new ArrayList<>();
 }
