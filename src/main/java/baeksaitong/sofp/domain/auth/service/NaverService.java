@@ -40,7 +40,7 @@ public class NaverService {
         NaverToken token = getToken(code);
         NaverProfile profile = getInfo(token.accessToken());
 
-        return authService.oauthLogin(profile.getEmail(), profile.getId(), profile.getBirthday(), profile.getName());
+        return authService.oauthLogin(profile.getEmail(), profile.getId(), profile.getBirthday(), profile.getName(), profile.getGender());
 
     }
 

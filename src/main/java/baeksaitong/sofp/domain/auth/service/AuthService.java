@@ -42,6 +42,7 @@ public class AuthService {
                 .pwd(passwordEncoder.encode(req.getPassword()))
                 .advertisement(req.getAdvertisement())
                 .role(ROLE_USER)
+                .gender(req.getGender())
                 .build();
 
         memberRepository.save(member);
@@ -83,7 +84,7 @@ public class AuthService {
     }
 
     public LoginRes oauthLogin(
-            String email, String id, LocalDate birthday, String name
+            String email, String id, LocalDate birthday, String name, String gender
     ){
         boolean isNew = false;
 
@@ -94,6 +95,7 @@ public class AuthService {
                     .birthday(birthday)
                     .name(name)
                     .advertisement(true)
+                    .gender(gender)
                     .build());
             isNew = true;
         }

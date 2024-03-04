@@ -32,6 +32,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     private Boolean advertisement;
 
+    private String gender;
+
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 

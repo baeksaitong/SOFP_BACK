@@ -36,7 +36,7 @@ public class KakaoService {
         KakaoToken kakaoToken = getToken(code);
         KakaoProfile profile = getProfile(kakaoToken.accessToken());
 
-        return authService.oauthLogin(profile.getEmail(), profile.getId().toString(), profile.getBirthday(), profile.getName());
+        return authService.oauthLogin(profile.getEmail(), profile.getId().toString(), profile.getBirthday(), profile.getName(), profile.getGender());
     }
 
     private KakaoProfile getProfile(String token){
