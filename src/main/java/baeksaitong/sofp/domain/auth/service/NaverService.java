@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.naver.NaverProfile;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
+import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.NaverFeignClient;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -35,7 +36,7 @@ public class NaverService {
     @Value("${social.naver.url.profile}")
     private String profileUrl;
 
-    public String login(String code) {
+    public LoginRes login(String code) {
         NaverToken token = getToken(code);
         NaverProfile profile = getInfo(token.accessToken());
 
