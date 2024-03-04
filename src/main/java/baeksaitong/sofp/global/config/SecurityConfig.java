@@ -24,16 +24,16 @@ public class SecurityConfig {
             "/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources", "/swagger-resources/**",
 
             /* health check */
-            "/health",
+            "/health-check",
 
             /* auth */
             "/app/auth/**", "/app/oauth/**",
 
             /* verification */
-            "/app/verification",
+            "/app/verification/**",
 
             /* health */
-            "/app/health"
+            "/app/health/**"
     };
 
     private final JwtTokenProvider jwtTokenProvider;
