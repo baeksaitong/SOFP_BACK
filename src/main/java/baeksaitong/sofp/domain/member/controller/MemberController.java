@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.member.controller;
 
+import baeksaitong.sofp.domain.member.dto.request.AllergyReq;
 import baeksaitong.sofp.domain.member.dto.request.ProfileImgReq;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
@@ -46,5 +47,11 @@ public class MemberController {
     ResponseEntity<String> setNickname(@RequestParam String nickname, @AuthenticationPrincipal Member member){
         memberService.setNickName(nickname, member);
         return BaseResponse.ok("닉네임을 등록에 성공했습니다");
+    }
+
+    @PostMapping("/allergy")
+    ResponseEntity<String> setAllergy(@RequestBody AllergyReq req, @AuthenticationPrincipal Member member){
+        memberService.setAllergy(req.getAllergyList(), member);
+        return BaseResponse.ok("알레르기 등록에 성공했습니다");
     }
 }
