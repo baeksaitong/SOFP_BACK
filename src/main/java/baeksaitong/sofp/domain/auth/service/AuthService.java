@@ -40,9 +40,9 @@ public class AuthService {
                 .uid(req.getEmail())
                 .birthday(req.getBirthday())
                 .pwd(passwordEncoder.encode(req.getPassword()))
+                .gender(req.getGender())
                 .advertisement(req.getAdvertisement())
                 .role(ROLE_USER)
-                .gender(req.getGender())
                 .build();
 
         memberRepository.save(member);

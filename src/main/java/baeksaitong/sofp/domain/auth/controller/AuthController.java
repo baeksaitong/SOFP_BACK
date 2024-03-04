@@ -46,9 +46,9 @@ public class AuthController {
         return BaseResponse.ok("사용가능 한 아이디입니다.");
     }
 
-    @Operation(tags = "1. Auth", summary = "로그인", description = " 로그인을 진행합니다.")
+    @Operation(tags = "1. Auth", summary = "로그인", description = "로그인을 진행합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "신규 회원 여부=false, access 토큰"),
+            @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: A-001 | message: 존재하지 않는 아이디입니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "code: A-002 | message: 비밀번호가 일치하지 않습니다.",
