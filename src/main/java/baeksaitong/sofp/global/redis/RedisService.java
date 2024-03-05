@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common.service;
+package baeksaitong.sofp.global.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

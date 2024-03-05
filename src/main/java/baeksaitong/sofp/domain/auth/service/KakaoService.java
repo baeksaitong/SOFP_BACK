@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.kakao.KakaoProfile;
 import baeksaitong.sofp.domain.auth.dto.kakao.KakaoToken;
+import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.KakaoFeignClient;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -31,11 +32,11 @@ public class KakaoService {
     @Value("${social.kakao.url.profile}")
     private String profileUrl;
 
-    public String login(String code) {
+    public LoginRes login(String code) {
         KakaoToken kakaoToken = getToken(code);
         KakaoProfile profile = getProfile(kakaoToken.accessToken());
 
-        return authService.oauthLogin(profile.getEmail(), profile.getId().toString(), profile.getPhone(), profile.getBirthday(), profile.getName());
+        return authService.oauthLogin(profile.getEmail(), profile.getId().toString(), profile.getBirthday(), profile.getName(), profile.getGender());
     }
 
     private KakaoProfile getProfile(String token){

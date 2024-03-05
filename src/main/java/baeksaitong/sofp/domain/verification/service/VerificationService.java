@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.verification.service;
 
-import baeksaitong.sofp.global.common.service.RedisService;
+import baeksaitong.sofp.global.redis.RedisService;
 import baeksaitong.sofp.domain.verification.error.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;

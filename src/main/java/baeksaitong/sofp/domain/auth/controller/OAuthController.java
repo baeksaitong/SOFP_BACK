@@ -31,7 +31,7 @@ public class OAuthController {
     })
     @GetMapping("/kakao")
     public ResponseEntity<LoginRes> kakao(String code){
-        return BaseResponse.ok(new LoginRes(kakaoService.login(code)));
+        return BaseResponse.ok(kakaoService.login(code));
     }
 
     @Operation(tags = "2. OAuth", summary = "네이버 로그인", description = "네이버 인가코드를 전달합니다.")
@@ -42,6 +42,6 @@ public class OAuthController {
     })
     @GetMapping("/naver")
     public ResponseEntity<LoginRes> naver(String code){
-        return BaseResponse.ok(new LoginRes(naverService.login(code)));
+        return BaseResponse.ok(naverService.login(code));
     }
 }

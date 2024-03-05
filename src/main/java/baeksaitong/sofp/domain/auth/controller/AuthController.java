@@ -25,14 +25,13 @@ public class AuthController {
 
     @Operation(tags = "1. Auth", summary = "회원 가입", description = "회원 가입을 진행합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원 가입에 성공했습니다."),
+            @ApiResponse(responseCode = "200", description = "신규 회원 여부=true, access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 이미 존재하는 아이디입니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/sign-up")
-    public ResponseEntity<String> signUp(@RequestBody SignUpReq req){
-        authService.singUp(req);
-        return BaseResponse.ok("회원 가입에 성공했습니다.");
+    public ResponseEntity<LoginRes> signUp(@RequestBody SignUpReq req){
+        return BaseResponse.ok(authService.singUp(req));
     }
 
     @Operation(tags = "1. Auth", summary = "아이디 중복 검사", description = "아이디 중복 여부를 검사합니다.")
@@ -47,7 +46,7 @@ public class AuthController {
         return BaseResponse.ok("사용가능 한 아이디입니다.");
     }
 
-    @Operation(tags = "1. Auth", summary = "로그인", description = "로그인을 진행합니다.")
+    @Operation(tags = "1. Auth", summary = "로그인", description = "신규 회원 여부=false, 로그인을 진행합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: A-001 | message: 존재하지 않는 아이디입니다.",
@@ -57,7 +56,7 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<LoginRes> login(@RequestBody LoginReq req){
-        return BaseResponse.ok(new LoginRes(authService.login(req)));
+        return BaseResponse.ok(new LoginRes(false, authService.login(req)));
     }
 
 

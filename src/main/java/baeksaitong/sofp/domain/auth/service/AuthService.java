@@ -3,6 +3,7 @@ package baeksaitong.sofp.domain.auth.service;
 import baeksaitong.sofp.domain.auth.dto.request.CheckIdReq;
 import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
 import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
+import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.common.entity.Member;
@@ -29,7 +30,7 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public void singUp(SignUpReq req) {
+    public LoginRes singUp(SignUpReq req) {
         if(memberRepository.existsByUid(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
@@ -39,12 +40,20 @@ public class AuthService {
                 .uid(req.getEmail())
                 .birthday(req.getBirthday())
                 .pwd(passwordEncoder.encode(req.getPassword()))
-                .phoneNumber(req.getPhone())
+                .gender(req.getGender())
                 .advertisement(req.getAdvertisement())
                 .role(ROLE_USER)
                 .build();
 
         memberRepository.save(member);
+
+        return new LoginRes(
+                true,
+                login(LoginReq.builder()
+                .id(req.getEmail())
+                .password(req.getPassword())
+                .build())
+        );
     }
 
     public void checkId(CheckIdReq req) {
@@ -74,23 +83,27 @@ public class AuthService {
         return jwtTokenProvider.createAccessToken(authentication);
     }
 
-    public String oauthLogin(
-            String email, String id, String phone, LocalDate birthday, String name
+    public LoginRes oauthLogin(
+            String email, String id, LocalDate birthday, String name, String gender
     ){
+        boolean isNew = false;
+
         if(!memberRepository.existsByUid(email)){
             singUp(SignUpReq.builder()
                     .email(email)
-                    .phone(phone)
                     .password(id)
                     .birthday(birthday)
                     .name(name)
                     .advertisement(true)
+                    .gender(gender)
                     .build());
+            isNew = true;
         }
 
-        return login(LoginReq.builder()
+        return new LoginRes(isNew,
+                login(LoginReq.builder()
                 .id(email)
                 .password(id)
-                .build());
+                .build()));
     }
 }
