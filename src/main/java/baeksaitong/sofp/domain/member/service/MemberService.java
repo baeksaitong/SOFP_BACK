@@ -168,4 +168,17 @@ public class MemberService {
             memberPillRepository.save(memberPill);
         }
     }
+
+
+
+    public void removePill(List<Long> removePillIdList, Member member) {
+        if(removePillIdList.isEmpty()){
+            return;
+        }
+
+        for (Long PillId : removePillIdList) {
+            Pill pill = pillRepository.findById(PillId).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
+            memberPillRepository.deleteByMemberAndPill(member, pill);
+        }
+    }
 }
