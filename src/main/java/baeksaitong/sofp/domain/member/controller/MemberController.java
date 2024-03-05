@@ -3,6 +3,7 @@ package baeksaitong.sofp.domain.member.controller;
 import baeksaitong.sofp.domain.member.dto.request.*;
 import baeksaitong.sofp.domain.member.dto.response.AllergyRes;
 import baeksaitong.sofp.domain.member.dto.response.DiseaseRes;
+import baeksaitong.sofp.domain.member.dto.response.PillRes;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.common.entity.Member;
@@ -126,6 +127,15 @@ public class MemberController {
         memberService.removeDisease( req.getRemoveDiseaseList(), member);
         memberService.setDisease(req.getAddDiseaseList(), member);
         return BaseResponse.ok("질병 정보 수정에 성공했습니다");
+    }
+
+    @Operation(tags = "3. Member", summary = "복용 중인 알약 조회", description = "복용 중인 알약을 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "복용 중인 알약 리스트")
+    })
+    @PostMapping("/pill")
+    ResponseEntity<PillRes> getPill(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(memberService.getPill(member));
     }
 
     @Operation(tags = "3. Member", summary = "복용 중인 알약 등록", description = "복용 중인 알약을 등록합니다.")

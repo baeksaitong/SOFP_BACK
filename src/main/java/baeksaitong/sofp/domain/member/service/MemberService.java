@@ -7,6 +7,8 @@ import baeksaitong.sofp.domain.health.repository.AllergyRepository;
 import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
+import baeksaitong.sofp.domain.member.dto.response.PillInfoRes;
+import baeksaitong.sofp.domain.member.dto.response.PillRes;
 import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
 import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
 import baeksaitong.sofp.domain.member.repository.MemberPillRepository;
@@ -148,6 +150,13 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+    public PillRes getPill(Member member) {
+        return new PillRes(
+                memberPillRepository.findAllByMember(member).stream()
+                        .map(
+                                memberPill -> new PillInfoRes(memberPill.getPill().getId(), memberPill.getPill().getName())
+                        ).collect(Collectors.toList()));
+    }
 
     public void setPill(List<Long> pillIdList, Member member) {
         if(pillIdList.isEmpty()){
@@ -181,4 +190,6 @@ public class MemberService {
             memberPillRepository.deleteByMemberAndPill(member, pill);
         }
     }
+
+
 }
