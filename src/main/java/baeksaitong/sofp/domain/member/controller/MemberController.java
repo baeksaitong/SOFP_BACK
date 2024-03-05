@@ -1,6 +1,8 @@
 package baeksaitong.sofp.domain.member.controller;
 
 import baeksaitong.sofp.domain.member.dto.request.*;
+import baeksaitong.sofp.domain.member.dto.response.AllergyRes;
+import baeksaitong.sofp.domain.member.dto.response.DiseaseRes;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.common.entity.Member;
@@ -15,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/app/member")
@@ -65,8 +65,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원이 등록한 알레르기의 이름 리스트를 반환합니다.")
     })
     @GetMapping("/allergy")
-    ResponseEntity<List<String>> getAllergy(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(memberService.getAllergy(member));
+    ResponseEntity<AllergyRes> getAllergy(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(new AllergyRes(memberService.getAllergy(member)));
     }
 
     @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다.")
@@ -99,8 +99,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 정보 이름 리스트를 반환합니다.")
     })
     @GetMapping("/disease")
-    ResponseEntity<List<String>> getDisease(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(memberService.getDisease(member));
+    ResponseEntity<DiseaseRes> getDisease(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(new DiseaseRes(memberService.getDisease(member)));
     }
 
     @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다.")
