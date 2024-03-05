@@ -2,11 +2,14 @@ package baeksaitong.sofp.domain.member.service;
 
 import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
 import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
+import baeksaitong.sofp.domain.health.error.PillErrorCode;
 import baeksaitong.sofp.domain.health.repository.AllergyRepository;
 import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
+import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
 import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
 import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
+import baeksaitong.sofp.domain.member.repository.MemberPillRepository;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.common.entity.*;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -29,8 +32,10 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberAllergyRepository memberAllergyRepository;
     private final MemberDiseaseRepository memberDiseaseRepository;
+    private final MemberPillRepository memberPillRepository;
     private final AllergyRepository allergyRepository;
     private final DiseaseRepository diseaseRepository;
+    private final PillRepository pillRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
 
@@ -144,4 +149,23 @@ public class MemberService {
     }
 
 
+    public void setPill(List<Long> pillIdList, Member member) {
+        if(pillIdList.isEmpty()){
+            return;
+        }
+
+        for (Long pillId : pillIdList) {
+            Pill pill = pillRepository.findById(pillId).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
+
+            if(memberPillRepository.existsByMemberAndPill(member,pill)){
+                continue;
+            }
+
+            MemberPill memberPill = MemberPill.builder()
+                    .pill(pill)
+                    .member(member)
+                    .build();
+            memberPillRepository.save(memberPill);
+        }
+    }
 }

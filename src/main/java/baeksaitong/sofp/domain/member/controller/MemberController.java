@@ -128,6 +128,16 @@ public class MemberController {
         return BaseResponse.ok("질병 정보 수정에 성공했습니다");
     }
 
-
+    @Operation(tags = "3. Member", summary = "복용 중인 알약 등록", description = "복용 중인 알약을 등록합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "복용 중인 약을 등록에 성공했습니다"),
+            @ApiResponse(responseCode = "404", description = "code: P-000 | message: 존재하지 않는 알약입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/pill/add")
+    ResponseEntity<String> setPill(@RequestBody PillReq req, @AuthenticationPrincipal Member member){
+        memberService.setPill(req.getPillIdList(), member);
+        return BaseResponse.ok("복용 중인 알약 등록에 성공했습니다");
+    }
 
 }
