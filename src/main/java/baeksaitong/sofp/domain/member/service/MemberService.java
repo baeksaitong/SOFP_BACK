@@ -4,6 +4,7 @@ import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
 import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
 import baeksaitong.sofp.domain.health.repository.AllergyRepository;
 import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
+import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
 import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
 import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
@@ -11,6 +12,7 @@ import baeksaitong.sofp.global.common.entity.*;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,8 @@ public class MemberService {
     private final MemberDiseaseRepository memberDiseaseRepository;
     private final AllergyRepository allergyRepository;
     private final DiseaseRepository diseaseRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
 
     public void setProfileImg(MultipartFile img, Member member) {
         if(member.getImgUrl() != null) {
@@ -114,5 +118,15 @@ public class MemberService {
             Disease disease = diseaseRepository.findByName(diseaseName).orElseThrow(() -> new BusinessException(DiseaseErrorCode.NO_SUCH_DISEASE));
             memberDiseaseRepository.deleteByMemberAndDisease(member,disease);
         }
+    }
+
+    public void editMember(MemberEditReq req, Member member) {
+        member.setNickname(req.getNickname());
+        member.setGender(req.getGender());
+        member.setPwd(passwordEncoder.encode(req.getPassword()));
+        member.setBirthday(req.getBirthday());
+        member.setAdvertisement(req.getAdvertisement());
+
+        memberRepository.save(member);
     }
 }

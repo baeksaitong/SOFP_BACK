@@ -98,4 +98,14 @@ public class MemberController {
         return BaseResponse.ok("질병 정보 수정에 성공했습니다");
     }
 
+    @Operation(tags = "3. Member", summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원 정보 수정에 성공했습니다")
+    })
+    @PostMapping("/edit")
+    ResponseEntity<String> editMember(@RequestBody MemberEditReq req,  @AuthenticationPrincipal Member member){
+        memberService.editMember(req, member);
+        return BaseResponse.ok("회원 정보 수정에 성공했습니다");
+    }
+
 }
