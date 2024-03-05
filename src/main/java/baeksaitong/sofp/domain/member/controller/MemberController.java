@@ -35,7 +35,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/img")
-    ResponseEntity<String> setProfileImg(@ModelAttribute ProfileImgReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> setProfileImg(@ModelAttribute ProfileImgReq req, @AuthenticationPrincipal Member member){
         memberService.setProfileImg(req.getProfileImg(),member);
         return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
     }
@@ -46,7 +46,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "닉네임을 등록에 성공했습니다")
     })
     @GetMapping("/nickname")
-    ResponseEntity<String> setNickname(@RequestParam String nickname, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> setNickname(@RequestParam String nickname, @AuthenticationPrincipal Member member){
         memberService.setNickName(nickname, member);
         return BaseResponse.ok("닉네임을 등록에 성공했습니다");
     }
@@ -56,7 +56,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원 정보 수정에 성공했습니다")
     })
     @PostMapping("/edit")
-    ResponseEntity<String> editMember(@RequestBody MemberEditReq req,  @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> editMember(@RequestBody MemberEditReq req,  @AuthenticationPrincipal Member member){
         memberService.editMember(req, member);
         return BaseResponse.ok("회원 정보 수정에 성공했습니다");
     }
@@ -66,8 +66,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원이 등록한 알레르기의 이름 리스트를 반환합니다.")
     })
     @GetMapping("/allergy")
-    ResponseEntity<AllergyRes> getAllergy(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(new AllergyRes(memberService.getAllergy(member)));
+    public ResponseEntity<AllergyRes> getAllergyList(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(new AllergyRes(memberService.getAllergyList(member)));
     }
 
     @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다.")
@@ -77,7 +77,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/allergy/add")
-    ResponseEntity<String> setAllergy(@RequestBody AllergyReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> setAllergy(@RequestBody AllergyReq req, @AuthenticationPrincipal Member member){
         memberService.setAllergy(req.getAllergyList(), member);
         return BaseResponse.ok("알레르기 정보 등록에 성공했습니다");
     }
@@ -89,7 +89,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/allergy/edit")
-    ResponseEntity<String> editAllergy(@RequestBody AllergyEditReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> editAllergy(@RequestBody AllergyEditReq req, @AuthenticationPrincipal Member member){
         memberService.removeAllergy( req.getRemoveAllergyList(), member);
         memberService.setAllergy(req.getAddAllergyList(), member);
         return BaseResponse.ok("알레르기 정보 수정에 성공했습니다");
@@ -100,8 +100,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 정보 이름 리스트를 반환합니다.")
     })
     @GetMapping("/disease")
-    ResponseEntity<DiseaseRes> getDisease(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(new DiseaseRes(memberService.getDisease(member)));
+    public ResponseEntity<DiseaseRes> getDiseaseList(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(new DiseaseRes(memberService.getDiseaseList(member)));
     }
 
     @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다.")
@@ -111,7 +111,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/disease/add")
-    ResponseEntity<String> setDisease(@RequestBody DiseaseReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> setDisease(@RequestBody DiseaseReq req, @AuthenticationPrincipal Member member){
         memberService.setDisease(req.getDiseaseList(), member);
         return BaseResponse.ok("질병 정보 등록에 성공했습니다");
     }
@@ -123,7 +123,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/disease/edit")
-    ResponseEntity<String> editDisease(@RequestBody DiseaseEditReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> editDisease(@RequestBody DiseaseEditReq req, @AuthenticationPrincipal Member member){
         memberService.removeDisease( req.getRemoveDiseaseList(), member);
         memberService.setDisease(req.getAddDiseaseList(), member);
         return BaseResponse.ok("질병 정보 수정에 성공했습니다");
@@ -134,8 +134,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "복용 중인 알약 리스트")
     })
     @PostMapping("/pill")
-    ResponseEntity<PillRes> getPill(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(memberService.getPill(member));
+    public ResponseEntity<PillRes> getPillList(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(memberService.getPillList(member));
     }
 
     @Operation(tags = "3. Member", summary = "복용 중인 알약 등록", description = "복용 중인 알약을 등록합니다.")
@@ -145,7 +145,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/pill/add")
-    ResponseEntity<String> setPill(@RequestBody PillReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> setPill(@RequestBody PillReq req, @AuthenticationPrincipal Member member){
         memberService.setPill(req.getPillIdList(), member);
         return BaseResponse.ok("복용 중인 알약 등록에 성공했습니다");
     }
@@ -157,7 +157,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/pill/edit")
-    ResponseEntity<String> editPill(@RequestBody PillEditReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> editPill(@RequestBody PillEditReq req, @AuthenticationPrincipal Member member){
         memberService.removePill(req.getRemovePillIdList(), member);
         memberService.setPill(req.getAddPillIdList(), member);
         return BaseResponse.ok("복용 중인 알약 수정에 성공했습니다");

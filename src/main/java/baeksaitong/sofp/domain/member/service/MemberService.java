@@ -56,7 +56,17 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public List<String> getAllergy(Member member) {
+    public void editMember(MemberEditReq req, Member member) {
+        member.setNickname(req.getNickname());
+        member.setGender(req.getGender());
+        member.setPwd(passwordEncoder.encode(req.getPassword()));
+        member.setBirthday(req.getBirthday());
+        member.setAdvertisement(req.getAdvertisement());
+
+        memberRepository.save(member);
+    }
+
+    public List<String> getAllergyList(Member member) {
         return memberAllergyRepository.findAllByMember(member).stream()
                 .map(memberAllergy -> memberAllergy.getAllergy().getName())
                 .collect(Collectors.toList());
@@ -98,7 +108,7 @@ public class MemberService {
         }
     }
 
-    public List<String> getDisease(Member member) {
+    public List<String> getDiseaseList(Member member) {
         return memberDiseaseRepository.findAllByMember(member).stream()
                 .map(memberDisease -> memberDisease.getDisease().getName())
                 .collect(Collectors.toList());
@@ -140,17 +150,7 @@ public class MemberService {
         }
     }
 
-    public void editMember(MemberEditReq req, Member member) {
-        member.setNickname(req.getNickname());
-        member.setGender(req.getGender());
-        member.setPwd(passwordEncoder.encode(req.getPassword()));
-        member.setBirthday(req.getBirthday());
-        member.setAdvertisement(req.getAdvertisement());
-
-        memberRepository.save(member);
-    }
-
-    public PillRes getPill(Member member) {
+    public PillRes getPillList(Member member) {
         return new PillRes(
                 memberPillRepository.findAllByMember(member).stream()
                         .map(
