@@ -16,6 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
@@ -48,6 +50,15 @@ public class MemberController {
         return BaseResponse.ok("닉네임을 등록에 성공했습니다");
     }
 
+    @Operation(tags = "3. Member", summary = "알레르기 조회", description = "알레르기 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원이 등록한 알레르기의 이름 리스트를 반환합니다.")
+    })
+    @GetMapping("/allergy")
+    ResponseEntity<List<String>> getAllergy(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(memberService.getAllergy(member));
+    }
+
     @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "알레르기 정보 등록에 성공했습니다"),
@@ -71,6 +82,15 @@ public class MemberController {
         memberService.removeAllergy( req.getRemoveAllergyList(), member);
         memberService.setAllergy(req.getAddAllergyList(), member);
         return BaseResponse.ok("알레르기 정보 수정에 성공했습니다");
+    }
+
+    @Operation(tags = "3. Member", summary = "질병 정보 조회", description = "질병 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 정보 이름 리스트를 반환합니다.")
+    })
+    @GetMapping("/disease")
+    ResponseEntity<List<String>> getDisease(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(memberService.getDisease(member));
     }
 
     @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다.")

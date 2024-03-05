@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -46,6 +47,12 @@ public class MemberService {
     public void setNickName(String nickname, Member member) {
         member.setNickname(nickname);
         memberRepository.save(member);
+    }
+
+    public List<String> getAllergy(Member member) {
+        return memberAllergyRepository.findAllByMember(member).stream()
+                .map(memberAllergy -> memberAllergy.getAllergy().getName())
+                .collect(Collectors.toList());
     }
 
     public void setAllergy(List<String> allergyList, Member member) {
@@ -82,6 +89,12 @@ public class MemberService {
             Allergy allergy = allergyRepository.findByName(allergyName).orElseThrow(() -> new BusinessException(AllergyErrorCode.NO_SUCH_ALLERGY));
             memberAllergyRepository.deleteByMemberAndAllergy(member,allergy);
         }
+    }
+
+    public List<String> getDisease(Member member) {
+        return memberDiseaseRepository.findAllByMember(member).stream()
+                .map(memberDisease -> memberDisease.getDisease().getName())
+                .collect(Collectors.toList());
     }
 
     public void setDisease(List<String> diseaseList, Member member) {
@@ -129,4 +142,6 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+
 }
