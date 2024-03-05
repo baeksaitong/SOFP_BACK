@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberAllergyRepository extends JpaRepository<MemberAllergy, Long> {
     void deleteByMemberAndAllergy(Member member, Allergy allergy);
-
+    boolean existsByMemberAndAllergy(Member member, Allergy allergy);
 }

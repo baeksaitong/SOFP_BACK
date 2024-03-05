@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberDiseaseRepository extends JpaRepository<MemberDisease, Long> {
     void deleteByMemberAndDisease(Member member, Disease disease);
+    boolean existsByMemberAndDisease(Member member, Disease disease);
 }

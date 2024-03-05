@@ -54,6 +54,9 @@ public class MemberService {
                     () -> new BusinessException(AllergyErrorCode.NO_SUCH_ALLERGY)
             );
 
+            if (memberAllergyRepository.existsByMemberAndAllergy(member, allergy)) {
+                continue;
+            }
 
             MemberAllergy memberAllergy = MemberAllergy.builder()
                     .member(member)
@@ -62,6 +65,7 @@ public class MemberService {
 
 
             memberAllergyRepository.save(memberAllergy);
+
         }
     }
 
@@ -81,10 +85,17 @@ public class MemberService {
             return;
         }
 
+
+
         for (String name : diseaseList) {
             Disease disease = diseaseRepository.findByName(name).orElseThrow(
                     () -> new BusinessException(DiseaseErrorCode.NO_SUCH_DISEASE)
             );
+
+            if (memberDiseaseRepository.existsByMemberAndDisease(member, disease)) {
+                continue;
+            }
+
             MemberDisease memberDisease = MemberDisease.builder()
                     .member(member)
                     .disease(disease)
