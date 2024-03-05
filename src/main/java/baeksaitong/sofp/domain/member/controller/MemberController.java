@@ -54,7 +54,7 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/allergy")
+    @PostMapping("/allergy/add")
     ResponseEntity<String> setAllergy(@RequestBody AllergyReq req, @AuthenticationPrincipal Member member){
         memberService.setAllergy(req.getAllergyList(), member);
         return BaseResponse.ok("알레르기 정보 등록에 성공했습니다");
@@ -79,7 +79,7 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "code: D-000 | message: 존재하지 않는 질병 정보입니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/disease")
+    @PostMapping("/disease/add")
     ResponseEntity<String> setDisease(@RequestBody DiseaseReq req, @AuthenticationPrincipal Member member){
         memberService.setDisease(req.getDiseaseList(), member);
         return BaseResponse.ok("질병 정보 등록에 성공했습니다");
