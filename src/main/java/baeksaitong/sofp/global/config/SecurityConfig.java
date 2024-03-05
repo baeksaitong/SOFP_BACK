@@ -27,7 +27,7 @@ public class SecurityConfig {
             "/health",
 
             /* auth */
-            "/app/auth/**",
+            "/app/auth/**", "/app/oauth/**",
 
             /* verification */
             "/app/verification"
