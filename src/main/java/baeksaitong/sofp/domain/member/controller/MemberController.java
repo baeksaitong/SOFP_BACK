@@ -1,8 +1,6 @@
 package baeksaitong.sofp.domain.member.controller;
 
-import baeksaitong.sofp.domain.member.dto.request.AllergyReq;
-import baeksaitong.sofp.domain.member.dto.request.DiseaseReq;
-import baeksaitong.sofp.domain.member.dto.request.ProfileImgReq;
+import baeksaitong.sofp.domain.member.dto.request.*;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.common.entity.Member;
@@ -62,6 +60,19 @@ public class MemberController {
         return BaseResponse.ok("알레르기 정보 등록에 성공했습니다");
     }
 
+    @Operation(tags = "3. Member", summary = "알레르기 수정", description = "알레르기 정보를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "알레르기 정보 수정에 성공했습니다"),
+            @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/allergy/edit")
+    ResponseEntity<String> editAllergy(@RequestBody AllergyEditReq req, @AuthenticationPrincipal Member member){
+        memberService.removeAllergy( req.getRemoveAllergyList(), member);
+        memberService.setAllergy(req.getAddAllergyList(), member);
+        return BaseResponse.ok("알레르기 정보 수정에 성공했습니다");
+    }
+
     @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 정보 등록에 성공했습니다"),
@@ -73,4 +84,18 @@ public class MemberController {
         memberService.setDisease(req.getDiseaseList(), member);
         return BaseResponse.ok("질병 정보 등록에 성공했습니다");
     }
+
+    @Operation(tags = "3. Member", summary = "질병 정보 수정", description = "질병 정보를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "질병 정보 수정에 성공했습니다"),
+            @ApiResponse(responseCode = "404", description = "code: D-000 | message: 존재하지 않는 질병 정보입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/disease/edit")
+    ResponseEntity<String> editDisease(@RequestBody DiseaseEditReq req, @AuthenticationPrincipal Member member){
+        memberService.removeDisease( req.getRemoveDiseaseList(), member);
+        memberService.setDisease(req.getAddDiseaseList(), member);
+        return BaseResponse.ok("질병 정보 수정에 성공했습니다");
+    }
+
 }

@@ -53,12 +53,26 @@ public class MemberService {
             Allergy allergy = allergyRepository.findByName(name).orElseThrow(
                     () -> new BusinessException(AllergyErrorCode.NO_SUCH_ALLERGY)
             );
+
+
             MemberAllergy memberAllergy = MemberAllergy.builder()
                     .member(member)
                     .allergy(allergy)
                     .build();
 
+
             memberAllergyRepository.save(memberAllergy);
+        }
+    }
+
+    public void removeAllergy(List<String> allergyList, Member member) {
+        if(allergyList.isEmpty()){
+            return;
+        }
+
+        for (String allergyName : allergyList) {
+            Allergy allergy = allergyRepository.findByName(allergyName).orElseThrow(() -> new BusinessException(AllergyErrorCode.NO_SUCH_ALLERGY));
+            memberAllergyRepository.deleteByMemberAndAllergy(member,allergy);
         }
     }
 
@@ -77,6 +91,17 @@ public class MemberService {
                     .build();
 
             memberDiseaseRepository.save(memberDisease);
+        }
+    }
+
+    public void removeDisease(List<String> diseaseList, Member member) {
+        if(diseaseList.isEmpty()){
+            return;
+        }
+
+        for (String diseaseName : diseaseList) {
+            Disease disease = diseaseRepository.findByName(diseaseName).orElseThrow(() -> new BusinessException(DiseaseErrorCode.NO_SUCH_DISEASE));
+            memberDiseaseRepository.deleteByMemberAndDisease(member,disease);
         }
     }
 }
