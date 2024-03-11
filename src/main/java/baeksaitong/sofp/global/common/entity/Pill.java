@@ -1,8 +1,5 @@
 package baeksaitong.sofp.global.common.entity;
 
-import baeksaitong.sofp.global.common.entity.enums.ColorType;
-import baeksaitong.sofp.global.common.entity.enums.FormulationType;
-import baeksaitong.sofp.global.common.entity.enums.LineType;
 import baeksaitong.sofp.global.common.entity.enums.ShapeType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,28 +15,20 @@ public class Pill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "serial _number")
     private Long serialNumber;
-
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "shape_type")
-    private ShapeType shapeType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "line_type")
-    private LineType lineType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "color_type")
-    private ColorType colorType;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "formulation_type")
-    private FormulationType formulationType;
-
+    private String classification;
+    private String formulation;
+    private ShapeType shape;
+    @Column(name = "line_front")
+    private String lineFront;
+    @Column(name = "line_back")
+    private String lineBack;
+    @Column(name = "color_front")
+    private String colorFront;
+    @Column(name = "color_back")
+    private String colorBack;
     @Column(name = "img_url")
     private String imgUrl;
 }
