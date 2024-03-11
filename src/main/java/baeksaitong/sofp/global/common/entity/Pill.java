@@ -1,6 +1,5 @@
 package baeksaitong.sofp.global.common.entity;
 
-import baeksaitong.sofp.global.common.entity.enums.ShapeType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,11 @@ public class Pill {
     private String name;
     private String classification;
     private String formulation;
-    private ShapeType shape;
+    private String shape;
+    @Column(name = "sign_front")
+    private String signFront;
+    @Column(name = "sign_back")
+    private String signBack;
     @Column(name = "line_front")
     private String lineFront;
     @Column(name = "line_back")
