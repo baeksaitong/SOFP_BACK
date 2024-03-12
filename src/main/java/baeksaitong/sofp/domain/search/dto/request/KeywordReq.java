@@ -1,7 +1,6 @@
 package baeksaitong.sofp.domain.search.dto.request;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
