@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.search.controller;
 
+import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.service.SearchService;
@@ -18,6 +19,12 @@ public class SearchController {
     @PostMapping("/keyword")
     public ResponseEntity<KeywordRes> findByKeyword(@RequestBody KeywordReq req){
         KeywordRes res = searchService.findByKeyword(req);
+        return BaseResponse.ok(res);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber){
+        PillInfoRes res = searchService.getPillInfo(serialNumber);
         return BaseResponse.ok(res);
     }
 }
