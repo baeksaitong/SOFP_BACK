@@ -6,8 +6,10 @@ import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.service.SearchService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
+import baeksaitong.sofp.global.common.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,8 +20,8 @@ public class SearchController {
     private final SearchService searchService;
 
     @PostMapping("/keyword")
-    public ResponseEntity<KeywordRes> findByKeyword(@RequestBody KeywordReq req){
-        KeywordRes res = searchService.findByKeyword(req);
+    public ResponseEntity<KeywordRes> findByKeyword(@RequestBody KeywordReq req, @AuthenticationPrincipal Member member){
+        KeywordRes res = searchService.findByKeyword(req, member);
         return BaseResponse.ok(res);
     }
 
