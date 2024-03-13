@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.search.service;
 
 import baeksaitong.sofp.domain.health.repository.PillRepository;
+import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
@@ -62,6 +63,10 @@ public class SearchService {
         }
 
         return result;
+
+    }
+
+    public void findByImage(ImageReq req) {
 
     }
 }

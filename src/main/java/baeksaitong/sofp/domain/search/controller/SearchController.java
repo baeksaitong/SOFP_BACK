@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.search.controller;
 
+import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
@@ -26,5 +27,11 @@ public class SearchController {
     public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber){
         PillInfoRes res = searchService.getPillInfo(serialNumber);
         return BaseResponse.ok(res);
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<?> findByImage(@ModelAttribute ImageReq req){
+        searchService.findByImage(req);
+        return BaseResponse.ok("임시");
     }
 }
