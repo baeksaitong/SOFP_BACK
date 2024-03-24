@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.favorite.service;
 
 import baeksaitong.sofp.domain.favorite.dto.enums.SearchType;
 import baeksaitong.sofp.domain.favorite.dto.request.FavoriteReq;
+import baeksaitong.sofp.domain.favorite.dto.response.FavoriteRes;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.global.common.entity.Favorite;
@@ -11,6 +12,9 @@ import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +51,24 @@ public class FavoriteService {
         }
 
         favoriteRepository.delete(favorite);
+    }
+
+    public List<FavoriteRes> getFavorite(Member member) {
+        List<Favorite> favoriteList = favoriteRepository.findAllByMember(member);
+
+        return favoriteList.stream().map(
+                favorite -> {
+                    Pill pill = favorite.getPill();
+
+                    return new FavoriteRes(
+                            pill.getId(),
+                            pill.getName(),
+                            pill.getClassification(),
+                            pill.getEnterprise(),
+                            pill.getChart(),
+                            (favorite.getImgUrl() != null) ? favorite.getImgUrl() : pill.getImgUrl()
+                    );
+                }
+        ).collect(Collectors.toList());
     }
 }
