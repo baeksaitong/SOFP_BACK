@@ -35,4 +35,17 @@ public class FavoriteService {
             favoriteRepository.save(favorite);
         }
     }
+
+
+
+    public void deleteFavorite(Long favoriteId) {
+        Favorite favorite = favoriteRepository.findById(favoriteId).get();
+
+        String imgUrl = favorite.getImgUrl();
+        if(imgUrl != null){
+            s3Service.deleteImage(imgUrl);
+        }
+
+        favoriteRepository.delete(favorite);
+    }
 }

@@ -7,10 +7,7 @@ import baeksaitong.sofp.global.common.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/app/favorite")
 @RestController
@@ -23,5 +20,11 @@ public class FavoriteController {
     private ResponseEntity<?> addFavorite(@ModelAttribute FavoriteReq req, @AuthenticationPrincipal Member member){
         favoriteService.addFavorite(req, member);
         return BaseResponse.ok("즐겨찾기 추가 성공");
+    }
+
+    @GetMapping("/delete")
+    private ResponseEntity<?> deleteFavorite(@RequestParam Long favoriteId){
+        favoriteService.deleteFavorite(favoriteId);
+        return BaseResponse.ok("즐겨찾기 삭제 성공");
     }
 }
