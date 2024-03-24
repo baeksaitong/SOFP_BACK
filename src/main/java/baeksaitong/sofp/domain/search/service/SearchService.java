@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.search.service;
 
+import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
@@ -9,6 +10,7 @@ import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.error.SearchErrorCode;
 import baeksaitong.sofp.domain.search.feign.PillFeignClient;
+import baeksaitong.sofp.global.common.entity.Favorite;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -32,6 +34,7 @@ public class SearchService {
     private final PillRepository pillRepository;
     private final PillFeignClient pillFeignClient;
     private final MemberService memberService;
+    private final FavoriteRepository favoriteRepository;
 
     @Value("${api.public-data.url.pill-info}")
     private String pillInfoUrl;
@@ -47,13 +50,18 @@ public class SearchService {
         allergyAndDiseaseList.addAll(memberService.getDiseaseList(member));
 
         List<KeywordDto> results = result.stream()
-                .map(pill -> new KeywordDto(
-                        pill.getSerialNumber(),
-                        pill.getName(),
-                        pill.getClassification(),
-                        pill.getImgUrl(),
-                        checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList)
-                ))
+                .map(pill -> {
+                            Favorite favorite = favoriteRepository.findByPillAndMember(pill, member).orElse(null);
+                            return new KeywordDto(
+                                    pill.getSerialNumber(),
+                                    pill.getName(),
+                                    pill.getClassification(),
+                                    pill.getImgUrl(),
+                                    checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
+                                    (favorite != null) ? favorite.getId() : null
+                            );
+                        }
+                )
                 .collect(Collectors.toList());
 
         return new KeywordRes(result.getTotalPages(), results);
