@@ -227,4 +227,10 @@ public class MemberService {
 
         return new KeywordRes(count/5 + 1, searchService.getKeywordDto(pillList, member));
     }
+
+    public KeywordRes deleteRecentViewPill(Long pillId, int count, Member member) {
+        historyService.deleteRecentViewPill(member.getId(), List.of(new Long[]{pillId}));
+
+        return getRecentViewPill(count, member);
+    }
 }

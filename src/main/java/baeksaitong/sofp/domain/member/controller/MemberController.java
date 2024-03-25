@@ -173,4 +173,16 @@ public class MemberController {
         KeywordRes recentViewPill = memberService.getRecentViewPill(count, member);
         return BaseResponse.ok(recentViewPill);
     }
+
+    @Operation(tags = "3. Member", summary = "최근 본 알약 삭제", description = "삭제 후 새로운 리스트 반환")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "페이지 갯수, keywordDto 리스트"),
+            @ApiResponse(responseCode = "404", description = "code: H-000 | message: 최근 본 알약 리스트가 존재하지 않습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/recentViewPill/delete")
+    public ResponseEntity<KeywordRes> deleteRecentViewPill(@RequestParam Long pillId, @RequestParam int count, @AuthenticationPrincipal Member member){
+        KeywordRes recentViewPill = memberService.deleteRecentViewPill(pillId, count, member);
+        return BaseResponse.ok(recentViewPill);
+    }
 }
