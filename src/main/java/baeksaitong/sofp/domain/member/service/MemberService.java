@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -206,12 +205,25 @@ public class MemberService {
             return new KeywordRes(0,new ArrayList<>());
         }
 
-        List<Pill> pillList = recentViewPill.stream()
-                .map(pillRepository::findBySerialNumber)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .limit(count)
-                .collect(Collectors.toList());
+
+        List<Pill> pillList = new ArrayList<>();
+        List<Long> errorPillList = new ArrayList<>();
+
+        for (Long serialNumber : recentViewPill) {
+            Pill pill = pillRepository.findBySerialNumber(serialNumber).orElse(null);
+            if(pill != null){
+                pillList.add(pill);
+                if(pillList.size() > count){
+                    break;
+                }
+            }else{
+                errorPillList.add(serialNumber);
+            }
+        }
+
+        if(!errorPillList.isEmpty()) {
+            historyService.deleteRecentViewPill(member.getId(), errorPillList);
+        }
 
         return new KeywordRes(count/5 + 1, searchService.getKeywordDto(pillList, member));
     }
