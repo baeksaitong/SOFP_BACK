@@ -47,26 +47,28 @@ public class SearchService {
     public KeywordRes findByKeyword(KeywordReq req, Member member) {
         Page<Pill> result = pillRepository.findByKeyword(req);
 
+        List<KeywordDto> results = getKeywordDto(result.getContent(), member);
+
+        return new KeywordRes(result.getTotalPages(), results);
+    }
+
+    public List<KeywordDto> getKeywordDto(List<Pill> pillList, Member member) {
         List<String> allergyAndDiseaseList = new ArrayList<>();
         allergyAndDiseaseList.addAll(memberService.getAllergyList(member));
         allergyAndDiseaseList.addAll(memberService.getDiseaseList(member));
 
-        List<KeywordDto> results = result.stream()
+        return pillList.stream()
                 .map(pill -> {
-                            Favorite favorite = favoriteRepository.findByPillAndMember(pill, member).orElse(null);
-                            return new KeywordDto(
-                                    pill.getSerialNumber(),
-                                    pill.getName(),
-                                    pill.getClassification(),
-                                    pill.getImgUrl(),
-                                    checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
-                                    (favorite != null) ? favorite.getId() : null
-                            );
-                        }
-                )
-                .collect(Collectors.toList());
-
-        return new KeywordRes(result.getTotalPages(), results);
+                    Favorite favorite = favoriteRepository.findByPillAndMember(pill, member).orElse(null);
+                    return new KeywordDto(
+                            pill.getSerialNumber(),
+                                pill.getName(),
+                                pill.getClassification(),
+                                pill.getImgUrl(),
+                                checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
+                                (favorite != null) ? favorite.getId() : null
+                    );
+                }).collect(Collectors.toList());
     }
 
     public PillInfoRes getPillInfo(String serialNumber, Member member) {

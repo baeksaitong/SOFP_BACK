@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.history.service;
 
 import baeksaitong.sofp.domain.history.repository.HistoryRepository;
 import baeksaitong.sofp.global.common.collection.History;
+import baeksaitong.sofp.global.common.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,15 @@ public class HistoryService {
         history.setRecentViewPill(recentViewPill);
 
         historyRepository.save(history);
+    }
+
+    public List<Long> getRecentViewPill(Member member) {
+        History history = historyRepository.findById(member.getId()).orElse(null);
+
+        if(history == null){
+            return null;
+        }
+
+        return history.getRecentViewPill();
     }
 }
