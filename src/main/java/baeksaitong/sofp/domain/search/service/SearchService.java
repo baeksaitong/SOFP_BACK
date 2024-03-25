@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.search.service;
 
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
+import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
@@ -35,6 +36,7 @@ public class SearchService {
     private final PillFeignClient pillFeignClient;
     private final MemberService memberService;
     private final FavoriteRepository favoriteRepository;
+    private final HistoryService historyService;
 
     @Value("${api.public-data.url.pill-info}")
     private String pillInfoUrl;
@@ -67,7 +69,7 @@ public class SearchService {
         return new KeywordRes(result.getTotalPages(), results);
     }
 
-    public PillInfoRes getPillInfo(String serialNumber) {
+    public PillInfoRes getPillInfo(String serialNumber, Member member) {
         PillInfoRes result;
         try {
              result = pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
@@ -77,6 +79,10 @@ public class SearchService {
 
         if(result.getName() == null){
             throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
+        }
+
+        if(member != null) {
+            historyService.addRecentView(member.getId(), Long.getLong(serialNumber));
         }
 
         return result;
@@ -89,7 +95,7 @@ public class SearchService {
 
     private Boolean checkIsWaring(String serialNumber, List<String> allergyAndDiseaseList){
 
-        String cautionGeneral = getPillInfo(serialNumber).getCautionGeneral();
+        String cautionGeneral = getPillInfo(serialNumber, null).getCautionGeneral();
 
         for (String ad : allergyAndDiseaseList) {
             if(cautionGeneral.contains(ad)){
