@@ -13,8 +13,6 @@ import java.util.List;
 public class History {
     @Id
     private String id;
-    private List<String> commonHistory;
-    private List<String> imageHistory;
-    private List<String> recentViewPill;
+    private List<Long> recentViewPill;
 
 }

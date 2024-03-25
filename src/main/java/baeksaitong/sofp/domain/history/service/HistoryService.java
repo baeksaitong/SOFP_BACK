@@ -20,13 +20,11 @@ public class HistoryService {
             history = History.builder()
                     .id(memberId.toString())
                     .recentViewPill(new ArrayList<>())
-                    .commonHistory(new ArrayList<>())
-                    .recentViewPill(new ArrayList<>())
                     .build();
         }
 
-        List<String> recentViewPill = history.getRecentViewPill();
-        recentViewPill.add(pillId.toString());
+        List<Long> recentViewPill = history.getRecentViewPill();
+        recentViewPill.add(pillId);
 
         int size = recentViewPill.size();
         if(size > 60){
