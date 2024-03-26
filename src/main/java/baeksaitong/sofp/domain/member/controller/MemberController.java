@@ -5,6 +5,7 @@ import baeksaitong.sofp.domain.member.dto.response.AllergyRes;
 import baeksaitong.sofp.domain.member.dto.response.DiseaseRes;
 import baeksaitong.sofp.domain.member.dto.response.PillRes;
 import baeksaitong.sofp.domain.member.service.MemberService;
+import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
@@ -161,5 +162,27 @@ public class MemberController {
         memberService.removePill(req.getRemovePillIdList(), member);
         memberService.setPill(req.getAddPillIdList(), member);
         return BaseResponse.ok("복용 중인 알약 수정에 성공했습니다");
+    }
+
+    @Operation(tags = "3. Member", summary = "최근 본 알약 조회", description = "조회 갯수 최대 40개")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "페이지 갯수, keywordDto 리스트")
+    })
+    @GetMapping("/recentViewPill")
+    public ResponseEntity<KeywordRes> getRecentViewPill(@RequestParam int count,@AuthenticationPrincipal Member member){
+        KeywordRes recentViewPill = memberService.getRecentViewPill(count, member);
+        return BaseResponse.ok(recentViewPill);
+    }
+
+    @Operation(tags = "3. Member", summary = "최근 본 알약 삭제", description = "삭제 후 새로운 리스트 반환")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "페이지 갯수, keywordDto 리스트"),
+            @ApiResponse(responseCode = "404", description = "code: H-000 | message: 최근 본 알약 리스트가 존재하지 않습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/recentViewPill/delete")
+    public ResponseEntity<KeywordRes> deleteRecentViewPill(@RequestParam Long pillId, @RequestParam int count, @AuthenticationPrincipal Member member){
+        KeywordRes recentViewPill = memberService.deleteRecentViewPill(pillId, count, member);
+        return BaseResponse.ok(recentViewPill);
     }
 }

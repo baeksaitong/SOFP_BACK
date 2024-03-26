@@ -17,6 +17,8 @@ public class Pill {
     @Column(name = "serial _number")
     private Long serialNumber;
     private String name;
+    private String chart;
+    private String enterprise;
     private String classification;
     private String formulation;
     private String shape;

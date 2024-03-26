@@ -6,6 +6,7 @@ import baeksaitong.sofp.domain.health.error.PillErrorCode;
 import baeksaitong.sofp.domain.health.repository.AllergyRepository;
 import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
+import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
 import baeksaitong.sofp.domain.member.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillRes;
@@ -13,6 +14,8 @@ import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
 import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
 import baeksaitong.sofp.domain.member.repository.MemberPillRepository;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
+import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
+import baeksaitong.sofp.domain.search.service.SearchService;
 import baeksaitong.sofp.global.common.entity.*;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.s3.AwsS3Service;
@@ -22,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +43,8 @@ public class MemberService {
     private final DiseaseRepository diseaseRepository;
     private final PillRepository pillRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final HistoryService historyService;
+    private final SearchService searchService;
 
 
     public void setProfileImg(MultipartFile img, Member member) {
@@ -192,4 +198,39 @@ public class MemberService {
     }
 
 
+    public KeywordRes getRecentViewPill(int count, Member member) {
+        List<Long> recentViewPill = historyService.getRecentViewPill(member);
+
+        if(recentViewPill == null){
+            return new KeywordRes(0,new ArrayList<>());
+        }
+
+
+        List<Pill> pillList = new ArrayList<>();
+        List<Long> errorPillList = new ArrayList<>();
+
+        for (Long serialNumber : recentViewPill) {
+            Pill pill = pillRepository.findBySerialNumber(serialNumber).orElse(null);
+            if(pill != null){
+                pillList.add(pill);
+                if(pillList.size() > count){
+                    break;
+                }
+            }else{
+                errorPillList.add(serialNumber);
+            }
+        }
+
+        if(!errorPillList.isEmpty()) {
+            historyService.deleteRecentViewPill(member.getId(), errorPillList);
+        }
+
+        return new KeywordRes(count/5 + 1, searchService.getKeywordDto(pillList, member));
+    }
+
+    public KeywordRes deleteRecentViewPill(Long pillId, int count, Member member) {
+        historyService.deleteRecentViewPill(member.getId(), List.of(new Long[]{pillId}));
+
+        return getRecentViewPill(count, member);
+    }
 }

@@ -26,8 +26,8 @@ public class SearchController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber){
-        PillInfoRes res = searchService.getPillInfo(serialNumber);
+    public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber, @AuthenticationPrincipal Member member){
+        PillInfoRes res = searchService.getPillInfo(serialNumber, member);
         return BaseResponse.ok(res);
     }
 
