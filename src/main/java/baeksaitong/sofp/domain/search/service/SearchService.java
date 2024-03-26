@@ -3,7 +3,8 @@ package baeksaitong.sofp.domain.search.service;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
-import baeksaitong.sofp.domain.member.service.MemberService;
+import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
+import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
@@ -34,9 +35,10 @@ public class SearchService {
 
     private final PillRepository pillRepository;
     private final PillFeignClient pillFeignClient;
-    private final MemberService memberService;
     private final FavoriteRepository favoriteRepository;
     private final HistoryService historyService;
+    private final MemberAllergyRepository memberAllergyRepository;
+    private final MemberDiseaseRepository memberDiseaseRepository;
 
     @Value("${api.public-data.url.pill-info}")
     private String pillInfoUrl;
@@ -54,8 +56,8 @@ public class SearchService {
 
     public List<KeywordDto> getKeywordDto(List<Pill> pillList, Member member) {
         List<String> allergyAndDiseaseList = new ArrayList<>();
-        allergyAndDiseaseList.addAll(memberService.getAllergyList(member));
-        allergyAndDiseaseList.addAll(memberService.getDiseaseList(member));
+        allergyAndDiseaseList.addAll(getAllergyList(member));
+        allergyAndDiseaseList.addAll(getDiseaseList(member));
 
         return pillList.stream()
                 .map(pill -> {
@@ -69,6 +71,18 @@ public class SearchService {
                                 (favorite != null) ? favorite.getId() : null
                     );
                 }).collect(Collectors.toList());
+    }
+
+    public List<String> getAllergyList(Member member) {
+        return memberAllergyRepository.findAllByMember(member).stream()
+                .map(memberAllergy -> memberAllergy.getAllergy().getName())
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getDiseaseList(Member member) {
+        return memberDiseaseRepository.findAllByMember(member).stream()
+                .map(memberDisease -> memberDisease.getDisease().getName())
+                .collect(Collectors.toList());
     }
 
     public PillInfoRes getPillInfo(String serialNumber, Member member) {
