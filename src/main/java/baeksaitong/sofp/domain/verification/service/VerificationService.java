@@ -31,10 +31,10 @@ public class VerificationService {
                 "인증번호 : " +  code +
                         "<br> 유효시간은 " + CODE_MINUTE + "분 입니다." +
                         "<br> 인증번호를 제대로 입력해주세요";
-        String key = SING_UP_FLAG + code;
+        String key = SING_UP_FLAG + email;
 
         mailService.mailSend(email,title,content);
-        redisService.setValues(email, key, Duration.ofMinutes(CODE_MINUTE));
+        redisService.setValues(key, code, Duration.ofMinutes(CODE_MINUTE));
     }
 
     private String makeRandomNumber() {
