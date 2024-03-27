@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ###Spring Boot###
-*.yml
+application.yml
