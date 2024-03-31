@@ -13,7 +13,7 @@ import static baeksaitong.sofp.global.common.Constants.EMAIL_REGEXP;
 public class LoginReq {
     @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 일치하지 않습니다.")
     @Schema(description = "아이디(이메일)", example = "example@example.com")
-    private String id;
+    private String email;
     @Schema(description = "비밀번호")
     private String password;
 }
