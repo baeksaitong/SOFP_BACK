@@ -3,6 +3,7 @@ package baeksaitong.sofp.domain.search.dto.response;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.util.List;
@@ -11,17 +12,29 @@ import java.util.Map;
 @Getter
 public class PillInfoRes {
 
+    @Schema(description = "알약 이름")
     private String name;
+    @Schema(description = "제조 회사")
     private String enterpriseName;
+    @Schema(description = "일반/전문 의약품 정보")
     private String proOrGeneral;
+    @Schema(description = "유통 기한")
     private String permitDate;
+    @Schema(description = "알약 성상")
     private String chart;
+    @Schema(description = "알약 재료")
     private String material;
+    @Schema(description = "알약 저장 방법")
     private String storageMethod;
+    @Schema(description = "알약 유통 기한")
     private String validTerm;
+    @Schema(description = "효능효과 문서 데이터")
     private String efficacyEffect;
+    @Schema(description = "용법용량 문서 데이터")
     private String dosageUsage;
+    @Schema(description = "주의사항(일반) 문서 데이터")
     private String cautionGeneral;
+    @Schema(description = "주의사항(전문) 문서 데이터")
     private String cautionProfessional;
 
     @JsonCreator

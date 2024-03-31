@@ -147,7 +147,7 @@ public class MemberController {
     })
     @PostMapping("/pill/add")
     public ResponseEntity<String> setPill(@RequestBody PillReq req, @AuthenticationPrincipal Member member){
-        memberService.setPill(req.getPillIdList(), member);
+        memberService.setPill(req.getPillSerailNumberList(), member);
         return BaseResponse.ok("복용 중인 알약 등록에 성공했습니다");
     }
 
@@ -159,8 +159,8 @@ public class MemberController {
     })
     @PostMapping("/pill/edit")
     public ResponseEntity<String> editPill(@RequestBody PillEditReq req, @AuthenticationPrincipal Member member){
-        memberService.removePill(req.getRemovePillIdList(), member);
-        memberService.setPill(req.getAddPillIdList(), member);
+        memberService.removePill(req.getRemovePillSerialNumberList(), member);
+        memberService.setPill(req.getAddPillSerialNumberList(), member);
         return BaseResponse.ok("복용 중인 알약 수정에 성공했습니다");
     }
 

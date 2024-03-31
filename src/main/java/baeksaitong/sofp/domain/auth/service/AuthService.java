@@ -50,7 +50,7 @@ public class AuthService {
         return new LoginRes(
                 true,
                 login(LoginReq.builder()
-                .id(req.getEmail())
+                .email(req.getEmail())
                 .password(req.getPassword())
                 .build())
         );
@@ -63,7 +63,7 @@ public class AuthService {
     }
 
     public String login(LoginReq req) {
-        Member member = memberRepository.findByUid(req.getId()).orElseThrow(
+        Member member = memberRepository.findByUid(req.getEmail()).orElseThrow(
                 () -> new BusinessException(AuthErrorCode.NO_SUCH_ID)
         );
 
@@ -75,7 +75,7 @@ public class AuthService {
     }
 
     private String createAccessToken(LoginReq req) {
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(req.getId(), req.getPassword());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(usernamePasswordAuthenticationToken);
@@ -102,7 +102,7 @@ public class AuthService {
 
         return new LoginRes(isNew,
                 login(LoginReq.builder()
-                .id(email)
+                .email(email)
                 .password(id)
                 .build()));
     }

@@ -1,4 +1,18 @@
 package baeksaitong.sofp.domain.search.dto.response;
 
-public record KeywordDto(Long serialNumber, String name, String classification, String imgUrl, Boolean isWaring, Long FavoriteId) {
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public record KeywordDto(
+        @Schema(description = "알약 시리얼 번호")
+        Long serialNumber,
+        @Schema(description = "알약 이름")
+        String name,
+        @Schema(description = "알약 분류")
+        String classification,
+        @Schema(description = "알약 이미지")
+        String imgUrl,
+        @Schema(description = "경고 여부")
+        Boolean isWaring,
+        @Schema(description = "즐겨찾기에 존재 시 저장된 즐겨찾기 ID")
+        Long FavoriteId) {
 }

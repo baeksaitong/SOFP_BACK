@@ -26,7 +26,7 @@ public class FavoriteService {
     private final AwsS3Service s3Service;
 
     public void addFavorite(FavoriteReq req, Member member) {
-        Pill pill = pillRepository.findById(req.getPillId()).get();
+        Pill pill = pillRepository.findById(req.getPillSeralNumber()).get();
         Favorite favorite = favoriteRepository.save(
                 Favorite.builder()
                         .pill(pill)
