@@ -5,6 +5,7 @@ import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.NaverFeignClient;
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class NaverService {
         NaverToken token = getToken(code);
         NaverProfile profile = getInfo(token.accessToken());
 
-        return authService.oauthLogin(profile.getEmail(), profile.getId(), profile.getBirthday(), profile.getName(), profile.getGender());
+        return authService.oauthLogin(profile.getEmail(), profile.getId(), profile.getBirthday(), profile.getName(), (profile.getGender().equals("M")) ? MemberGender.MALE : MemberGender.FEMALE);
 
     }
 
