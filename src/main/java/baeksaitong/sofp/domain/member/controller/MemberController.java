@@ -1,10 +1,7 @@
 package baeksaitong.sofp.domain.member.controller;
 
-import baeksaitong.sofp.domain.auth.dto.response.BasicInfoRes;
+import baeksaitong.sofp.domain.member.dto.response.*;
 import baeksaitong.sofp.domain.member.dto.request.*;
-import baeksaitong.sofp.domain.member.dto.response.AllergyRes;
-import baeksaitong.sofp.domain.member.dto.response.DiseaseRes;
-import baeksaitong.sofp.domain.member.dto.response.PillRes;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
@@ -50,6 +47,16 @@ public class MemberController {
         return BaseResponse.ok(res);
     }
 
+
+    @Operation(tags = "3. Member", summary = "회원 상세 정보 제공", description = "회원 상세 정보를 제공합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "닉네임 및 프로필 사진 주소 제공")
+    })
+    @PostMapping("/info/detail")
+    public ResponseEntity<DetailInfoRes> getDetailInfo(@AuthenticationPrincipal Member member){
+        DetailInfoRes res = memberService.getDetailInfo(member);
+        return BaseResponse.ok(res);
+    }
 
     @Operation(tags = "3. Member", summary = "프로필 사진 등록", description = "프로필 사진을 등록합니다.")
     @ApiResponses({

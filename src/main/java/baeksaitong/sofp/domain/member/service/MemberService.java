@@ -10,6 +10,7 @@ import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
+import baeksaitong.sofp.domain.member.dto.response.DetailInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillRes;
 import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
@@ -244,5 +245,17 @@ public class MemberService {
 
     public BasicInfoRes getBasicInfo(Member member) {
         return new BasicInfoRes(member.getNickname(), member.getImgUrl());
+    }
+
+    public DetailInfoRes getDetailInfo(Member member) {
+        return new DetailInfoRes(
+                member.getName(),
+                member.getBirthday(),
+                member.getEmail(),
+                member.getNickname(),
+                member.getImgUrl(),
+                member.getGender(),
+                member.getAdvertisement()
+        );
     }
 }
