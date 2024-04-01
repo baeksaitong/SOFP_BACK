@@ -1,5 +1,6 @@
 package baeksaitong.sofp.global.common.entity;
 
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.common.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,7 +34,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     private Boolean advertisement;
 
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private MemberGender gender;
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;

@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.auth.dto.request;
 
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,9 +29,9 @@ public class SignUpReq {
     @Schema(description = "아이디(이메일)", example = "example@example.com")
     private String email;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "성별")
-    private String gender;
+    private MemberGender gender;
 
     @NotBlank
     @Schema(description = "비밀번호")

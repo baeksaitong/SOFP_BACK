@@ -7,6 +7,7 @@ import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -84,7 +85,7 @@ public class AuthService {
     }
 
     public LoginRes oauthLogin(
-            String email, String id, LocalDate birthday, String name, String gender
+            String email, String id, LocalDate birthday, String name, MemberGender gender
     ){
         boolean isNew = false;
 
