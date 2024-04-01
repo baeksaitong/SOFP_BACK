@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.member.service;
 
-import baeksaitong.sofp.domain.auth.dto.response.BasicInfoRes;
+import baeksaitong.sofp.domain.member.dto.response.BasicInfoRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
 import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
@@ -67,7 +67,7 @@ public class MemberService {
     public void editMember(MemberEditReq req, Member member) {
         member.setNickname(req.getNickname());
         member.setGender(req.getGender());
-        member.setPwd(passwordEncoder.encode(req.getPassword()));
+        if(req.getPassword() != null) member.setPwd(passwordEncoder.encode(req.getPassword()));
         member.setBirthday(req.getBirthday());
         member.setAdvertisement(req.getAdvertisement());
 

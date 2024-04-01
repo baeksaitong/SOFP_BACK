@@ -25,7 +25,6 @@ public class MemberEditReq {
     @Schema(description = "성별")
     private MemberGender gender;
 
-    @NotBlank
     @Schema(description = "비밀번호")
     private String password;
 
