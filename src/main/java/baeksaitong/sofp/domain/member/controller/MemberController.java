@@ -27,6 +27,18 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @Operation(tags = "3. Member", summary = "회원 정보 수정 전 비밀번호 인증", description = "회원 수정을 위해 상세정보 페이지로 가기전에 비밀번호로 회원을 인증합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "인증에 성공했습니다"),
+            @ApiResponse(responseCode = "404", description = "code: A-002 | message: 비밀번호가 일치하지 않습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/verification")
+    public ResponseEntity<String> verification(@ModelAttribute VerificationReq req, @AuthenticationPrincipal Member member){
+        memberService.verification(req.getPassword(),member);
+        return BaseResponse.ok("인증에 성공했습니다");
+    }
+
     @Operation(tags = "3. Member", summary = "프로필 사진 등록", description = "프로필 사진을 등록합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "프로필 사진을 등록에 성공했습니다"),

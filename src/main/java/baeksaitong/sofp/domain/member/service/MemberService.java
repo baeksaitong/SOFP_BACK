@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.member.service;
 
+import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
 import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
 import baeksaitong.sofp.domain.health.error.PillErrorCode;
@@ -232,5 +233,11 @@ public class MemberService {
         historyService.deleteRecentViewPill(member.getId(), List.of(new Long[]{pillId}));
 
         return getRecentViewPill(count, member);
+    }
+
+    public void verification(String password, Member member) {
+        if(!passwordEncoder.matches(password, member.getPassword())){
+            throw new BusinessException(AuthErrorCode.WRONG_PASSWORD);
+        }
     }
 }
