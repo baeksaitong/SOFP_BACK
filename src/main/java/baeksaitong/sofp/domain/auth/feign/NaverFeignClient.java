@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.auth.feign;
 
+import baeksaitong.sofp.domain.auth.dto.naver.NaverAgreement;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverProfile;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
 import baeksaitong.sofp.global.config.FeignConfig;
@@ -24,4 +25,8 @@ public interface NaverFeignClient {
 
     @GetMapping
     NaverProfile getProfile(URI baseUrl, @RequestHeader("Authorization") String token);
+
+    @GetMapping
+    NaverAgreement getAgreement(URI baseUrl, @RequestHeader("Authorization") String token);
+
 }
