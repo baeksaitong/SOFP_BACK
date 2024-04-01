@@ -25,7 +25,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     private String name;
     private LocalDate birthday;
-    private String uid;
+    private String email;
     private String pwd;
     private String nickname;
 
@@ -52,7 +52,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return uid;
+        return email;
     }
 
     @Override

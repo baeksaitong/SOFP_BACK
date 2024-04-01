@@ -32,13 +32,13 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public LoginRes singUp(SignUpReq req) {
-        if(memberRepository.existsByUid(req.getEmail())){
+        if(memberRepository.existsByEmail(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
 
         Member member = Member.builder()
                 .name(req.getName())
-                .uid(req.getEmail())
+                .email(req.getEmail())
                 .birthday(req.getBirthday())
                 .pwd(passwordEncoder.encode(req.getPassword()))
                 .gender(req.getGender())
@@ -58,13 +58,13 @@ public class AuthService {
     }
 
     public void checkId(CheckIdReq req) {
-        if(memberRepository.existsByUid(req.getEmail())){
+        if(memberRepository.existsByEmail(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
     }
 
     public String login(LoginReq req) {
-        Member member = memberRepository.findByUid(req.getEmail()).orElseThrow(
+        Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(
                 () -> new BusinessException(AuthErrorCode.NO_SUCH_ID)
         );
 
@@ -89,7 +89,7 @@ public class AuthService {
     ){
         boolean isNew = false;
 
-        if(!memberRepository.existsByUid(email)){
+        if(!memberRepository.existsByEmail(email)){
             singUp(SignUpReq.builder()
                     .email(email)
                     .password(id)
