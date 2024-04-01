@@ -85,7 +85,7 @@ public class AuthService {
     }
 
     public LoginRes oauthLogin(
-            String email, String id, LocalDate birthday, String name, MemberGender gender
+            String email, String id, LocalDate birthday, String name, MemberGender gender, Boolean agreement
     ){
         boolean isNew = false;
 
@@ -95,7 +95,7 @@ public class AuthService {
                     .password(id)
                     .birthday(birthday)
                     .name(name)
-                    .advertisement(true)
+                    .advertisement(agreement)
                     .gender(gender)
                     .build());
             isNew = true;
