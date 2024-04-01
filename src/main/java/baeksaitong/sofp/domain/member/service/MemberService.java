@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.member.service;
 
+import baeksaitong.sofp.domain.auth.dto.response.BasicInfoRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
 import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
@@ -239,5 +240,9 @@ public class MemberService {
         if(!passwordEncoder.matches(password, member.getPassword())){
             throw new BusinessException(AuthErrorCode.WRONG_PASSWORD);
         }
+    }
+
+    public BasicInfoRes getBasicInfo(Member member) {
+        return new BasicInfoRes(member.getNickname(), member.getImgUrl());
     }
 }

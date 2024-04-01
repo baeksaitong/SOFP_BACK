@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.member.controller;
 
+import baeksaitong.sofp.domain.auth.dto.response.BasicInfoRes;
 import baeksaitong.sofp.domain.member.dto.request.*;
 import baeksaitong.sofp.domain.member.dto.response.AllergyRes;
 import baeksaitong.sofp.domain.member.dto.response.DiseaseRes;
@@ -38,6 +39,17 @@ public class MemberController {
         memberService.verification(req.getPassword(),member);
         return BaseResponse.ok("인증에 성공했습니다");
     }
+
+    @Operation(tags = "3. Member", summary = "회원 기본 정보 제공", description = "회원 기본 정보를 제공합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "닉네임 및 프로필 사진 주소 제공")
+    })
+    @PostMapping("/info/basic")
+    public ResponseEntity<BasicInfoRes> getBasicInfo(@AuthenticationPrincipal Member member){
+        BasicInfoRes res = memberService.getBasicInfo(member);
+        return BaseResponse.ok(res);
+    }
+
 
     @Operation(tags = "3. Member", summary = "프로필 사진 등록", description = "프로필 사진을 등록합니다.")
     @ApiResponses({
