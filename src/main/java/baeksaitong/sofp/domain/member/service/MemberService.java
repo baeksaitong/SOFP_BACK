@@ -1,5 +1,7 @@
 package baeksaitong.sofp.domain.member.service;
 
+import baeksaitong.sofp.domain.member.dto.response.BasicInfoRes;
+import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
 import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
 import baeksaitong.sofp.domain.health.error.PillErrorCode;
@@ -8,6 +10,7 @@ import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
+import baeksaitong.sofp.domain.member.dto.response.DetailInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillRes;
 import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
@@ -65,7 +68,7 @@ public class MemberService {
     public void editMember(MemberEditReq req, Member member) {
         member.setNickname(req.getNickname());
         member.setGender(req.getGender());
-        member.setPwd(passwordEncoder.encode(req.getPassword()));
+        if(req.getPassword() != null) member.setPwd(passwordEncoder.encode(req.getPassword()));
         member.setBirthday(req.getBirthday());
         member.setAdvertisement(req.getAdvertisement());
 
@@ -232,5 +235,27 @@ public class MemberService {
         historyService.deleteRecentViewPill(member.getId(), List.of(new Long[]{pillId}));
 
         return getRecentViewPill(count, member);
+    }
+
+    public void verification(String password, Member member) {
+        if(!passwordEncoder.matches(password, member.getPassword())){
+            throw new BusinessException(AuthErrorCode.WRONG_PASSWORD);
+        }
+    }
+
+    public BasicInfoRes getBasicInfo(Member member) {
+        return new BasicInfoRes(member.getNickname(), member.getImgUrl());
+    }
+
+    public DetailInfoRes getDetailInfo(Member member) {
+        return new DetailInfoRes(
+                member.getName(),
+                member.getBirthday(),
+                member.getEmail(),
+                member.getNickname(),
+                member.getImgUrl(),
+                member.getGender(),
+                member.getAdvertisement()
+        );
     }
 }

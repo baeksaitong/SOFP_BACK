@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.member.dto.request;
 
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,11 +21,10 @@ public class MemberEditReq {
     @Schema(description = "생일")
     private LocalDate birthday;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "성별")
-    private String gender;
+    private MemberGender gender;
 
-    @NotBlank
     @Schema(description = "비밀번호")
     private String password;
 

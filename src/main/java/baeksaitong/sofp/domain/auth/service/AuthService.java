@@ -7,6 +7,7 @@ import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +32,13 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public LoginRes singUp(SignUpReq req) {
-        if(memberRepository.existsByUid(req.getEmail())){
+        if(memberRepository.existsByEmail(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
 
         Member member = Member.builder()
                 .name(req.getName())
-                .uid(req.getEmail())
+                .email(req.getEmail())
                 .birthday(req.getBirthday())
                 .pwd(passwordEncoder.encode(req.getPassword()))
                 .gender(req.getGender())
@@ -57,13 +58,13 @@ public class AuthService {
     }
 
     public void checkId(CheckIdReq req) {
-        if(memberRepository.existsByUid(req.getEmail())){
+        if(memberRepository.existsByEmail(req.getEmail())){
             throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
         }
     }
 
     public String login(LoginReq req) {
-        Member member = memberRepository.findByUid(req.getEmail()).orElseThrow(
+        Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(
                 () -> new BusinessException(AuthErrorCode.NO_SUCH_ID)
         );
 
@@ -84,17 +85,17 @@ public class AuthService {
     }
 
     public LoginRes oauthLogin(
-            String email, String id, LocalDate birthday, String name, String gender
+            String email, String id, LocalDate birthday, String name, MemberGender gender, Boolean agreement
     ){
         boolean isNew = false;
 
-        if(!memberRepository.existsByUid(email)){
+        if(!memberRepository.existsByEmail(email)){
             singUp(SignUpReq.builder()
                     .email(email)
                     .password(id)
                     .birthday(birthday)
                     .name(name)
-                    .advertisement(true)
+                    .advertisement(agreement)
                     .gender(gender)
                     .build());
             isNew = true;

@@ -1,11 +1,14 @@
 package baeksaitong.sofp.domain.auth.service;
 
+import baeksaitong.sofp.domain.auth.dto.naver.NaverAgreement;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverProfile;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.NaverFeignClient;
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,11 +39,21 @@ public class NaverService {
     @Value("${social.naver.url.profile}")
     private String profileUrl;
 
+    @Value("${social.naver.url.agreement}")
+    private String agreementUrl;
+
     public LoginRes login(String code) {
         NaverToken token = getToken(code);
         NaverProfile profile = getInfo(token.accessToken());
 
-        return authService.oauthLogin(profile.getEmail(), profile.getId(), profile.getBirthday(), profile.getName(), profile.getGender());
+        return authService.oauthLogin(
+                profile.getEmail(),
+                profile.getId(),
+                profile.getBirthday(),
+                profile.getName(),
+                (profile.getGender().equals("M")) ? MemberGender.MALE : MemberGender.FEMALE,
+                getAgreement(token.accessToken())
+        );
 
     }
 
@@ -57,6 +70,19 @@ public class NaverService {
         try {
             return naverFeignClient.getProfile(new URI(profileUrl), "Bearer " + token);
         } catch (Exception e) {
+            log.error("error while getting naver user profile: ", e);
+            throw new BusinessException(AuthErrorCode.NAVER_ERROR);
+        }
+    }
+
+    private Boolean getAgreement(String token){
+        try {
+            NaverAgreement agreement = naverFeignClient.getAgreement(new URI(agreementUrl), "Bearer " + token);
+            return (agreement.result() != null && agreement.result().equals("success"));
+        } catch (FeignException.NotFound e){
+            return false;
+        }
+        catch (Exception e) {
             log.error("error while getting naver user profile: ", e);
             throw new BusinessException(AuthErrorCode.NAVER_ERROR);
         }
