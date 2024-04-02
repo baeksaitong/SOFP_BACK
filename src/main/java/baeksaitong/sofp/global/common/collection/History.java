@@ -12,7 +12,7 @@ import java.util.List;
 @Document(collection = "history")
 public class History {
     @Id
-    private String id;
+    private Long id;
     private List<Long> recentViewPill;
 
 }

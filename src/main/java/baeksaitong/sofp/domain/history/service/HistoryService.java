@@ -23,7 +23,7 @@ public class HistoryService {
 
         if(history == null){
             history = History.builder()
-                    .id(memberId.toString())
+                    .id(memberId)
                     .recentViewPill(new ArrayList<>())
                     .build();
         }
