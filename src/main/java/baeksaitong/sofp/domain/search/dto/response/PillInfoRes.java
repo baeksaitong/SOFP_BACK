@@ -11,7 +11,6 @@ import java.util.Map;
 
 @Getter
 public class PillInfoRes {
-
     @Schema(description = "알약 이름")
     private String name;
     @Schema(description = "제조 회사")
@@ -37,9 +36,12 @@ public class PillInfoRes {
     @Schema(description = "주의사항(전문) 문서 데이터")
     private String cautionProfessional;
 
+    @Schema(description = "내 정보와 관련된 경고 사항")
+    private List<String> waringInfo;
+
     @JsonCreator
     @JsonIgnoreProperties(ignoreUnknown = true)
-    PillInfoRes(@JsonProperty("body") Map<String,Object> body){
+    public PillInfoRes(@JsonProperty("body") Map<String,Object> body){
        if((Integer)body.get("totalCount") > 0){
            Map<String,Object> result = (Map<String, Object>)((List<Object>) body.get("items")).get(0);
            this.name = (String) result.get("ITEM_NAME");
@@ -57,5 +59,9 @@ public class PillInfoRes {
        }
     }
 
+
+    public void setWaringInfo(List<String> waringInfo){
+        this.waringInfo = waringInfo;
+    }
 
 }

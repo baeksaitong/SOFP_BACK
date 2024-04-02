@@ -19,7 +19,6 @@ import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -73,11 +72,11 @@ public class SearchService {
                 }).collect(Collectors.toList());
     }
 
-    @Cacheable(value = "pillInfo", key = "#serialNumber")
     public PillInfoRes getPillInfo(String serialNumber, Member member) {
         PillInfoRes result;
         try {
              result = pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
+             result.setWaringInfo(findAllWaringInfo(result.getCautionGeneral(), getAllergyAndDiseaseSet(member)));
         } catch (URISyntaxException e) {
             throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
         }
@@ -117,5 +116,11 @@ public class SearchService {
 
         String cautionGeneral = getPillInfo(serialNumber, null).getCautionGeneral();
         return allergyAndDiseaseSet.stream().anyMatch(cautionGeneral::contains);
+    }
+
+    private List<String> findAllWaringInfo(String cautionGeneral, Set<String> allergyAndDiseaseSet) {
+        return allergyAndDiseaseSet.stream()
+                .filter(cautionGeneral::contains)
+                .collect(Collectors.toList());
     }
 }
