@@ -86,7 +86,7 @@ public class SearchService {
         }
 
         if(member != null) {
-            historyService.addRecentView(member.getId(), Long.getLong(serialNumber));
+            historyService.addRecentView(member.getId(), Long.parseLong(serialNumber));
         }
 
         return result;
