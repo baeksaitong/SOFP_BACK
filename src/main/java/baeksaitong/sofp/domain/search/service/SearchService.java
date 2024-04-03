@@ -24,8 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,9 +56,7 @@ public class SearchService {
     }
 
     public List<KeywordDto> getKeywordDto(List<Pill> pillList, Member member) {
-        List<String> allergyAndDiseaseList = new ArrayList<>();
-        allergyAndDiseaseList.addAll(getAllergyList(member));
-        allergyAndDiseaseList.addAll(getDiseaseList(member));
+        Set<String> allergyAndDiseaseList = getAllergyAndDiseaseSet(member);
 
         return pillList.stream()
                 .map(pill -> {
@@ -73,22 +72,11 @@ public class SearchService {
                 }).collect(Collectors.toList());
     }
 
-    public List<String> getAllergyList(Member member) {
-        return memberAllergyRepository.findAllByMember(member).stream()
-                .map(memberAllergy -> memberAllergy.getAllergy().getName())
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getDiseaseList(Member member) {
-        return memberDiseaseRepository.findAllByMember(member).stream()
-                .map(memberDisease -> memberDisease.getDisease().getName())
-                .collect(Collectors.toList());
-    }
-
     public PillInfoRes getPillInfo(String serialNumber, Member member) {
         PillInfoRes result;
         try {
              result = pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
+             result.setWaringInfo(findAllWaringInfo(result.getCautionGeneral(), getAllergyAndDiseaseSet(member)));
         } catch (URISyntaxException e) {
             throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
         }
@@ -98,7 +86,7 @@ public class SearchService {
         }
 
         if(member != null) {
-            historyService.addRecentView(member.getId(), Long.getLong(serialNumber));
+            historyService.addRecentView(member.getId(), Long.parseLong(serialNumber));
         }
 
         return result;
@@ -109,16 +97,30 @@ public class SearchService {
 
     }
 
-    private Boolean checkIsWaring(String serialNumber, List<String> allergyAndDiseaseList){
+    private Set<String> getAllergyAndDiseaseSet(Member member) {
+        Set<String> allergyAndDiseaseSet = new HashSet<>();
+        allergyAndDiseaseSet.addAll(
+                memberAllergyRepository.findAllByMember(member).stream()
+                        .map(memberAllergy -> memberAllergy.getAllergy().getName())
+                        .collect(Collectors.toSet())
+        );
+        allergyAndDiseaseSet.addAll(
+                memberDiseaseRepository.findAllByMember(member).stream()
+                        .map(memberDisease -> memberDisease.getDisease().getName())
+                        .collect(Collectors.toSet())
+        );
+        return allergyAndDiseaseSet;
+    }
+
+    private Boolean checkIsWaring(String serialNumber, Set<String> allergyAndDiseaseSet){
 
         String cautionGeneral = getPillInfo(serialNumber, null).getCautionGeneral();
+        return allergyAndDiseaseSet.stream().anyMatch(cautionGeneral::contains);
+    }
 
-        for (String ad : allergyAndDiseaseList) {
-            if(cautionGeneral.contains(ad)){
-                return true;
-            }
-        }
-
-        return false;
+    private List<String> findAllWaringInfo(String cautionGeneral, Set<String> allergyAndDiseaseSet) {
+        return allergyAndDiseaseSet.stream()
+                .filter(cautionGeneral::contains)
+                .collect(Collectors.toList());
     }
 }
