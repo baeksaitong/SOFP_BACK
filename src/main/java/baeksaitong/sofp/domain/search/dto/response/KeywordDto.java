@@ -11,8 +11,13 @@ public record KeywordDto(
         String classification,
         @Schema(description = "알약 이미지")
         String imgUrl,
+        @Schema(description = "알약 성상")
+        String chart,
+        @Schema(description = "알약 제조 업체")
+        String enterprise,
         @Schema(description = "경고 여부")
         Boolean isWaring,
         @Schema(description = "즐겨찾기에 존재 시 저장된 즐겨찾기 ID")
-        Long FavoriteId) {
+        Long FavoriteId
+) {
 }
