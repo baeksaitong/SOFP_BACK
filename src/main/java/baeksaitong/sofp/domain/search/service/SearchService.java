@@ -66,6 +66,8 @@ public class SearchService {
                                 pill.getName(),
                                 pill.getClassification(),
                                 pill.getImgUrl(),
+                                pill.getChart(),
+                                pill.getEnterprise(),
                                 checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
                                 (favorite != null) ? favorite.getId() : null
                     );
