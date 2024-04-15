@@ -22,7 +22,8 @@ public class FavoriteController {
 
     private final FavoriteService favoriteService;
 
-    @Operation(tags = "6. Favorite", summary = "즐겨찾기 추가", description = "알약을 즐겨찾기에 추가합니다.")
+    @Operation(tags = "6. Favorite", summary = "즐겨찾기 추가", description = "알약을 즐겨찾기에 추가합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "즐겨찾기 추가 성공")
     })
@@ -32,7 +33,8 @@ public class FavoriteController {
         return BaseResponse.ok("즐겨찾기 추가 성공");
     }
 
-    @Operation(tags = "6. Favorite", summary = "즐겨찾기 삭제", description = "알약을 즐겨찾기에서 삭제합니다.")
+    @Operation(tags = "6. Favorite", summary = "즐겨찾기 삭제", description = "알약을 즐겨찾기에서 삭제합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "즐겨찾기 삭제 성공")
     })
@@ -42,7 +44,8 @@ public class FavoriteController {
         return BaseResponse.ok("즐겨찾기 삭제 성공");
     }
 
-    @Operation(tags = "6. Favorite", summary = "즐겨찾기 조회", description = "즐겨찾기 된 알약을 조회하니다.")
+    @Operation(tags = "6. Favorite", summary = "즐겨찾기 조회", description = "즐겨찾기 된 알약을 조회하니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "즐겨찾기에 등록된 알약 리스트 획득")
     })
