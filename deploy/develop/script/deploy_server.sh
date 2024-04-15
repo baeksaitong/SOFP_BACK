@@ -22,6 +22,11 @@ echo "> create link"
 ln -Tfs $CP_JAR_PATH $APPLICATION_JAR
 
 # (3)
+echo "> Kill Use :8080 PID"
+USE_8080_PID=$(lsof -i :8080 | grep LISTEN | awk '{print $2}')
+kill -9 $USE_8080_PID
+
+# (4)
 echo "> Check application PID."
 CURRENT_PID=$(pgrep -f -n $APPLICATION_JAR_NAME)
 echo "$CURRENT_PID"
@@ -35,6 +40,6 @@ else
 	sleep 10
 fi
 
-# (4)
-echo "> Run application (success)."
+# (5)
+echo "> Run application."
 nohup java -jar -Dspring.profiles.active=local $APPLICATION_JAR > /dev/null 2> /dev/null < /dev/null &
