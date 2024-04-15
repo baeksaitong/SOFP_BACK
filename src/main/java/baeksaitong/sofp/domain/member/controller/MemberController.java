@@ -25,7 +25,8 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(tags = "3. Member", summary = "회원 정보 수정 전 비밀번호 인증", description = "회원 수정을 위해 상세정보 페이지로 가기전에 비밀번호로 회원을 인증합니다.")
+    @Operation(tags = "3. Member", summary = "회원 정보 수정 전 비밀번호 인증", description = "회원 수정을 위해 상세정보 페이지로 가기전에 비밀번호로 회원을 인증합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "인증에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: A-002 | message: 비밀번호가 일치하지 않습니다.",
@@ -37,7 +38,8 @@ public class MemberController {
         return BaseResponse.ok("인증에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "회원 기본 정보 제공", description = "회원 기본 정보를 제공합니다.")
+    @Operation(tags = "3. Member", summary = "회원 기본 정보 제공", description = "회원 기본 정보를 제공합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "닉네임 및 프로필 사진 주소 제공")
     })
@@ -48,7 +50,8 @@ public class MemberController {
     }
 
 
-    @Operation(tags = "3. Member", summary = "회원 상세 정보 제공", description = "회원 상세 정보를 제공합니다.")
+    @Operation(tags = "3. Member", summary = "회원 상세 정보 제공", description = "회원 상세 정보를 제공합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "닉네임 및 프로필 사진 주소 제공")
     })
@@ -58,7 +61,8 @@ public class MemberController {
         return BaseResponse.ok(res);
     }
 
-    @Operation(tags = "3. Member", summary = "프로필 사진 등록", description = "프로필 사진을 등록합니다.")
+    @Operation(tags = "3. Member", summary = "프로필 사진 등록", description = "프로필 사진을 등록합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "프로필 사진을 등록에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: S-000 | message: 존재하지 않는 파일 입니다.",
@@ -73,7 +77,8 @@ public class MemberController {
     }
 
 
-    @Operation(tags = "3. Member", summary = "닉네임 등록", description = "닉네임을 등록합니다.")
+    @Operation(tags = "3. Member", summary = "닉네임 등록", description = "닉네임을 등록합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "닉네임을 등록에 성공했습니다")
     })
@@ -83,7 +88,8 @@ public class MemberController {
         return BaseResponse.ok("닉네임을 등록에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
+    @Operation(tags = "3. Member", summary = "회원 정보 수정", description = "회원 정보를 수정합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 정보 수정에 성공했습니다")
     })
@@ -93,7 +99,8 @@ public class MemberController {
         return BaseResponse.ok("회원 정보 수정에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "알레르기 조회", description = "알레르기 정보를 조회합니다.")
+    @Operation(tags = "3. Member", summary = "알레르기 조회", description = "알레르기 정보를 조회합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원이 등록한 알레르기의 이름 리스트를 반환합니다.")
     })
@@ -102,7 +109,8 @@ public class MemberController {
         return BaseResponse.ok(new AllergyRes(memberService.getAllergyList(member)));
     }
 
-    @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다.")
+    @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "알레르기 정보 등록에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
@@ -114,7 +122,8 @@ public class MemberController {
         return BaseResponse.ok("알레르기 정보 등록에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "알레르기 수정", description = "알레르기 정보를 수정합니다.")
+    @Operation(tags = "3. Member", summary = "알레르기 수정", description = "알레르기 정보를 수정합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "알레르기 정보 수정에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
@@ -127,7 +136,8 @@ public class MemberController {
         return BaseResponse.ok("알레르기 정보 수정에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "질병 정보 조회", description = "질병 정보를 조회합니다.")
+    @Operation(tags = "3. Member", summary = "질병 정보 조회", description = "질병 정보를 조회합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 정보 이름 리스트를 반환합니다.")
     })
@@ -136,7 +146,8 @@ public class MemberController {
         return BaseResponse.ok(new DiseaseRes(memberService.getDiseaseList(member)));
     }
 
-    @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다.")
+    @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 정보 등록에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: D-000 | message: 존재하지 않는 질병 정보입니다.",
@@ -148,7 +159,8 @@ public class MemberController {
         return BaseResponse.ok("질병 정보 등록에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "질병 정보 수정", description = "질병 정보를 수정합니다.")
+    @Operation(tags = "3. Member", summary = "질병 정보 수정", description = "질병 정보를 수정합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 정보 수정에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: D-000 | message: 존재하지 않는 질병 정보입니다.",
@@ -161,7 +173,8 @@ public class MemberController {
         return BaseResponse.ok("질병 정보 수정에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "복용 중인 알약 조회", description = "복용 중인 알약을 조회합니다.")
+    @Operation(tags = "3. Member", summary = "복용 중인 알약 조회", description = "복용 중인 알약을 조회합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "복용 중인 알약 리스트")
     })
@@ -170,7 +183,8 @@ public class MemberController {
         return BaseResponse.ok(memberService.getPillList(member));
     }
 
-    @Operation(tags = "3. Member", summary = "복용 중인 알약 등록", description = "복용 중인 알약을 등록합니다.")
+    @Operation(tags = "3. Member", summary = "복용 중인 알약 등록", description = "복용 중인 알약을 등록합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "복용 중인 약을 등록에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: P-000 | message: 존재하지 않는 알약입니다.",
@@ -182,7 +196,8 @@ public class MemberController {
         return BaseResponse.ok("복용 중인 알약 등록에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "복용 중인 알약 수정", description = "복용 중인 알약을 수정합니다.")
+    @Operation(tags = "3. Member", summary = "복용 중인 알약 수정", description = "복용 중인 알약을 수정합니다." +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "복용 중인 알약 수정에 성공했습니다"),
             @ApiResponse(responseCode = "404", description = "code: P-000 | message: 존재하지 않는 알약입니다.",
@@ -195,7 +210,8 @@ public class MemberController {
         return BaseResponse.ok("복용 중인 알약 수정에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "최근 본 알약 조회", description = "조회 갯수 최대 40개")
+    @Operation(tags = "3. Member", summary = "최근 본 알약 조회", description = "조회 갯수 최대 40개" +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "페이지 갯수, keywordDto 리스트")
     })
@@ -205,7 +221,8 @@ public class MemberController {
         return BaseResponse.ok(recentViewPill);
     }
 
-    @Operation(tags = "3. Member", summary = "최근 본 알약 삭제", description = "삭제 후 새로운 리스트 반환")
+    @Operation(tags = "3. Member", summary = "최근 본 알약 삭제", description = "삭제 후 새로운 리스트 반환" +
+            "<br> - 인증 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "페이지 갯수, keywordDto 리스트"),
             @ApiResponse(responseCode = "404", description = "code: H-000 | message: 최근 본 알약 리스트가 존재하지 않습니다.",
