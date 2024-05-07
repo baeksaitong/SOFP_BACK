@@ -4,6 +4,7 @@ import baeksaitong.sofp.global.common.service.CustomMemberDetailsService;
 import baeksaitong.sofp.global.jwt.error.CustomJwtException;
 import baeksaitong.sofp.global.jwt.error.code.JwtErrorCode;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -28,15 +30,17 @@ public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String secretKey;
-
     @Value("${jwt.access-token-valid-minute}")
     private long accessTokenValidTime;
+    private SecretKeySpec secretKeySpec;
 
     private final CustomMemberDetailsService memberDetailsService;
 
     @PostConstruct
     protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+        byte[] keyBytes = Base64.getDecoder().decode(secretKey.getBytes());
+        this.secretKeySpec = new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
+
         accessTokenValidTime = accessTokenValidTime * 60 * 1000L;
     }
 
@@ -53,7 +57,7 @@ public class JwtTokenProvider {
                 .claim(JWT_AUTHORITIES_KEY, authorities)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(secretKeySpec, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -64,7 +68,12 @@ public class JwtTokenProvider {
     }
 
     public String getUserId(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKeySpec)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public String resolveAccessToken(HttpServletRequest request) {
@@ -79,11 +88,15 @@ public class JwtTokenProvider {
         if (jwtToken == null) {
             throw new CustomJwtException(JwtErrorCode.EMPTY_TOKEN);
         }
-        
+
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKeySpec)  // Update to use parserBuilder()
+                    .build()
+                    .parseClaimsJws(jwtToken);
+
             return !claims.getBody().getExpiration().before(new Date());
-        } catch (SignatureException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException e) {
             log.info("JWT 토큰이 유효하지 않습니다.");
             throw new CustomJwtException(JwtErrorCode.INVALID_JWT_TOKEN);
         } catch (ExpiredJwtException e) {
