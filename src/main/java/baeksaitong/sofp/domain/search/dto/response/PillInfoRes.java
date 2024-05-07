@@ -64,4 +64,15 @@ public class PillInfoRes {
         this.waringInfo = waringInfo;
     }
 
+    public void setEfficacyEffect(String efficacyEffect) {
+        this.efficacyEffect = efficacyEffect;
+    }
+
+    public void setDosageUsage(String dosageUsage) {
+        this.dosageUsage = dosageUsage;
+    }
+
+    public void setCautionGeneral(String cautionGeneral) {
+        this.cautionGeneral = cautionGeneral;
+    }
 }
