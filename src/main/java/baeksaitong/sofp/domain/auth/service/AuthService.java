@@ -2,8 +2,10 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.request.CheckIdReq;
 import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
+import baeksaitong.sofp.domain.auth.dto.request.RefreshTokenReq;
 import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
+import baeksaitong.sofp.domain.auth.dto.response.RefreshAccessRes;
 import baeksaitong.sofp.domain.auth.dto.response.TokenRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
@@ -110,4 +112,14 @@ public class AuthService {
                 .password(id)
                 .build()));
     }
+
+    public RefreshAccessRes refershAccessToken(RefreshTokenReq req) {
+        String token = req.refreshToken();
+        String userId = jwtTokenProvider.getUserId(token);
+        jwtTokenProvider.validateRefreshToken(token, userId);
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        return new RefreshAccessRes(jwtTokenProvider.createAccessToken(authentication));
+    }
+
+
 }
