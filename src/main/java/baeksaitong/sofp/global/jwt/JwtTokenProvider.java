@@ -99,6 +99,15 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
+    public Date getExpiration(String jwtToken) {
+        Jws<Claims> claims = Jwts.parserBuilder()
+                .setSigningKey(secretKeySpec)
+                .build()
+                .parseClaimsJws(jwtToken);
+
+        return claims.getBody().getExpiration();
+    }
+
     public String resolveAccessToken(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         if (authorization == null) {
