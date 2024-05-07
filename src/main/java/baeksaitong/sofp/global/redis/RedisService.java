@@ -13,28 +13,59 @@ import java.time.Duration;
 @Slf4j
 public class RedisService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public void setValues(String key, String data) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
+    public void save(String key, String data) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(key, data);
     }
 
-    public void setValues(String key, String data, Duration duration) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
+    public void save(String key, String data, Duration duration) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(key, data, duration);
     }
 
-    public String getValues(String key) {
-        ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(key);
+    public void save(RedisPrefix prefix, String key, String data) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        values.set(prefix.name() + key, String.valueOf(data));
     }
 
-    public void deleteValues(String key) {
+    public void save(RedisPrefix prefix, String key, String data, Duration duration) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        values.set(prefix.name() + key, data, duration);
+    }
+
+    public String get(String key) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        return (String) values.get(key);
+    }
+
+    public String get(RedisPrefix prefix, String key) {
+        ValueOperations<String, Object> values = redisTemplate.opsForValue();
+        return (String) values.get(prefix.name() + key);
+    }
+
+    public void delete(String key) {
         redisTemplate.delete(key);
+    }
+
+    public void delete(RedisPrefix prefix, String key) {
+        redisTemplate.delete(prefix.name() + key);
     }
 
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
+    }
+
+    public Boolean hasKey(RedisPrefix prefix, String key) {
+        return redisTemplate.hasKey(prefix.name() + key);
+    }
+
+    public Boolean hasNoKey(String key) {
+        return !redisTemplate.hasKey(key);
+    }
+
+    public Boolean hasNoKey(RedisPrefix prefix, String key) {
+        return !redisTemplate.hasKey(prefix.name() + key);
     }
 }
