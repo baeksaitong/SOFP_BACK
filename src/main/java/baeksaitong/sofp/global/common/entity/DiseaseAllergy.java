@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class DiseaseAndAllergy {
+public class DiseaseAllergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

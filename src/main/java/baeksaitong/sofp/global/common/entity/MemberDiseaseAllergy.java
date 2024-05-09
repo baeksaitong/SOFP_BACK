@@ -8,14 +8,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberDiseaseAndAllergy {
+public class MemberDiseaseAllergy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "disease_id")
-    private DiseaseAndAllergy diseaseAndAllergy;
+    private DiseaseAllergy diseaseAllergy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

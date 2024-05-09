@@ -3,7 +3,7 @@ package baeksaitong.sofp.domain.search.service;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
-import baeksaitong.sofp.domain.member.repository.MemberDiseaseAndAllergyRepository;
+import baeksaitong.sofp.domain.member.repository.MemberDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
@@ -36,7 +36,7 @@ public class SearchService {
     private final PillFeignClient pillFeignClient;
     private final FavoriteRepository favoriteRepository;
     private final HistoryService historyService;
-    private final MemberDiseaseAndAllergyRepository memberDiseaseAndAllergyRepository;
+    private final MemberDiseaseAllergyRepository memberDiseaseAllergyRepository;
 
     @Value("${api.public-data.url.pill-info}")
     private String pillInfoUrl;
@@ -97,8 +97,8 @@ public class SearchService {
     }
 
     private Set<String> getAllergyAndDiseaseSet(Member member) {
-        return memberDiseaseAndAllergyRepository.findAllByMember(member).stream()
-                .map(memberDisease -> memberDisease.getDiseaseAndAllergy().getName()).collect(Collectors.toSet());
+        return memberDiseaseAllergyRepository.findAllByMember(member).stream()
+                .map(memberDisease -> memberDisease.getDiseaseAllergy().getName()).collect(Collectors.toSet());
     }
 
     private Boolean checkIsWaring(String serialNumber, Set<String> allergyAndDiseaseSet){
