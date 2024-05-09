@@ -23,7 +23,7 @@ public class HealthController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 리스트를 가져옵니다.")
     })
-    @GetMapping("/disease")
+    @GetMapping("/diseaseAllergy")
     ResponseEntity<DiseaseRes> getDiseaseList(){
         return BaseResponse.ok(healthService.getDiseaseAndAllergyList());
     }
