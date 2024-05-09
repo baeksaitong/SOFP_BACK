@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,11 +16,10 @@ public class HealthService {
 
     private final DiseaseAllergyRepository diseaseAllergyRepository;
     public DiseaseAllergyRes getDiseaseAllergyList() {
-        List<String> diseaseList = diseaseAllergyRepository.findAll()
-                .stream()
+        return new DiseaseAllergyRes(
+                diseaseAllergyRepository.findAll().stream()
                 .map(DiseaseAllergy::getName)
-                .collect(Collectors.toList());
-
-        return new DiseaseAllergyRes(diseaseList);
+                .collect(Collectors.toList())
+        );
     }
 }
