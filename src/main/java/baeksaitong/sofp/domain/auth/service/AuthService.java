@@ -2,8 +2,11 @@ package baeksaitong.sofp.domain.auth.service;
 
 import baeksaitong.sofp.domain.auth.dto.request.CheckIdReq;
 import baeksaitong.sofp.domain.auth.dto.request.LoginReq;
+import baeksaitong.sofp.domain.auth.dto.request.RefreshTokenReq;
 import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
+import baeksaitong.sofp.domain.auth.dto.response.RefreshAccessRes;
+import baeksaitong.sofp.domain.auth.dto.response.TokenRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.global.common.entity.Member;
@@ -18,7 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 import static baeksaitong.sofp.global.common.entity.enums.MemberRole.ROLE_USER;
 
@@ -30,6 +35,12 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+
+    public void checkId(CheckIdReq req) {
+        if(memberRepository.existsByEmail(req.getEmail())){
+            throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
+        }
+    }
 
     public LoginRes singUp(SignUpReq req) {
         if(memberRepository.existsByEmail(req.getEmail())){
@@ -57,13 +68,7 @@ public class AuthService {
         );
     }
 
-    public void checkId(CheckIdReq req) {
-        if(memberRepository.existsByEmail(req.getEmail())){
-            throw new BusinessException(AuthErrorCode.DUPLICATIE_ID);
-        }
-    }
-
-    public String login(LoginReq req) {
+    public TokenRes login(LoginReq req) {
         Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(
                 () -> new BusinessException(AuthErrorCode.NO_SUCH_ID)
         );
@@ -72,16 +77,18 @@ public class AuthService {
             throw new BusinessException(AuthErrorCode.WRONG_PASSWORD);
         }
 
-        return createAccessToken(req);
+        Authentication authentication = createAuthentication(req);
+
+        return new TokenRes(jwtTokenProvider.createAccessToken(authentication), jwtTokenProvider.createRefreshToken(authentication));
     }
 
-    private String createAccessToken(LoginReq req) {
+    private Authentication createAuthentication(LoginReq req) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject()
                 .authenticate(usernamePasswordAuthenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return jwtTokenProvider.createAccessToken(authentication);
+        return authentication;
     }
 
     public LoginRes oauthLogin(
@@ -106,5 +113,30 @@ public class AuthService {
                 .email(email)
                 .password(id)
                 .build()));
+    }
+
+    public RefreshAccessRes refreshAccessToken0(RefreshTokenReq req) {
+        Authentication authentication = validateRefreshTokenAndGetAuthentication(req);
+        return new RefreshAccessRes(jwtTokenProvider.createAccessToken(authentication));
+    }
+
+
+    public String getExpiration(String token) {
+        jwtTokenProvider.validateToken(token);
+        Date expiration = jwtTokenProvider.getExpiration(token);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(expiration);
+    }
+
+    public TokenRes refresh(RefreshTokenReq req) {
+        Authentication authentication = validateRefreshTokenAndGetAuthentication(req);
+        return new TokenRes(jwtTokenProvider.createAccessToken(authentication), jwtTokenProvider.createRefreshToken(authentication) );
+    }
+
+    private Authentication validateRefreshTokenAndGetAuthentication(RefreshTokenReq req) {
+        String token = req.refreshToken();
+        String userId = jwtTokenProvider.getUserId(token);
+        jwtTokenProvider.validateRefreshToken(token, userId);
+        return jwtTokenProvider.getAuthentication(token);
     }
 }
