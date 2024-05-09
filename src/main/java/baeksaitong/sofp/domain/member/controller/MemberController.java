@@ -99,78 +99,37 @@ public class MemberController {
         return BaseResponse.ok("회원 정보 수정에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "알레르기 조회", description = "알레르기 정보를 조회합니다." +
+    @Operation(tags = "3. Member", summary = "질병 및 알레르기 정보 조회", description = "질병 정보를 조회합니다." +
             "<br> - 인증 필요")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원이 등록한 알레르기의 이름 리스트를 반환합니다.")
-    })
-    @GetMapping("/allergy")
-    public ResponseEntity<AllergyRes> getAllergyList(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(new AllergyRes(memberService.getAllergyList(member)));
-    }
-
-    @Operation(tags = "3. Member", summary = "알레르기 등록", description = "알레르기 정보를 등록합니다." +
-            "<br> - 인증 필요")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "알레르기 정보 등록에 성공했습니다"),
-            @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PostMapping("/allergy/add")
-    public ResponseEntity<String> setAllergy(@RequestBody AllergyReq req, @AuthenticationPrincipal Member member){
-        memberService.setAllergy(req.getAllergyList(), member);
-        return BaseResponse.ok("알레르기 정보 등록에 성공했습니다");
-    }
-
-    @Operation(tags = "3. Member", summary = "알레르기 수정", description = "알레르기 정보를 수정합니다." +
-            "<br> - 인증 필요")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "알레르기 정보 수정에 성공했습니다"),
-            @ApiResponse(responseCode = "404", description = "code: A-000 | message: 존재하지 않는 알레르기 정보입니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
-    @PostMapping("/allergy/edit")
-    public ResponseEntity<String> editAllergy(@RequestBody AllergyEditReq req, @AuthenticationPrincipal Member member){
-        memberService.removeAllergy( req.getRemoveAllergyList(), member);
-        memberService.setAllergy(req.getAddAllergyList(), member);
-        return BaseResponse.ok("알레르기 정보 수정에 성공했습니다");
-    }
-
-    @Operation(tags = "3. Member", summary = "질병 정보 조회", description = "질병 정보를 조회합니다." +
-            "<br> - 인증 필요")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 정보 이름 리스트를 반환합니다.")
+            @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 및 알레르기 리스트를 반환합니다.")
     })
     @GetMapping("/disease")
-    public ResponseEntity<DiseaseRes> getDiseaseList(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(new DiseaseRes(memberService.getDiseaseList(member)));
+    public ResponseEntity<DiseaseRes> getDiseaseAndAllergyList(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(new DiseaseRes(memberService.getgetDiseaseAndAllergyList(member)));
     }
 
-    @Operation(tags = "3. Member", summary = "질병 등록", description = "질병 정보를 등록합니다." +
+    @Operation(tags = "3. Member", summary = "질병 및 알레르기 등록", description = "질병 및 알레르기 정보를 등록합니다." +
             "<br> - 인증 필요")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "질병 정보 등록에 성공했습니다"),
-            @ApiResponse(responseCode = "404", description = "code: D-000 | message: 존재하지 않는 질병 정보입니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "질병 및 알레르기 정보 등록에 성공했습니다")
     })
     @PostMapping("/disease/add")
     public ResponseEntity<String> setDisease(@RequestBody DiseaseReq req, @AuthenticationPrincipal Member member){
         memberService.setDisease(req.getDiseaseList(), member);
-        return BaseResponse.ok("질병 정보 등록에 성공했습니다");
+        return BaseResponse.ok("질병 및 알레르기 정보 등록에 성공했습니다");
     }
 
-    @Operation(tags = "3. Member", summary = "질병 정보 수정", description = "질병 정보를 수정합니다." +
+    @Operation(tags = "3. Member", summary = "질병 및 알레르기 정보 수정", description = "질병 및 알레르기 정보를 수정합니다." +
             "<br> - 인증 필요")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "질병 정보 수정에 성공했습니다"),
-            @ApiResponse(responseCode = "404", description = "code: D-000 | message: 존재하지 않는 질병 정보입니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "질병 및 알레르기 정보 수정에 성공했습니다")
     })
     @PostMapping("/disease/edit")
     public ResponseEntity<String> editDisease(@RequestBody DiseaseEditReq req, @AuthenticationPrincipal Member member){
         memberService.removeDisease( req.getRemoveDiseaseList(), member);
         memberService.setDisease(req.getAddDiseaseList(), member);
-        return BaseResponse.ok("질병 정보 수정에 성공했습니다");
+        return BaseResponse.ok("질병 및 알레르기 정보 수정에 성공했습니다");
     }
 
     @Operation(tags = "3. Member", summary = "복용 중인 알약 조회", description = "복용 중인 알약을 조회합니다." +

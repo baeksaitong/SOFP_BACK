@@ -2,19 +2,15 @@ package baeksaitong.sofp.domain.member.service;
 
 import baeksaitong.sofp.domain.member.dto.response.BasicInfoRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
-import baeksaitong.sofp.domain.health.error.AllergyErrorCode;
-import baeksaitong.sofp.domain.health.error.DiseaseErrorCode;
 import baeksaitong.sofp.domain.health.error.PillErrorCode;
-import baeksaitong.sofp.domain.health.repository.AllergyRepository;
-import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
+import baeksaitong.sofp.domain.health.repository.DiseaseAndAllergyRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
 import baeksaitong.sofp.domain.member.dto.response.DetailInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillRes;
-import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
-import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
+import baeksaitong.sofp.domain.member.repository.MemberDiseaseAndAllergyRepository;
 import baeksaitong.sofp.domain.member.repository.MemberPillRepository;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
@@ -39,11 +35,9 @@ public class MemberService {
 
     private final AwsS3Service awsS3Service;
     private final MemberRepository memberRepository;
-    private final MemberAllergyRepository memberAllergyRepository;
-    private final MemberDiseaseRepository memberDiseaseRepository;
+    private final MemberDiseaseAndAllergyRepository memberDiseaseAndAllergyRepository;
     private final MemberPillRepository memberPillRepository;
-    private final AllergyRepository allergyRepository;
-    private final DiseaseRepository diseaseRepository;
+    private final DiseaseAndAllergyRepository diseaseAndAllergyRepository;
     private final PillRepository pillRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final HistoryService historyService;
@@ -75,76 +69,34 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public List<String> getAllergyList(Member member) {
-        return memberAllergyRepository.findAllByMember(member).stream()
-                .map(memberAllergy -> memberAllergy.getAllergy().getName())
+    public List<String> getgetDiseaseAndAllergyList(Member member) {
+        return memberDiseaseAndAllergyRepository.findAllByMember(member).stream()
+                .map(memberDiseaseAndAllergy -> memberDiseaseAndAllergy.getDiseaseAndAllergy().getName())
                 .collect(Collectors.toList());
     }
 
-    public void setAllergy(List<String> allergyList, Member member) {
-        if(allergyList.isEmpty()){
+    public void setDisease(List<String> diseaseAndAllergyList, Member member) {
+        if(diseaseAndAllergyList.isEmpty()){
             return;
         }
 
-        for (String name : allergyList) {
-            Allergy allergy = allergyRepository.findByName(name).orElseThrow(
-                    () -> new BusinessException(AllergyErrorCode.NO_SUCH_ALLERGY)
-            );
+        for (String name : diseaseAndAllergyList) {
+            DiseaseAndAllergy diseaseAndAllergy = diseaseAndAllergyRepository.findByName(name).orElse(null);
 
-            if (memberAllergyRepository.existsByMemberAndAllergy(member, allergy)) {
+            if(diseaseAndAllergy == null){
                 continue;
             }
 
-            MemberAllergy memberAllergy = MemberAllergy.builder()
-                    .member(member)
-                    .allergy(allergy)
-                    .build();
-
-
-            memberAllergyRepository.save(memberAllergy);
-
-        }
-    }
-
-    public void removeAllergy(List<String> allergyList, Member member) {
-        if(allergyList.isEmpty()){
-            return;
-        }
-
-        for (String allergyName : allergyList) {
-            Allergy allergy = allergyRepository.findByName(allergyName).orElseThrow(() -> new BusinessException(AllergyErrorCode.NO_SUCH_ALLERGY));
-            memberAllergyRepository.deleteByMemberAndAllergy(member,allergy);
-        }
-    }
-
-    public List<String> getDiseaseList(Member member) {
-        return memberDiseaseRepository.findAllByMember(member).stream()
-                .map(memberDisease -> memberDisease.getDisease().getName())
-                .collect(Collectors.toList());
-    }
-
-    public void setDisease(List<String> diseaseList, Member member) {
-        if(diseaseList.isEmpty()){
-            return;
-        }
-
-
-
-        for (String name : diseaseList) {
-            Disease disease = diseaseRepository.findByName(name).orElseThrow(
-                    () -> new BusinessException(DiseaseErrorCode.NO_SUCH_DISEASE)
-            );
-
-            if (memberDiseaseRepository.existsByMemberAndDisease(member, disease)) {
+            if (memberDiseaseAndAllergyRepository.existsByMemberAndDiseaseAndAllergy(member, diseaseAndAllergy)) {
                 continue;
             }
 
-            MemberDisease memberDisease = MemberDisease.builder()
+            MemberDiseaseAndAllergy memberDiseaseAndAllergy = MemberDiseaseAndAllergy.builder()
                     .member(member)
-                    .disease(disease)
+                    .diseaseAndAllergy(diseaseAndAllergy)
                     .build();
 
-            memberDiseaseRepository.save(memberDisease);
+            memberDiseaseAndAllergyRepository.save(memberDiseaseAndAllergy);
         }
     }
 
@@ -153,9 +105,14 @@ public class MemberService {
             return;
         }
 
-        for (String diseaseName : diseaseList) {
-            Disease disease = diseaseRepository.findByName(diseaseName).orElseThrow(() -> new BusinessException(DiseaseErrorCode.NO_SUCH_DISEASE));
-            memberDiseaseRepository.deleteByMemberAndDisease(member,disease);
+        for (String name : diseaseList) {
+            DiseaseAndAllergy diseaseAndAllergy = diseaseAndAllergyRepository.findByName(name).orElse(null);
+
+            if(diseaseAndAllergy == null){
+                continue;
+            }
+
+            memberDiseaseAndAllergyRepository.deleteByMemberAndDiseaseAndAllergy(member, diseaseAndAllergy);
         }
     }
 
