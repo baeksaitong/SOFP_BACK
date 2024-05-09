@@ -115,11 +115,8 @@ public class AuthService {
                 .build()));
     }
 
-    public RefreshAccessRes refreshAccessToken(RefreshTokenReq req) {
-        String token = req.refreshToken();
-        String userId = jwtTokenProvider.getUserId(token);
-        jwtTokenProvider.validateRefreshToken(token, userId);
-        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+    public RefreshAccessRes refreshAccessToken0(RefreshTokenReq req) {
+        Authentication authentication = validateRefreshTokenAndGetAuthentication(req);
         return new RefreshAccessRes(jwtTokenProvider.createAccessToken(authentication));
     }
 
@@ -129,5 +126,17 @@ public class AuthService {
         Date expiration = jwtTokenProvider.getExpiration(token);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(expiration);
+    }
+
+    public TokenRes refresh(RefreshTokenReq req) {
+        Authentication authentication = validateRefreshTokenAndGetAuthentication(req);
+        return new TokenRes(jwtTokenProvider.createAccessToken(authentication), jwtTokenProvider.createRefreshToken(authentication) );
+    }
+
+    private Authentication validateRefreshTokenAndGetAuthentication(RefreshTokenReq req) {
+        String token = req.refreshToken();
+        String userId = jwtTokenProvider.getUserId(token);
+        jwtTokenProvider.validateRefreshToken(token, userId);
+        return jwtTokenProvider.getAuthentication(token);
     }
 }

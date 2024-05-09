@@ -6,6 +6,7 @@ import baeksaitong.sofp.domain.auth.dto.request.RefreshTokenReq;
 import baeksaitong.sofp.domain.auth.dto.request.SignUpReq;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.dto.response.RefreshAccessRes;
+import baeksaitong.sofp.domain.auth.dto.response.TokenRes;
 import baeksaitong.sofp.domain.auth.service.AuthService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
@@ -63,7 +64,7 @@ public class AuthController {
 
     @Operation(tags = "1. Auth", summary = "Access Token 갱신", description = "refresh 토큰을 통해 access 토큰을 재발급합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "access, refresh 토큰"),
+            @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: J-000 | message: 유효하지 않은 jwt 토큰입니다. <br>" +
                     "code: J-001 | message: 만료된 jwt 토큰입니다. <br>" +
                     "code: J-002 | message: 지원하지 않는 JWT 토큰입니다.<br>" +
@@ -73,7 +74,23 @@ public class AuthController {
     })
     @PostMapping("/refresh/access")
     public ResponseEntity<RefreshAccessRes> refreshAccess(@RequestBody RefreshTokenReq req) {
-        RefreshAccessRes res = authService.refreshAccessToken(req);
+        RefreshAccessRes res = authService.refreshAccessToken0(req);
+        return BaseResponse.ok(res);
+    }
+
+    @Operation(tags = "1. Auth", summary = "Access 및 Refresh Token 갱신", description = "refresh 토큰을 통해 access 및 refresh 토큰을 재발급합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "access, refresh 토큰"),
+            @ApiResponse(responseCode = "404", description = "code: J-000 | message: 유효하지 않은 jwt 토큰입니다. <br>" +
+                    "code: J-001 | message: 만료된 jwt 토큰입니다. <br>" +
+                    "code: J-002 | message: 지원하지 않는 JWT 토큰입니다.<br>" +
+                    "code: J-003 | message: 토큰이 필요합니다.<br>" +
+                    "code: J-004 | message: 토큰을 갱신할 수 없습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenRes> refresh(@RequestBody RefreshTokenReq req) {
+        TokenRes res = authService.refresh(req);
         return BaseResponse.ok(res);
     }
 
