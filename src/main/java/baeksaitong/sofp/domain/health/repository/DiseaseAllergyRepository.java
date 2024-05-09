@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DiseaseAllergyRepository extends JpaRepository<DiseaseAllergy, Long> {
+public interface DiseaseAllergyRepository extends JpaRepository<DiseaseAllergy, Long>, DiseaseAllergyRepositoryCustom {
     List<DiseaseAllergy> findAll();
-
     Optional<DiseaseAllergy> findByName(String name);
 }
