@@ -69,13 +69,13 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public List<String> getgetDiseaseAndAllergyList(Member member) {
+    public List<String> getgetDiseaseAllergyList(Member member) {
         return memberDiseaseAllergyRepository.findAllByMember(member).stream()
                 .map(memberDiseaseAllergy -> memberDiseaseAllergy.getDiseaseAllergy().getName())
                 .collect(Collectors.toList());
     }
 
-    public void setDisease(List<String> diseaseAndAllergyList, Member member) {
+    public void setDiseaseAllergy(List<String> diseaseAndAllergyList, Member member) {
         if(diseaseAndAllergyList.isEmpty()){
             return;
         }
@@ -100,7 +100,7 @@ public class MemberService {
         }
     }
 
-    public void removeDisease(List<String> diseaseList, Member member) {
+    public void removeDiseaseAllergy(List<String> diseaseList, Member member) {
         if(diseaseList.isEmpty()){
             return;
         }

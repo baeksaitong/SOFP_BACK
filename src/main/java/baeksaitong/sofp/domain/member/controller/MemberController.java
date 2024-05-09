@@ -105,8 +105,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 및 알레르기 리스트를 반환합니다.")
     })
     @GetMapping("/diseaseAllergy")
-    public ResponseEntity<DiseaseRes> getDiseaseAndAllergyList(@AuthenticationPrincipal Member member){
-        return BaseResponse.ok(new DiseaseRes(memberService.getgetDiseaseAndAllergyList(member)));
+    public ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(@AuthenticationPrincipal Member member){
+        return BaseResponse.ok(new DiseaseAllergyRes(memberService.getgetDiseaseAllergyList(member)));
     }
 
     @Operation(tags = "3. Member", summary = "질병 및 알레르기 등록", description = "질병 및 알레르기 정보를 등록합니다." +
@@ -115,8 +115,8 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 정보 등록에 성공했습니다")
     })
     @PostMapping("/diseaseAllergy/add")
-    public ResponseEntity<String> setDisease(@RequestBody DiseaseReq req, @AuthenticationPrincipal Member member){
-        memberService.setDisease(req.getDiseaseList(), member);
+    public ResponseEntity<String> setDiseaseAllergy(@RequestBody DiseaseAllergyReq req, @AuthenticationPrincipal Member member){
+        memberService.setDiseaseAllergy(req.getDiseaseAllergyList(), member);
         return BaseResponse.ok("질병 및 알레르기 정보 등록에 성공했습니다");
     }
 
@@ -126,9 +126,9 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 정보 수정에 성공했습니다")
     })
     @PostMapping("/diseaseAllergy/edit")
-    public ResponseEntity<String> editDisease(@RequestBody DiseaseEditReq req, @AuthenticationPrincipal Member member){
-        memberService.removeDisease( req.getRemoveDiseaseList(), member);
-        memberService.setDisease(req.getAddDiseaseList(), member);
+    public ResponseEntity<String> editDiseaseAllergy(@RequestBody DiseaseAllergyEditReq req, @AuthenticationPrincipal Member member){
+        memberService.removeDiseaseAllergy( req.getRemoveDiseaseAllergyList(), member);
+        memberService.setDiseaseAllergy(req.getAddDiseaseAllergyList(), member);
         return BaseResponse.ok("질병 및 알레르기 정보 수정에 성공했습니다");
     }
 

@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.health.controller;
 
-import baeksaitong.sofp.domain.health.dto.response.DiseaseRes;
+import baeksaitong.sofp.domain.health.dto.response.DiseaseAllergyRes;
 import baeksaitong.sofp.domain.health.service.HealthService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +24,7 @@ public class HealthController {
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 리스트를 가져옵니다.")
     })
     @GetMapping("/diseaseAllergy")
-    ResponseEntity<DiseaseRes> getDiseaseList(){
-        return BaseResponse.ok(healthService.getDiseaseAndAllergyList());
+    ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(){
+        return BaseResponse.ok(healthService.getDiseaseAllergyList());
     }
 }

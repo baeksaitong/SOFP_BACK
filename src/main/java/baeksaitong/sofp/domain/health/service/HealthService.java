@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.health.service;
 
-import baeksaitong.sofp.domain.health.dto.response.DiseaseRes;
+import baeksaitong.sofp.domain.health.dto.response.DiseaseAllergyRes;
 import baeksaitong.sofp.domain.health.repository.DiseaseAllergyRepository;
 import baeksaitong.sofp.global.common.entity.DiseaseAllergy;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 public class HealthService {
 
     private final DiseaseAllergyRepository diseaseAllergyRepository;
-    public DiseaseRes getDiseaseAndAllergyList() {
+    public DiseaseAllergyRes getDiseaseAllergyList() {
         List<String> diseaseList = diseaseAllergyRepository.findAll()
                 .stream()
                 .map(DiseaseAllergy::getName)
                 .collect(Collectors.toList());
 
-        return new DiseaseRes(diseaseList);
+        return new DiseaseAllergyRes(diseaseList);
     }
 }
