@@ -21,7 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 import static baeksaitong.sofp.global.common.entity.enums.MemberRole.ROLE_USER;
 
@@ -113,7 +115,7 @@ public class AuthService {
                 .build()));
     }
 
-    public RefreshAccessRes refershAccessToken(RefreshTokenReq req) {
+    public RefreshAccessRes refreshAccessToken(RefreshTokenReq req) {
         String token = req.refreshToken();
         String userId = jwtTokenProvider.getUserId(token);
         jwtTokenProvider.validateRefreshToken(token, userId);
@@ -122,4 +124,10 @@ public class AuthService {
     }
 
 
+    public String getExpiration(String token) {
+        jwtTokenProvider.validateToken(token);
+        Date expiration = jwtTokenProvider.getExpiration(token);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(expiration);
+    }
 }
