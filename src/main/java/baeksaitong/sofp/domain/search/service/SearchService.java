@@ -65,6 +65,7 @@ public class SearchService {
                             pill.getSerialNumber(),
                                 pill.getName(),
                                 pill.getClassification(),
+                                pill.getProOrGen(),
                                 pill.getImgUrl(),
                                 pill.getChart(),
                                 pill.getEnterprise(),
