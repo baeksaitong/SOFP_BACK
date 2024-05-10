@@ -3,8 +3,7 @@ package baeksaitong.sofp.domain.search.service;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
-import baeksaitong.sofp.domain.member.repository.MemberAllergyRepository;
-import baeksaitong.sofp.domain.member.repository.MemberDiseaseRepository;
+import baeksaitong.sofp.domain.member.repository.MemberDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,8 +36,7 @@ public class SearchService {
     private final PillFeignClient pillFeignClient;
     private final FavoriteRepository favoriteRepository;
     private final HistoryService historyService;
-    private final MemberAllergyRepository memberAllergyRepository;
-    private final MemberDiseaseRepository memberDiseaseRepository;
+    private final MemberDiseaseAllergyRepository memberDiseaseAllergyRepository;
 
     @Value("${api.public-data.url.pill-info}")
     private String pillInfoUrl;
@@ -100,18 +97,8 @@ public class SearchService {
     }
 
     private Set<String> getAllergyAndDiseaseSet(Member member) {
-        Set<String> allergyAndDiseaseSet = new HashSet<>();
-        allergyAndDiseaseSet.addAll(
-                memberAllergyRepository.findAllByMember(member).stream()
-                        .map(memberAllergy -> memberAllergy.getAllergy().getName())
-                        .collect(Collectors.toSet())
-        );
-        allergyAndDiseaseSet.addAll(
-                memberDiseaseRepository.findAllByMember(member).stream()
-                        .map(memberDisease -> memberDisease.getDisease().getName())
-                        .collect(Collectors.toSet())
-        );
-        return allergyAndDiseaseSet;
+        return memberDiseaseAllergyRepository.findAllByMember(member).stream()
+                .map(memberDisease -> memberDisease.getDiseaseAllergy().getName()).collect(Collectors.toSet());
     }
 
     private Boolean checkIsWaring(String serialNumber, Set<String> allergyAndDiseaseSet){

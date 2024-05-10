@@ -1,11 +1,7 @@
 package baeksaitong.sofp.domain.health.service;
 
-import baeksaitong.sofp.domain.health.dto.response.AllergyRes;
-import baeksaitong.sofp.domain.health.dto.response.DiseaseRes;
-import baeksaitong.sofp.domain.health.repository.AllergyRepository;
-import baeksaitong.sofp.domain.health.repository.DiseaseRepository;
-import baeksaitong.sofp.global.common.entity.Allergy;
-import baeksaitong.sofp.global.common.entity.Disease;
+import baeksaitong.sofp.domain.health.repository.DiseaseAllergyRepository;
+import baeksaitong.sofp.global.common.entity.DiseaseAllergy;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,26 +13,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class HealthService {
-
-    private final AllergyRepository allergyRepository;
-    private final DiseaseRepository diseaseRepository;
-
-    public AllergyRes getAllergyList() {
-
-        List<String> allergyList = allergyRepository.findAll()
-                .stream()
-                .map(Allergy::getName)
+    private final DiseaseAllergyRepository diseaseAllergyRepository;
+    public List<String> getDiseaseAllergyList() {
+        return diseaseAllergyRepository.findAll().stream()
+                .map(DiseaseAllergy::getName)
                 .collect(Collectors.toList());
-
-        return new AllergyRes(allergyList);
     }
 
-    public DiseaseRes getDiseaseList() {
-        List<String> diseaseList = diseaseRepository.findAll()
-                .stream()
-                .map(Disease::getName)
-                .collect(Collectors.toList());
-
-        return new DiseaseRes(diseaseList);
+    public List<String> searchDiseaseAllergyList(String keyword) {
+        return diseaseAllergyRepository.findByKeyword(keyword);
     }
 }
