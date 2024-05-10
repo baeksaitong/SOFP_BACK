@@ -72,6 +72,6 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
     }
 
     private BooleanExpression keywordLike(String keyword) {
-        return keyword != null ? pill.name.contains(keyword) : null;
+        return keyword != null ? pill.name.contains(keyword).or(pill.efficacy.contains(keyword)).or(pill.ingredient.contains(keyword)) : null;
     }
 }
