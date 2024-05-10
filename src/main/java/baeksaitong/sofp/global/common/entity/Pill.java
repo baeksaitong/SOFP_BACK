@@ -20,8 +20,13 @@ public class Pill {
     private String chart;
     private String enterprise;
     private String classification;
+    @Column(name = "pro_or_gen")
+    private String proOrGen;
     private String formulation;
     private String shape;
+    private String efficacy;
+    private String ingredient;
+
     @Column(name = "sign_front")
     private String signFront;
     @Column(name = "sign_back")
