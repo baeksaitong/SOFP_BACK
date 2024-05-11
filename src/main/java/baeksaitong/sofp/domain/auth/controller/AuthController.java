@@ -15,10 +15,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "\uD83D\uDD10 Auth")
 @RestController
 @RequestMapping("/app/auth")
 @RequiredArgsConstructor
@@ -26,7 +28,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Operation(tags = "1. Auth", summary = "회원 가입", description = "회원 가입을 진행합니다.")
+    @Operation(summary = "회원 가입", description = "회원 가입을 진행합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "신규 회원 여부=true, access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: A-000 | message: 이미 존재하는 아이디입니다.",
@@ -37,7 +39,7 @@ public class AuthController {
         return BaseResponse.ok(authService.singUp(req));
     }
 
-    @Operation(tags = "1. Auth", summary = "아이디 중복 검사", description = "아이디 중복 여부를 검사합니다.")
+    @Operation(summary = "아이디 중복 검사", description = "아이디 중복 여부를 검사합니다.")
             @ApiResponses({
                     @ApiResponse(responseCode = "200", description = "사용가능 한 아이디입니다."),
                     @ApiResponse(responseCode = "404", description = "code: A-000 | message: 이미 존재하는 아이디입니다.",
@@ -49,7 +51,7 @@ public class AuthController {
         return BaseResponse.ok("사용가능 한 아이디입니다.");
     }
 
-    @Operation(tags = "1. Auth", summary = "로그인", description = "신규 회원 여부=false, 로그인을 진행합니다.")
+    @Operation(summary = "로그인", description = "신규 회원 여부=false, 로그인을 진행합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: A-001 | message: 존재하지 않는 아이디입니다.",
@@ -62,7 +64,7 @@ public class AuthController {
         return BaseResponse.ok(new LoginRes(false, authService.login(req)));
     }
 
-    @Operation(tags = "1. Auth", summary = "Access Token 갱신", description = "refresh 토큰을 통해 access 토큰을 재발급합니다.")
+    @Operation(summary = "Access Token 갱신", description = "refresh 토큰을 통해 access 토큰을 재발급합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "404", description = "code: J-000 | message: 유효하지 않은 jwt 토큰입니다. <br>" +
@@ -78,7 +80,7 @@ public class AuthController {
         return BaseResponse.ok(res);
     }
 
-    @Operation(tags = "1. Auth", summary = "Access 및 Refresh Token 갱신", description = "refresh 토큰을 통해 access 및 refresh 토큰을 재발급합니다.")
+    @Operation( summary = "Access 및 Refresh Token 갱신", description = "refresh 토큰을 통해 access 및 refresh 토큰을 재발급합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "access, refresh 토큰"),
             @ApiResponse(responseCode = "404", description = "code: J-000 | message: 유효하지 않은 jwt 토큰입니다. <br>" +
@@ -94,7 +96,7 @@ public class AuthController {
         return BaseResponse.ok(res);
     }
 
-    @Operation(tags = "1. Auth", summary = "토큰 만료기한 조회", description = "유효한 토큰인 경우, 해당 토큰의 만료기한을 조회할 수 있습니다.")
+    @Operation(summary = "토큰 만료기한 조회", description = "유효한 토큰인 경우, 해당 토큰의 만료기한을 조회할 수 있습니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "토큰의 만료기한 (yyyy-MM-dd HH:mm:ss)"),
             @ApiResponse(responseCode = "400", description = "code: J-000 | message: 유효하지 않은 jwt 토큰입니다. <br>" +

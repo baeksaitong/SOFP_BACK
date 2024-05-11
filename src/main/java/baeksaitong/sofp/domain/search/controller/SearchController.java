@@ -13,11 +13,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "\uD83D\uDD0D️ Search")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/app/search")
@@ -25,8 +27,7 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @Operation(tags = "5. Search", summary = "모양 및 검색어 검색", description = "모양 및 검색어로 알약을 검색합니다." +
-            "<br> - 인증 필요")
+    @Operation(summary = "\uD83D\uDD11 모양 및 검색어 검색", description = "모양 및 검색어로 알약을 검색합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
     })
@@ -36,8 +37,7 @@ public class SearchController {
         return BaseResponse.ok(res);
     }
 
-    @Operation(tags = "5. Search", summary = "알약 세부 정보", description = "알약 세부 정보를 제공 합니다." +
-            "<br> - 인증 필요")
+    @Operation(summary = "\uD83D\uDD11 알약 세부 정보", description = "알약 세부 정보를 제공 합니다." )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "알약 세부 사항 및 경고 사항을 알려줍니다."),
             @ApiResponse(responseCode = "404", description = "code: S-000 | message: 알약 정보를 불려오는데 실패했습니다.",
@@ -49,8 +49,7 @@ public class SearchController {
         return BaseResponse.ok(res);
     }
 
-    @Operation(tags = "5. Search", summary = "이미지 검색", description = "이미지로 알약을 검색합니다." +
-            "<br> - 인증 필요")
+    @Operation(summary = "\uD83D\uDD11 이미지 검색", description = "이미지로 알약을 검색합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
     })
