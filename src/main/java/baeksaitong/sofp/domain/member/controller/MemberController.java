@@ -99,7 +99,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원이 등록한 질병 및 알레르기 리스트를 반환합니다.")
     })
-    @GetMapping("/diseaseAllergy")
+    @GetMapping("/disease-allergy")
     public ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(@AuthenticationPrincipal Member member){
         return BaseResponse.ok(new DiseaseAllergyRes(memberService.getgetDiseaseAllergyList(member)));
     }
@@ -108,7 +108,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 정보 등록에 성공했습니다")
     })
-    @PostMapping("/diseaseAllergy/add")
+    @PostMapping("/disease-allergy/add")
     public ResponseEntity<String> setDiseaseAllergy(@RequestBody DiseaseAllergyReq req, @AuthenticationPrincipal Member member){
         memberService.setDiseaseAllergy(req.getDiseaseAllergyList(), member);
         return BaseResponse.ok("질병 및 알레르기 정보 등록에 성공했습니다");
@@ -118,7 +118,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 정보 수정에 성공했습니다")
     })
-    @PostMapping("/diseaseAllergy/edit")
+    @PostMapping("/disease-allergy/edit")
     public ResponseEntity<String> editDiseaseAllergy(@RequestBody DiseaseAllergyEditReq req, @AuthenticationPrincipal Member member){
         memberService.removeDiseaseAllergy( req.getRemoveDiseaseAllergyList(), member);
         memberService.setDiseaseAllergy(req.getAddDiseaseAllergyList(), member);
@@ -163,7 +163,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "페이지 갯수, keywordDto 리스트")
     })
-    @GetMapping("/recentViewPill")
+    @GetMapping("/recent-view")
     public ResponseEntity<KeywordRes> getRecentViewPill(@RequestParam int count,@AuthenticationPrincipal Member member){
         KeywordRes recentViewPill = memberService.getRecentViewPill(count, member);
         return BaseResponse.ok(recentViewPill);
@@ -175,7 +175,7 @@ public class MemberController {
             @ApiResponse(responseCode = "404", description = "code: H-000 | message: 최근 본 알약 리스트가 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/recentViewPill/delete")
+    @GetMapping("/recent-view/delete")
     public ResponseEntity<KeywordRes> deleteRecentViewPill(@RequestParam Long pillId, @RequestParam int count, @AuthenticationPrincipal Member member){
         KeywordRes recentViewPill = memberService.deleteRecentViewPill(pillId, count, member);
         return BaseResponse.ok(recentViewPill);
