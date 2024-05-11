@@ -16,11 +16,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "\uD83D\uDC64 Member")
-@Controller
+@RestController
 @RequestMapping("/app/member")
 @RequiredArgsConstructor
 public class MemberController {
