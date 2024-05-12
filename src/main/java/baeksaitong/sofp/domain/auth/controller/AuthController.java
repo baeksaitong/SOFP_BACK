@@ -16,8 +16,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "\uD83D\uDD10 Auth")
@@ -35,7 +37,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/sign-up")
-    public ResponseEntity<LoginRes> signUp(@RequestBody SignUpReq req){
+    public ResponseEntity<LoginRes> signUp(@RequestBody @Validated SignUpReq req){
         return BaseResponse.ok(authService.singUp(req));
     }
 
@@ -46,7 +48,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/id-check")
-    public ResponseEntity<String> checkId(@RequestBody CheckIdReq req){
+    public ResponseEntity<String> checkId(@RequestBody @Validated CheckIdReq req){
         authService.checkId(req);
         return BaseResponse.ok("사용가능 한 아이디입니다.");
     }
@@ -60,7 +62,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginRes> login(@RequestBody LoginReq req){
+    public ResponseEntity<LoginRes> login(@RequestBody @Validated LoginReq req){
         return BaseResponse.ok(new LoginRes(false, authService.login(req)));
     }
 
@@ -75,7 +77,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/refresh/access")
-    public ResponseEntity<RefreshAccessRes> refreshAccess(@RequestBody RefreshTokenReq req) {
+    public ResponseEntity<RefreshAccessRes> refreshAccess(@RequestBody @Validated RefreshTokenReq req) {
         RefreshAccessRes res = authService.refreshAccessToken0(req);
         return BaseResponse.ok(res);
     }
@@ -91,7 +93,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/refresh")
-    public ResponseEntity<TokenRes> refresh(@RequestBody RefreshTokenReq req) {
+    public ResponseEntity<TokenRes> refresh(@RequestBody @Validated RefreshTokenReq req) {
         TokenRes res = authService.refresh(req);
         return BaseResponse.ok(res);
     }
@@ -106,7 +108,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/expiration")
-    public ResponseEntity<String> getExpiration(@RequestParam String token) {
+    public ResponseEntity<String> getExpiration(@RequestParam @Validated @NotBlank String token) {
         String expiration = authService.getExpiration(token);
         return BaseResponse.ok(expiration);
     }
