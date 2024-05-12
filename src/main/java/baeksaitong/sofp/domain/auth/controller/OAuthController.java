@@ -25,7 +25,9 @@ public class OAuthController {
     private final KakaoService kakaoService;
     private final NaverService naverService;
 
-    @Operation(summary = "카카오 로그인", description = "카카오 인가코드를 전달합니다.")
+    @Operation(summary = "카카오 로그인", description = "카카오 인가코드를 전달합니다." +
+            "<br><br> \uD83D\uDEA9 API URL : http://kauth.kakao.com/oauth/authorize?response_type=code&client_id={client_id}&redirect_uri=http://15.164.18.65:8080/app/oauth/kakao" +
+            "<br>\uD83D\uDCA1 클라이언트 아이디는 노션-문서-백엔드-소셜 로그인 참고")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "500", description = "code: A-003 | message: 카카오 유저 정보를 받아오는데 실패했습니다.",
@@ -36,7 +38,10 @@ public class OAuthController {
         return BaseResponse.ok(kakaoService.login(code));
     }
 
-    @Operation(summary = "네이버 로그인", description = "네이버 인가코드를 전달합니다.")
+    @Operation(summary = "네이버 로그인", description = "네이버 인가코드를 전달합니다." +
+            "<br><br> \uD83D\uDEA9 API URL : https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id={client_id}&redirect_uri=http://15.164.18.65:8080/app/oauth/naver&state=sofp" +
+            "<br>\uD83D\uDCA1 클라이언트 아이디는 노션-문서-백엔드-소셜 로그인 참고"
+           )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "access 토큰"),
             @ApiResponse(responseCode = "500", description = "code: A-004 | message: 네이버 유저 정보를 받아오는데 실패했습니다.",
