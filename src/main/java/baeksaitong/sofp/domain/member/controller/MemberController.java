@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "\uD83D\uDC64 Member")
@@ -33,7 +34,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/verification")
-    public ResponseEntity<String> verification(@ModelAttribute VerificationReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> verification(@ModelAttribute @Validated VerificationReq req, @AuthenticationPrincipal Member member){
         memberService.verification(req.getPassword(),member);
         return BaseResponse.ok("인증에 성공했습니다");
     }

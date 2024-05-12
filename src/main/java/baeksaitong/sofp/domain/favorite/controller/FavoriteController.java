@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,12 +25,12 @@ public class FavoriteController {
 
     private final FavoriteService favoriteService;
 
-        @Operation(summary = "\uD83D\uDD11 즐겨찾기 추가", description = "알약을 즐겨찾기에 추가합니다.")
+    @Operation(summary = "\uD83D\uDD11 즐겨찾기 추가", description = "알약을 즐겨찾기에 추가합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "즐겨찾기 추가 성공")
     })
     @PostMapping("/add")
-    private ResponseEntity<?> addFavorite(@ModelAttribute FavoriteReq req, @AuthenticationPrincipal Member member){
+    private ResponseEntity<?> addFavorite(@ModelAttribute @Validated FavoriteReq req, @AuthenticationPrincipal Member member){
         favoriteService.addFavorite(req, member);
         return BaseResponse.ok("즐겨찾기 추가 성공");
     }
