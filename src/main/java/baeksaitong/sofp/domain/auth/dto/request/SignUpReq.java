@@ -28,7 +28,7 @@ public class SignUpReq {
     private String email;
     @ValidEnum(enumClass = MemberGender.class, message = "유효하지 않은 성별입니다", ignoreCase=true)
     @Schema(description = "성별", example = "MALE(male)/FEMALE(female)")
-    private MemberGender gender;
+    private String gender;
     @Pattern(regexp = PW_REGEXP, message = "유효하지 않는 비밀번호입니다.")
     @Schema(description = "비밀번호 : 8자 이상 16자 이하, 하나 이상 숫자 및 알파벳 문자(소문자 또는 대문자)")
     private String password;
