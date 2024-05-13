@@ -6,12 +6,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class FavoriteReq {
     @Schema(description = "검색 타입", example = "COMMON(common)/IMAGE(image)")
     @ValidEnum(enumClass = SearchType.class, message = "검색 타입이 필요합니다.", ignoreCase = true)
