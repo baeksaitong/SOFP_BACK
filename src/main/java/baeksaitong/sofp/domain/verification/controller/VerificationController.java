@@ -46,9 +46,8 @@ public class VerificationController {
             @ApiResponse(responseCode = "200", description = "코드 일치 시 True 반환"),
             @ApiResponse(responseCode = "500", description = "code: M-000 | message: 메일 전송에 실패했습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "code: M-001 | message: 코드 유효기간이 만료 되었습니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            @ApiResponse(responseCode = "404", description = "code: M-002 | message: 코드가 일치하지 않습니다",
+            @ApiResponse(responseCode = "404", description = "code: M-001 | message: 코드 유효기간이 만료 되었습니다.<br>"+
+                    "code: M-002 | message: 코드가 일치하지 않습니다",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/mail/check")
