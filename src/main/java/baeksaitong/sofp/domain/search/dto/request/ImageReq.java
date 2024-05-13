@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 public class ImageReq {
     @Schema(description = "검색 이미지")
-    @NotNull
+    @NotNull(message = "이미지가 필요합니다.")
     private MultipartFile image;
     @Schema(description = "알약 모양")
     private String shape;
@@ -25,7 +25,7 @@ public class ImageReq {
     @Schema(description = "알약 분할선")
     private String line;
     @Schema(description = "검색 페이지 - 0부터 시작, 기본값 : 0")
-    private int page=0;
+    private Integer page=0;
     @Schema(description = "페이지 당 요소 갯수 - 기본값 : 5")
-    private int limit=5;
+    private Integer limit=5;
 }
