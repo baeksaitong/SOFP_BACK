@@ -16,6 +16,7 @@ import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.service.SearchService;
 import baeksaitong.sofp.global.common.entity.*;
+import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ public class MemberService {
 
     public void editMember(MemberEditReq req, Member member) {
         member.setNickname(req.getNickname());
-        member.setGender(req.getGender());
+        member.setGender(MemberGender.from(req.getGender()));
         if(req.getPassword() != null) member.setPwd(passwordEncoder.encode(req.getPassword()));
         member.setBirthday(req.getBirthday());
         member.setAdvertisement(req.getAdvertisement());

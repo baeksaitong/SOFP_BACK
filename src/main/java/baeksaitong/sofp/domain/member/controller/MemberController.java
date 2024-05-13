@@ -69,7 +69,7 @@ public class MemberController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/img")
-    public ResponseEntity<String> setProfileImg(@ModelAttribute ProfileImgReq req, @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> setProfileImg(@ModelAttribute @Validated ProfileImgReq req, @AuthenticationPrincipal Member member){
         memberService.setProfileImg(req.getProfileImg(),member);
         return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
     }
@@ -90,7 +90,7 @@ public class MemberController {
             @ApiResponse(responseCode = "200", description = "회원 정보 수정에 성공했습니다")
     })
     @PostMapping("/edit")
-    public ResponseEntity<String> editMember(@RequestBody MemberEditReq req,  @AuthenticationPrincipal Member member){
+    public ResponseEntity<String> editMember(@RequestBody @Validated MemberEditReq req,  @AuthenticationPrincipal Member member){
         memberService.editMember(req, member);
         return BaseResponse.ok("회원 정보 수정에 성공했습니다");
     }
