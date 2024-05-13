@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "\uD83D\uDD0D️ Search")
@@ -54,8 +55,8 @@ public class SearchController {
             @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
     })
     @PostMapping("/image")
-    public ResponseEntity<?> findByImage(@ModelAttribute ImageReq req){
+    public ResponseEntity<?> findByImage(@ModelAttribute @Validated ImageReq req){
         searchService.findByImage(req);
-        return BaseResponse.ok("임시");
+        return BaseResponse.ok(req.getPage().toString() + ", " + req.getLimit().toString());
     }
 }
