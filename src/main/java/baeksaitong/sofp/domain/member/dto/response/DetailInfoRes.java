@@ -12,8 +12,6 @@ public record DetailInfoRes(
         LocalDate birthday,
         @Schema(description = "이메일")
         String email,
-        @Schema(description = "닉네임")
-        String nickname,
         @Schema(description = "프로필 사진 주소")
         String imgUrl,
         @Schema(description = "성별")

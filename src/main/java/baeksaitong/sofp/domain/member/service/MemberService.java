@@ -55,13 +55,8 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public void setNickName(String nickname, Member member) {
-        member.setNickname(nickname);
-        memberRepository.save(member);
-    }
-
     public void editMember(MemberEditReq req, Member member) {
-        member.setNickname(req.getNickname());
+        member.setName(req.getName());
         member.setGender(MemberGender.from(req.getGender()));
         if(req.getPassword() != null) member.setPwd(passwordEncoder.encode(req.getPassword()));
         member.setBirthday(req.getBirthday());
@@ -202,7 +197,7 @@ public class MemberService {
     }
 
     public BasicInfoRes getBasicInfo(Member member) {
-        return new BasicInfoRes(member.getNickname(), member.getImgUrl());
+        return new BasicInfoRes(member.getName(), member.getImgUrl());
     }
 
     public DetailInfoRes getDetailInfo(Member member) {
@@ -210,7 +205,6 @@ public class MemberService {
                 member.getName(),
                 member.getBirthday(),
                 member.getEmail(),
-                member.getNickname(),
                 member.getImgUrl(),
                 member.getGender(),
                 member.getAdvertisement()

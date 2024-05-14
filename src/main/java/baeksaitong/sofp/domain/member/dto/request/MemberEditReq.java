@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class MemberEditReq {
     @NotBlank(message = "이름이 필요합니다.")
     @Schema(description = "이름")
-    private String nickname;
+    private String name;
 
     @NotNull(message = "생일이 필요합니다.")
     @Schema(description = "생일")
