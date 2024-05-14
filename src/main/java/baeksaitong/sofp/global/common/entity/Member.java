@@ -27,7 +27,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private LocalDate birthday;
     private String email;
     private String pwd;
-    private String nickname;
 
     @Column(name = "img_url")
     private String imgUrl;

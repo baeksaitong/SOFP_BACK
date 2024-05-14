@@ -39,9 +39,9 @@ public class MemberController {
         return BaseResponse.ok("인증에 성공했습니다");
     }
 
-    @Operation(summary = "\uD83D\uDD11 회원 기본 정보 제공", description = "회원 기본 정보를 제공합니다.")
+    @Operation(summary = "\uD83D\uDD11 회원 기본 정보 제공", description = "이름 및 프로필 사진을 제공합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "닉네임 및 프로필 사진 주소 제공")
+            @ApiResponse(responseCode = "200", description = "이름 및 프로필 사진 주소 제공")
     })
     @PostMapping("/info/basic")
     public ResponseEntity<BasicInfoRes> getBasicInfo(@AuthenticationPrincipal Member member){
@@ -52,7 +52,7 @@ public class MemberController {
 
     @Operation(summary = "\uD83D\uDD11 회원 상세 정보 제공", description = "회원 상세 정보를 제공합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "닉네임 및 프로필 사진 주소 제공")
+            @ApiResponse(responseCode = "200", description = "회원 상세 정보")
     })
     @PostMapping("/info/detail")
     public ResponseEntity<DetailInfoRes> getDetailInfo(@AuthenticationPrincipal Member member){
@@ -72,17 +72,6 @@ public class MemberController {
     public ResponseEntity<String> setProfileImg(@ModelAttribute @Validated ProfileImgReq req, @AuthenticationPrincipal Member member){
         memberService.setProfileImg(req.getProfileImg(),member);
         return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
-    }
-
-
-    @Operation(summary = "\uD83D\uDD11 닉네임 등록", description = "닉네임을 등록합니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "닉네임을 등록에 성공했습니다")
-    })
-    @GetMapping("/nickname")
-    public ResponseEntity<String> setNickname(@RequestParam String nickname, @AuthenticationPrincipal Member member){
-        memberService.setNickName(nickname, member);
-        return BaseResponse.ok("닉네임을 등록에 성공했습니다");
     }
 
     @Operation(summary = "\uD83D\uDD11 회원 정보 수정", description = "회원 정보를 수정합니다.")
