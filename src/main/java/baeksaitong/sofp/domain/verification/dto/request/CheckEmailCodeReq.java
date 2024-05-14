@@ -14,11 +14,10 @@ import static baeksaitong.sofp.global.common.Constants.*;
 @AllArgsConstructor
 public class CheckEmailCodeReq {
 
-    @NotBlank
     @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 일치하지 않습니다.")
     @Schema(description = "코드를 보낸 이메일", example = "example@example.com")
     private String email;
-    @NotBlank
-    @Schema(description = "확인할 코드")
+    @NotBlank(message = "인증 코드가 필요합니다.")
+    @Schema(description = "인증 코드")
     private String code;
 }

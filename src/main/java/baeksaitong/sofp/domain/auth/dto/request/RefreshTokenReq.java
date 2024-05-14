@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public record RefreshTokenReq(
         @Schema(description = "Refresh Token")
-        @NotBlank
+        @NotBlank(message = "Refresh Token이 필요합니다.")
         String refreshToken
 ) {
 }

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class HealthService {
+public class DiseaseAllergyService {
     private final DiseaseAllergyRepository diseaseAllergyRepository;
     public List<String> getDiseaseAllergyList() {
         return diseaseAllergyRepository.findAll().stream()

@@ -52,7 +52,7 @@ public class AuthService {
                 .email(req.getEmail())
                 .birthday(req.getBirthday())
                 .pwd(passwordEncoder.encode(req.getPassword()))
-                .gender(req.getGender())
+                .gender(MemberGender.from(req.getGender()))
                 .advertisement(req.getAdvertisement())
                 .role(ROLE_USER)
                 .build();
@@ -103,7 +103,7 @@ public class AuthService {
                     .birthday(birthday)
                     .name(name)
                     .advertisement(agreement)
-                    .gender(gender)
+                    .gender(String.valueOf(gender))
                     .build());
             isNew = true;
         }
