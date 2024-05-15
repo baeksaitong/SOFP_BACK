@@ -50,11 +50,9 @@ public class HistoryService {
     }
 
     public void deleteRecentViewPill(Long memberId, List<Long> removePillIdList){
-        History history = historyRepository.findById(memberId).orElse(null);
-
-        if(history != null){
-            throw new BusinessException(HistoryErrorCode.NO_SUCH_RECENT_VIEW_PILL);
-        }
+        History history = historyRepository.findById(memberId).orElseThrow(
+                () -> new BusinessException(HistoryErrorCode.NO_SUCH_RECENT_VIEW_PILL)
+        );
 
         List<Long> recentViewPill = history.getRecentViewPill();
 
