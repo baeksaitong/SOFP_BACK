@@ -163,7 +163,6 @@ public class MemberService {
 
 
         List<Pill> pillList = new ArrayList<>();
-        List<Long> errorPillList = new ArrayList<>();
 
         for (Long serialNumber : recentViewPill) {
             Pill pill = pillRepository.findBySerialNumber(serialNumber).orElse(null);
@@ -172,13 +171,7 @@ public class MemberService {
                 if(pillList.size() > count){
                     break;
                 }
-            }else{
-                errorPillList.add(serialNumber);
             }
-        }
-
-        if(!errorPillList.isEmpty()) {
-            historyService.deleteRecentViewPill(member.getId(), errorPillList);
         }
 
         return new KeywordRes(count/5 + 1, searchService.getKeywordDto(pillList, member));
