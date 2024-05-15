@@ -29,14 +29,12 @@ public class HistoryService {
         }
 
         List<Long> recentViewPill = history.getRecentViewPill();
-        recentViewPill.add(pillId);
+        recentViewPill.remove(pillId);
 
-        int size = recentViewPill.size();
-        if(size > 60){
-            recentViewPill = recentViewPill.subList(size - 60,size);
-        }
+        recentViewPill.add(0, pillId);
 
-        history.setRecentViewPill(recentViewPill);
+        int endIdx = Math.min(recentViewPill.size(), 60);
+        history.setRecentViewPill(recentViewPill.subList(0,endIdx));
 
         historyRepository.save(history);
     }
@@ -52,11 +50,9 @@ public class HistoryService {
     }
 
     public void deleteRecentViewPill(Long memberId, List<Long> removePillIdList){
-        History history = historyRepository.findById(memberId).orElse(null);
-
-        if(history != null){
-            throw new BusinessException(HistoryErrorCode.NO_SUCH_RECENT_VIEW_PILL);
-        }
+        History history = historyRepository.findById(memberId).orElseThrow(
+                () -> new BusinessException(HistoryErrorCode.NO_SUCH_RECENT_VIEW_PILL)
+        );
 
         List<Long> recentViewPill = history.getRecentViewPill();
 

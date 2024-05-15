@@ -75,7 +75,7 @@ public class SearchService {
         PillInfoRes result;
         try {
              result = pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
-             result.setWaringInfo(findAllWaringInfo(result.getCautionGeneral(), getAllergyAndDiseaseSet(member)));
+             if(result.getCautionGeneral() != null) result.setWaringInfo(findAllWaringInfo(result.getCautionGeneral(), getAllergyAndDiseaseSet(member)));
         } catch (URISyntaxException e) {
             throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
         }
