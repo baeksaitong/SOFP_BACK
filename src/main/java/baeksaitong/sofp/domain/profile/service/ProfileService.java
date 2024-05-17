@@ -44,7 +44,7 @@ public class ProfileService {
         return new ProfileDetailRes(profile);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public void deleteProfile(String name, Member member) {
         Profile profile = profileRepository.findByNameAndMember(name, member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
