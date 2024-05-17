@@ -1,6 +1,8 @@
 package baeksaitong.sofp.domain.profile.service;
 
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
+import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
+import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Member;
@@ -28,5 +30,17 @@ public class ProfileService {
                 .build();
 
         profileRepository.save(profile);
+    }
+
+    public ProfileBasicRes getProfileBasic(String name, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(name, member)
+                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        return new ProfileBasicRes(profile);
+    }
+
+    public ProfileDetailRes getProfileDetail(String name, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(name, member)
+                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        return new ProfileDetailRes(profile);
     }
 }
