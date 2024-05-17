@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.Profile.dto.request;
+package baeksaitong.sofp.domain.profile.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

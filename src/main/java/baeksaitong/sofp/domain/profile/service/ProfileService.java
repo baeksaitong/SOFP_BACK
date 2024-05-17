@@ -1,7 +1,7 @@
-package baeksaitong.sofp.domain.Profile.service;
+package baeksaitong.sofp.domain.profile.service;
 
-import baeksaitong.sofp.domain.Profile.dto.request.ProfileReq;
-import baeksaitong.sofp.domain.Profile.repository.ProfileRepository;
+import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
+import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.enums.MemberGender;

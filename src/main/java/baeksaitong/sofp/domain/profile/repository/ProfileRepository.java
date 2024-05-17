@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.Profile.repository;
+package baeksaitong.sofp.domain.profile.repository;
 
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;

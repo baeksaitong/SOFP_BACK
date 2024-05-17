@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.Profile.error;
+package baeksaitong.sofp.domain.profile.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.Profile.dto.response;
+package baeksaitong.sofp.domain.profile.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

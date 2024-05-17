@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.member.service;
 
-import baeksaitong.sofp.domain.Profile.dto.response.BasicInfoRes;
+import baeksaitong.sofp.domain.profile.dto.response.BasicInfoRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.health.error.PillErrorCode;
 import baeksaitong.sofp.domain.health.repository.DiseaseAllergyRepository;
