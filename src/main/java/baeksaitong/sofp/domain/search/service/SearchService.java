@@ -3,7 +3,7 @@ package baeksaitong.sofp.domain.search.service;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.PillRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
-import baeksaitong.sofp.domain.member.repository.MemberDiseaseAllergyRepository;
+import baeksaitong.sofp.domain.member.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
@@ -36,7 +36,7 @@ public class SearchService {
     private final PillFeignClient pillFeignClient;
     private final FavoriteRepository favoriteRepository;
     private final HistoryService historyService;
-    private final MemberDiseaseAllergyRepository memberDiseaseAllergyRepository;
+    private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
 
     @Value("${api.public-data.url.pill-info}")
     private String pillInfoUrl;
@@ -97,7 +97,7 @@ public class SearchService {
     }
 
     private Set<String> getAllergyAndDiseaseSet(Member member) {
-        return memberDiseaseAllergyRepository.findAllByMember(member).stream()
+        return profileDiseaseAllergyRepository.findAllByMember(member).stream()
                 .map(memberDisease -> memberDisease.getDiseaseAllergy().getName()).collect(Collectors.toSet());
     }
 

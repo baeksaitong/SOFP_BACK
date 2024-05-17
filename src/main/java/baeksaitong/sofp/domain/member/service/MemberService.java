@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.member.service;
 
-import baeksaitong.sofp.domain.member.dto.response.BasicInfoRes;
+import baeksaitong.sofp.domain.Profile.dto.response.BasicInfoRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.health.error.PillErrorCode;
 import baeksaitong.sofp.domain.health.repository.DiseaseAllergyRepository;
@@ -10,8 +10,8 @@ import baeksaitong.sofp.domain.member.dto.request.MemberEditReq;
 import baeksaitong.sofp.domain.member.dto.response.DetailInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.member.dto.response.PillRes;
-import baeksaitong.sofp.domain.member.repository.MemberDiseaseAllergyRepository;
-import baeksaitong.sofp.domain.member.repository.MemberPillRepository;
+import baeksaitong.sofp.domain.member.repository.ProfileDiseaseAllergyRepository;
+import baeksaitong.sofp.domain.member.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.service.SearchService;
@@ -36,8 +36,8 @@ public class MemberService {
 
     private final AwsS3Service awsS3Service;
     private final MemberRepository memberRepository;
-    private final MemberDiseaseAllergyRepository memberDiseaseAllergyRepository;
-    private final MemberPillRepository memberPillRepository;
+    private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
+    private final ProfilePillRepository profilePillRepository;
     private final DiseaseAllergyRepository diseaseAllergyRepository;
     private final PillRepository pillRepository;
     private final BCryptPasswordEncoder passwordEncoder;
@@ -66,8 +66,8 @@ public class MemberService {
     }
 
     public List<String> getgetDiseaseAllergyList(Member member) {
-        return memberDiseaseAllergyRepository.findAllByMember(member).stream()
-                .map(memberDiseaseAllergy -> memberDiseaseAllergy.getDiseaseAllergy().getName())
+        return profileDiseaseAllergyRepository.findAllByMember(member).stream()
+                .map(profileDiseaseAllergy -> profileDiseaseAllergy.getDiseaseAllergy().getName())
                 .collect(Collectors.toList());
     }
 
@@ -83,16 +83,16 @@ public class MemberService {
                 continue;
             }
 
-            if (memberDiseaseAllergyRepository.existsByMemberAndDiseaseAllergy(member, diseaseAllergy)) {
+            if (profileDiseaseAllergyRepository.existsByMemberAndDiseaseAllergy(member, diseaseAllergy)) {
                 continue;
             }
 
-            MemberDiseaseAllergy memberDiseaseAllergy = MemberDiseaseAllergy.builder()
+            ProfileDiseaseAllergy profileDiseaseAllergy = ProfileDiseaseAllergy.builder()
                     .member(member)
                     .diseaseAllergy(diseaseAllergy)
                     .build();
 
-            memberDiseaseAllergyRepository.save(memberDiseaseAllergy);
+            profileDiseaseAllergyRepository.save(profileDiseaseAllergy);
         }
     }
 
@@ -108,15 +108,15 @@ public class MemberService {
                 continue;
             }
 
-            memberDiseaseAllergyRepository.deleteByMemberAndDiseaseAllergy(member, diseaseAllergy);
+            profileDiseaseAllergyRepository.deleteByMemberAndDiseaseAllergy(member, diseaseAllergy);
         }
     }
 
     public PillRes getPillList(Member member) {
         return new PillRes(
-                memberPillRepository.findAllByMember(member).stream()
+                profilePillRepository.findAllByMember(member).stream()
                         .map(
-                                memberPill -> new PillInfoRes(memberPill.getPill().getId(), memberPill.getPill().getName())
+                                profilePill -> new PillInfoRes(profilePill.getPill().getId(), profilePill.getPill().getName())
                         ).collect(Collectors.toList()));
     }
 
@@ -128,15 +128,15 @@ public class MemberService {
         for (Long pillId : pillIdList) {
             Pill pill = pillRepository.findById(pillId).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
 
-            if(memberPillRepository.existsByMemberAndPill(member,pill)){
+            if(profilePillRepository.existsByMemberAndPill(member,pill)){
                 continue;
             }
 
-            MemberPill memberPill = MemberPill.builder()
+            ProfilePill profilePill = ProfilePill.builder()
                     .pill(pill)
                     .member(member)
                     .build();
-            memberPillRepository.save(memberPill);
+            profilePillRepository.save(profilePill);
         }
     }
 
@@ -149,7 +149,7 @@ public class MemberService {
 
         for (Long PillId : removePillIdList) {
             Pill pill = pillRepository.findById(PillId).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
-            memberPillRepository.deleteByMemberAndPill(member, pill);
+            profilePillRepository.deleteByMemberAndPill(member, pill);
         }
     }
 
