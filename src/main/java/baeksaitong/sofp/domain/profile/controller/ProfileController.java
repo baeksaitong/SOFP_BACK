@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.profile.controller;
 
+import baeksaitong.sofp.domain.profile.dto.response.DiseaseAllergyRes;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileImgEditReq;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
@@ -53,5 +54,11 @@ public class ProfileController {
     public ResponseEntity<String> setProfileImg(@ModelAttribute ProfileImgEditReq req, @AuthenticationPrincipal Member member){
         profileService.setProfileImg(req,member);
         return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
+    }
+
+    @GetMapping("/disease-allergy")
+    public ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(@RequestParam String name, @AuthenticationPrincipal Member member){
+        DiseaseAllergyRes diseaseAllergyList = profileService.getDiseaseAllergyList(name, member);
+        return BaseResponse.ok(diseaseAllergyList);
     }
 }

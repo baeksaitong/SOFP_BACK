@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.stream.Collectors;
+
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
@@ -50,7 +53,6 @@ public class ProfileService {
         return new ProfileDetailRes(profile);
     }
 
-    @Transactional
     public void deleteProfile(String name, Member member) {
         Profile profile = profileRepository.findByNameAndMember(name, member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
@@ -58,7 +60,6 @@ public class ProfileService {
         profileRepository.delete(profile);
     }
 
-    @Transactional
     public ProfileDetailRes editProfile(ProfileReq req, Member member) {
         Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
@@ -69,7 +70,6 @@ public class ProfileService {
         return new ProfileDetailRes(profile);
     }
 
-    @Transactional
     public void setProfileImg(ProfileImgEditReq req, Member member) {
         Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
@@ -81,5 +81,17 @@ public class ProfileService {
         String imgUrl = awsS3Service.upload(req.getProfileImg(), profile.getId());
         profile.setImgUrl(imgUrl);
         profileRepository.save(profile);
+    }
+
+    public DiseaseAllergyRes getDiseaseAllergyList(String name, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(name, member)
+                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+
+        return new DiseaseAllergyRes(
+                profileDiseaseAllergyRepository.findAllByProfile(profile)
+                        .stream()
+                        .map(profileDiseaseAllergy -> profileDiseaseAllergy.getDiseaseAllergy().getName())
+                        .collect(Collectors.toList())
+                );
     }
 }
