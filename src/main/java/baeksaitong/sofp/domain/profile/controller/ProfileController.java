@@ -7,6 +7,7 @@ import baeksaitong.sofp.global.common.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,8 +18,9 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
+    @GetMapping("/add")
     public ResponseEntity<String> addProfile(ProfileReq req, @AuthenticationPrincipal Member member){
         profileService.addProfile(req, member);
-        return BaseResponse.ok("개발중");
+        return BaseResponse.ok("프로필 추가에 성공했습니다.");
     }
 }

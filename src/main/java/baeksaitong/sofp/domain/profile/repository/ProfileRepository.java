@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
-    boolean existsByMember(Member member);
+    Long countByMember(Member member);
 }
