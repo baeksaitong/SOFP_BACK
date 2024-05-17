@@ -21,4 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfileController {
 
     private final ProfileService profileService;
+
+    public ResponseEntity<String> addProfile(ProfileReq req, @AuthenticationPrincipal Member member){
+        profileService.addProfile(req, member);
+        return BaseResponse.ok("개발중");
+    }
 }

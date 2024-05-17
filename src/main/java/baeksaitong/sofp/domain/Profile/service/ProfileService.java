@@ -12,4 +12,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
+
+    public void addProfile(ProfileReq req, Member member){
+        Profile profile = Profile.builder()
+                .member(member)
+                .name(req.getName())
+                .birthday(req.getBirthday())
+                .gender(MemberGender.from(req.getGender()))
+                .build();
+
+        profileRepository.save(profile);
+    }
 }
