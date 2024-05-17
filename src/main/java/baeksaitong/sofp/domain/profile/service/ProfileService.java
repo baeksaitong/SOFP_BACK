@@ -61,6 +61,7 @@ public class ProfileService {
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         profile.edit(profile.getName(), req.getBirthday(), req.getGender());
+        profileRepository.save(profile);
 
         return new ProfileDetailRes(profile);
     }
