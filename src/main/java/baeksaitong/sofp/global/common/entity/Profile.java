@@ -32,4 +32,8 @@ public class Profile extends BaseTimeEntity{
         this.birthday = birthday;
         this.gender = gender;
     }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 }

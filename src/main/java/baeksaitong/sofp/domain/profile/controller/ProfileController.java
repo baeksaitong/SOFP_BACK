@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.profile.controller;
 
+import baeksaitong.sofp.domain.profile.dto.request.ProfileImgEditReq;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
@@ -46,5 +47,11 @@ public class ProfileController {
     public ResponseEntity<ProfileDetailRes> editProfile(@RequestBody ProfileReq req, @AuthenticationPrincipal Member member){
         ProfileDetailRes res = profileService.editProfile(req, member);
         return BaseResponse.ok(res);
+    }
+
+    @PostMapping("/img")
+    public ResponseEntity<String> setProfileImg(@ModelAttribute ProfileImgEditReq req, @AuthenticationPrincipal Member member){
+        profileService.setProfileImg(req,member);
+        return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
     }
 }
