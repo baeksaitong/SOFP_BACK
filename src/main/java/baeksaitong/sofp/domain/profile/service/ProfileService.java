@@ -2,9 +2,11 @@ package baeksaitong.sofp.domain.profile.service;
 
 import baeksaitong.sofp.domain.profile.dto.request.ProfileImgEditReq;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
+import baeksaitong.sofp.domain.profile.dto.response.DiseaseAllergyRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
+import baeksaitong.sofp.domain.profile.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
+    private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
     private final AwsS3Service awsS3Service;
 
     public void addProfile(ProfileReq req, Member member){
@@ -66,6 +69,7 @@ public class ProfileService {
         return new ProfileDetailRes(profile);
     }
 
+    @Transactional
     public void setProfileImg(ProfileImgEditReq req, Member member) {
         Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
