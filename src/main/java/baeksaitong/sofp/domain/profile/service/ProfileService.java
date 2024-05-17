@@ -7,7 +7,6 @@ import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,7 @@ public class ProfileService {
                 .member(member)
                 .name(req.getName())
                 .birthday(req.getBirthday())
-                .gender(MemberGender.from(req.getGender()))
+                .gender(req.getGender())
                 .build();
 
         profileRepository.save(profile);
@@ -51,5 +50,15 @@ public class ProfileService {
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         profileRepository.delete(profile);
+    }
+
+    @Transactional
+    public ProfileDetailRes editProfile(ProfileReq req, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
+                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+
+        profile.edit(profile.getName(), req.getBirthday(), req.getGender());
+
+        return new ProfileDetailRes(profile);
     }
 }

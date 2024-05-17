@@ -26,4 +26,10 @@ public class Profile extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void edit(String name, LocalDate birthday, MemberGender gender) {
+        this.name = name;
+        this.birthday = birthday;
+        this.gender = gender;
+    }
 }

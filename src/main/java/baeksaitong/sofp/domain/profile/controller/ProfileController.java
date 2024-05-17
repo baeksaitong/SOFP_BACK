@@ -41,4 +41,10 @@ public class ProfileController {
         profileService.deleteProfile(name, member);
         return BaseResponse.ok("프로필 삭제에 성공했습니다.");
     }
+
+    @PostMapping("/edit")
+    public ResponseEntity<ProfileDetailRes> editProfile(@RequestBody ProfileReq req, @AuthenticationPrincipal Member member){
+        ProfileDetailRes res = profileService.editProfile(req, member);
+        return BaseResponse.ok(res);
+    }
 }
