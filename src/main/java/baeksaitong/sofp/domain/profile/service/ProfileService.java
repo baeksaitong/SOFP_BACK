@@ -11,6 +11,7 @@ import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +43,13 @@ public class ProfileService {
         Profile profile = profileRepository.findByNameAndMember(name, member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
         return new ProfileDetailRes(profile);
+    }
+
+    @Transactional(readOnly = true)
+    public void deleteProfile(String name, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(name, member)
+                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+
+        profileRepository.delete(profile);
     }
 }

@@ -38,4 +38,10 @@ public class ProfileController {
         profileService.addProfile(req, member);
         return BaseResponse.ok("프로필 추가에 성공했습니다.");
     }
+
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteProfile(@RequestParam String name, @AuthenticationPrincipal Member member){
+        profileService.deleteProfile(name, member);
+        return BaseResponse.ok("프로필 삭제에 성공했습니다.");
+    }
 }
