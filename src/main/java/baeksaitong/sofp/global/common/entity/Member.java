@@ -22,8 +22,6 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     private String email;
     private String pwd;
-    @Column(name = "img_url")
-    private String imgUrl;
     private Boolean advertisement;
     @Enumerated(EnumType.STRING)
     private MemberRole role;

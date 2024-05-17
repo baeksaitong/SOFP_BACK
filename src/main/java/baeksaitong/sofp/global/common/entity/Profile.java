@@ -20,6 +20,8 @@ public class Profile extends BaseTimeEntity{
     private LocalDate birthday;
     private MemberGender gender;
     private String color;
+    @Column(name = "img_url")
+    private String imgUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
