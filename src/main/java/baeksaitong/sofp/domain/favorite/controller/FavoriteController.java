@@ -30,8 +30,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기 추가 성공")
     })
     @PostMapping("/add")
-    private ResponseEntity<?> addFavorite(@ModelAttribute @Validated FavoriteReq req, @AuthenticationPrincipal Member member){
-        favoriteService.addFavorite(req, member);
+    private ResponseEntity<?> addFavorite(@RequestParam String name, @ModelAttribute @Validated FavoriteReq req, @AuthenticationPrincipal Member member){
+        favoriteService.addFavorite(req, name, member);
         return BaseResponse.ok("즐겨찾기 추가 성공");
     }
 
@@ -50,8 +50,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기에 등록된 알약 리스트 획득")
     })
     @GetMapping
-    private ResponseEntity<?> getFavorite(@AuthenticationPrincipal Member member){
-        List<FavoriteRes> res = favoriteService.getFavorite(member);
+    private ResponseEntity<?> getFavorite(@RequestParam String name, @AuthenticationPrincipal Member member){
+        List<FavoriteRes> res = favoriteService.getFavorite(name, member);
         return BaseResponse.ok(res);
     }
 }
