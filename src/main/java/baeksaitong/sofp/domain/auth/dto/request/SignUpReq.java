@@ -32,6 +32,9 @@ public class SignUpReq {
     @Pattern(regexp = PW_REGEXP, message = "유효하지 않는 비밀번호입니다.")
     @Schema(description = "비밀번호 : 8자 이상 16자 이하, 하나 이상 숫자 및 알파벳 문자(소문자 또는 대문자)")
     private String password;
+    @NotNull(message = "색상 정보가 필요합니다")
+    @Schema(description = "색상")
+    private String color;
     @NotNull(message = "광고 동의 여부가 필요합니다.")
     @Schema(description = "광고 동의 여부")
     private Boolean advertisement;
