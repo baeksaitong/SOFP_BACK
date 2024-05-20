@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.favorite.service;
 
 import baeksaitong.sofp.domain.favorite.dto.enums.SearchType;
 import baeksaitong.sofp.domain.favorite.dto.request.FavoriteReq;
+import baeksaitong.sofp.domain.favorite.dto.response.FavoriteDto;
 import baeksaitong.sofp.domain.favorite.dto.response.FavoriteRes;
 import baeksaitong.sofp.domain.favorite.error.FavoriteErrorCode;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
@@ -70,25 +71,21 @@ public class FavoriteService {
         favoriteRepository.delete(favorite);
     }
 
-    public List<FavoriteRes> getFavorite(String name, Member member) {
+    public FavoriteRes getFavorite(String name, Member member) {
         Profile profile = profileRepository.findByNameAndMember(name, member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         List<Favorite> favoriteList = favoriteRepository.findAllByProfile(profile);
 
-        return favoriteList.stream().map(
+        List<FavoriteDto> favoriteDtoList = favoriteList.stream().map(
                 favorite -> {
                     Pill pill = favorite.getPill();
 
-                    return new FavoriteRes(
-                            pill.getId(),
-                            pill.getName(),
-                            pill.getClassification(),
-                            pill.getEnterprise(),
-                            pill.getChart(),
-                            (favorite.getImgUrl() != null) ? favorite.getImgUrl() : pill.getImgUrl()
+                    return new FavoriteDto(
+                            pill, (favorite.getImgUrl() != null) ? favorite.getImgUrl() : pill.getImgUrl()
                     );
                 }
         ).collect(Collectors.toList());
+        return new FavoriteRes(favoriteDtoList);
     }
 }

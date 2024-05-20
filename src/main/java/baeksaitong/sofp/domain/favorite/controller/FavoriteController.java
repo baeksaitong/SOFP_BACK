@@ -15,8 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Tag(name = "⭐ Favorite")
 @RequestMapping("/app/favorite")
 @RestController
@@ -30,7 +28,7 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기 추가 성공")
     })
     @PostMapping("/add")
-    private ResponseEntity<?> addFavorite(@RequestParam String name, @ModelAttribute @Validated FavoriteReq req, @AuthenticationPrincipal Member member){
+    private ResponseEntity<String> addFavorite(@RequestParam String name, @ModelAttribute @Validated FavoriteReq req, @AuthenticationPrincipal Member member){
         favoriteService.addFavorite(req, name, member);
         return BaseResponse.ok("즐겨찾기 추가 성공");
     }
@@ -40,7 +38,7 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기 삭제 성공")
     })
     @GetMapping("/delete")
-    private ResponseEntity<?> deleteFavorite(@RequestParam Long favoriteId){
+    private ResponseEntity<String> deleteFavorite(@RequestParam Long favoriteId){
         favoriteService.deleteFavorite(favoriteId);
         return BaseResponse.ok("즐겨찾기 삭제 성공");
     }
@@ -50,8 +48,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기에 등록된 알약 리스트 획득")
     })
     @GetMapping
-    private ResponseEntity<?> getFavorite(@RequestParam String name, @AuthenticationPrincipal Member member){
-        List<FavoriteRes> res = favoriteService.getFavorite(name, member);
+    private ResponseEntity<FavoriteRes> getFavorite(@RequestParam String name, @AuthenticationPrincipal Member member){
+        FavoriteRes res = favoriteService.getFavorite(name, member);
         return BaseResponse.ok(res);
     }
 }
