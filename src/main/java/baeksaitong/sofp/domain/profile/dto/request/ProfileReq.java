@@ -1,9 +1,7 @@
 package baeksaitong.sofp.domain.profile.dto.request;
 
 import baeksaitong.sofp.global.common.entity.enums.MemberGender;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -14,6 +12,7 @@ public class ProfileReq {
     private String name;
     private LocalDate birthday;
     private String gender;
+    private String color;
 
     public MemberGender getGender(){
         return MemberGender.from(gender);

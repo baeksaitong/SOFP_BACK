@@ -9,8 +9,9 @@ public record ProfileDetailRes(
         String name,
         LocalDate birthday,
         MemberGender gender,
+        String color,
         String imgURL) {
     public ProfileDetailRes(Profile profile){
-        this(profile.getName(),profile.getBirthday(), profile.getGender(), profile.getImgUrl());
+        this(profile.getName(),profile.getBirthday(), profile.getGender(), profile.getColor(), profile.getImgUrl());
     }
 }

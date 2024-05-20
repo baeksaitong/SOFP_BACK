@@ -1,6 +1,6 @@
-package baeksaitong.sofp.domain.member.repository;
+package baeksaitong.sofp.domain.pill.repository;
 
-import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.ProfilePill;
 import baeksaitong.sofp.global.common.entity.Pill;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ProfilePillRepository extends JpaRepository<ProfilePill, Long> {
-    boolean existsByMemberAndPill(Member member, Pill pill);
-    void deleteByMemberAndPill(Member member, Pill pill);
-    List<ProfilePill> findAllByMember(Member member);
+
+    void deleteAllByProfileAndPillIn(Profile profile, List<Pill> pill);
+    List<ProfilePill> findAllByProfile(Profile profile);
 }

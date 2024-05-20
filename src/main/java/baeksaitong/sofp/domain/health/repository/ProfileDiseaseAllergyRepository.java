@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.profile.repository;
+package baeksaitong.sofp.domain.health.repository;
 
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.ProfileDiseaseAllergy;

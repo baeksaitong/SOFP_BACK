@@ -2,11 +2,9 @@ package baeksaitong.sofp.domain.profile.service;
 
 import baeksaitong.sofp.domain.profile.dto.request.ProfileImgEditReq;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
-import baeksaitong.sofp.domain.profile.dto.response.DiseaseAllergyRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
-import baeksaitong.sofp.domain.profile.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;
@@ -16,18 +14,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
-    private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
     private final AwsS3Service awsS3Service;
 
     public void addProfile(ProfileReq req, Member member){
-        if(profileRepository.countByMember(member) > 4){
+        if(profileRepository.countByMember(member) > 3){
             throw new BusinessException(ProfileErrorCode.EXCEEDED_PROFILE_LIMIT);
         }
 
@@ -36,6 +31,7 @@ public class ProfileService {
                 .name(req.getName())
                 .birthday(req.getBirthday())
                 .gender(req.getGender())
+                .color(req.getColor())
                 .build();
 
         profileRepository.save(profile);
@@ -60,18 +56,18 @@ public class ProfileService {
         profileRepository.delete(profile);
     }
 
-    public ProfileDetailRes editProfile(ProfileReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
+    public ProfileDetailRes editProfile(String name, ProfileReq req, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(name, member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
-        profile.edit(profile.getName(), req.getBirthday(), req.getGender());
+        profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());
         profileRepository.save(profile);
 
         return new ProfileDetailRes(profile);
     }
 
-    public void setProfileImg(ProfileImgEditReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
+    public void setProfileImg(String name, ProfileImgEditReq req, Member member) {
+        Profile profile = profileRepository.findByNameAndMember(name, member)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         if(profile.getImgUrl() != null){
@@ -83,15 +79,4 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    public DiseaseAllergyRes getDiseaseAllergyList(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
-
-        return new DiseaseAllergyRes(
-                profileDiseaseAllergyRepository.findAllByProfile(profile)
-                        .stream()
-                        .map(profileDiseaseAllergy -> profileDiseaseAllergy.getDiseaseAllergy().getName())
-                        .collect(Collectors.toList())
-                );
-    }
 }
