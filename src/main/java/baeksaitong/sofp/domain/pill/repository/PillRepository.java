@@ -1,13 +1,13 @@
-package baeksaitong.sofp.domain.health.repository;
+package baeksaitong.sofp.domain.pill.repository;
 
 import baeksaitong.sofp.domain.search.repository.PillRepositoryCustom;
 import baeksaitong.sofp.global.common.entity.Pill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface PillRepository extends JpaRepository<Pill,Long>, PillRepositoryCustom {
-    Optional<Pill> findBySerialNumber(Long serialNumber);
+    List<Pill> findAllBySerialNumberIn(List<Long> serialNumbers);
 }

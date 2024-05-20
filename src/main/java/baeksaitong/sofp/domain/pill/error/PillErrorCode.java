@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.health.error;
+package baeksaitong.sofp.domain.pill.error;
 
 import baeksaitong.sofp.global.error.code.ErrorCode;
 import lombok.AllArgsConstructor;
