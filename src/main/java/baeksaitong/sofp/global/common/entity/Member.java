@@ -21,7 +21,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private Long id;
 
     private String email;
-    private String pwd;
+    private String password;
     private Boolean advertisement;
     @Enumerated(EnumType.STRING)
     private MemberRole role;
@@ -33,7 +33,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return pwd;
+        return password;
     }
 
     @Override
@@ -59,5 +59,13 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAdvertisement(Boolean advertisement) {
+        this.advertisement = advertisement;
     }
 }
