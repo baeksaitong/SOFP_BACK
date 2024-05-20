@@ -27,10 +27,11 @@ public class Profile extends BaseTimeEntity{
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public void edit(String name, LocalDate birthday, MemberGender gender) {
+    public void edit(String name, LocalDate birthday, MemberGender gender, String color) {
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
+        this.color = color;
     }
 
     public void setImgUrl(String imgUrl) {
