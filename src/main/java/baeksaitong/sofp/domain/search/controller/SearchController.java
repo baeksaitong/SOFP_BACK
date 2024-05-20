@@ -33,8 +33,10 @@ public class SearchController {
             @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
     })
     @PostMapping("/keyword")
-    public ResponseEntity<KeywordRes> findByKeyword(@RequestBody KeywordReq req, @AuthenticationPrincipal Member member){
-        KeywordRes res = searchService.findByKeyword(req, member);
+    public ResponseEntity<KeywordRes> findByKeyword(
+            @RequestBody KeywordReq req, @RequestParam String name, @AuthenticationPrincipal Member member
+    ){
+        KeywordRes res = searchService.findByKeyword(req, name, member);
         return BaseResponse.ok(res);
     }
 
@@ -45,8 +47,9 @@ public class SearchController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/info")
-    public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber, @AuthenticationPrincipal Member member){
-        PillInfoRes res = searchService.getPillInfo(serialNumber, member);
+    public ResponseEntity<PillInfoRes> getPillDetailInfo(
+            @RequestParam String serialNumber, @RequestParam String name, @AuthenticationPrincipal Member member){
+        PillInfoRes res = searchService.getPillInfo(serialNumber, name, member);
         return BaseResponse.ok(res);
     }
 
