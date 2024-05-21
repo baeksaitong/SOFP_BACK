@@ -59,10 +59,4 @@ public class MemberController {
         return BaseResponse.ok(res);
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<ProfileListRes> getProfileList(@AuthenticationPrincipal Member member){
-        ProfileListRes res = memberService.getProfileList(member);
-        return BaseResponse.ok(res);
-    }
-
 }
