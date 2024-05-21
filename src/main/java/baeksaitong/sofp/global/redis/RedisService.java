@@ -15,34 +15,34 @@ public class RedisService {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public void save(String key, String data) {
+    public void save(String key, Object data) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(key, data);
     }
 
-    public void save(String key, String data, Duration duration) {
+    public void save(String key, Object data, Duration duration) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(key, data, duration);
     }
 
-    public void save(RedisPrefix prefix, String key, String data) {
+    public void save(RedisPrefix prefix, String key, Object data) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(prefix.name() + key, String.valueOf(data));
     }
 
-    public void save(RedisPrefix prefix, String key, String data, Duration duration) {
+    public void save(RedisPrefix prefix, String key, Object data, Duration duration) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
         values.set(prefix.name() + key, data, duration);
     }
 
-    public String get(String key) {
+    public Object get(String key) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        return (String) values.get(key);
+        return  values.get(key);
     }
 
-    public String get(RedisPrefix prefix, String key) {
+    public Object get(RedisPrefix prefix, String key) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        return (String) values.get(prefix.name() + key);
+        return values.get(prefix.name() + key);
     }
 
     public void delete(String key) {

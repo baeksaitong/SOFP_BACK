@@ -1,15 +1,14 @@
 package baeksaitong.sofp.domain.verification.service;
 
-import baeksaitong.sofp.global.redis.RedisService;
 import baeksaitong.sofp.domain.verification.error.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.redis.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static baeksaitong.sofp.global.redis.RedisPrefix.*;
+import static baeksaitong.sofp.global.redis.RedisPrefix.SING_UP;
 
 @Service
 @RequiredArgsConstructor
@@ -18,15 +17,12 @@ public class VerificationService {
     private final MailService mailService;
     private final RedisService redisService;
 
-    @Value("${spring.mail.auth-code-expiration-minutes}")
-    public static int SIGN_CODE_MINUTE;
-
     public void sendEmailCode(String email) {
         String code = makeRandomNumber(6);
         String title = "회원가입 인증 이메일 입니다.";
         String content =
                 "인증번호 : " +  code +
-                        "<br> 유효시간은 " + SIGN_CODE_MINUTE + "분 입니다." +
+                        "<br> 유효시간은 " +  SING_UP.getDuration().toMinutes() + "분 입니다." +
                         "<br> 인증번호를 제대로 입력해주세요";
 
         mailService.mailSend(email,title,content);
