@@ -1,6 +1,5 @@
 package baeksaitong.sofp.domain.profile.service;
 
-import baeksaitong.sofp.domain.profile.dto.request.ProfileImgEditReq;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
@@ -15,6 +14,7 @@ import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional
@@ -82,6 +82,11 @@ public class ProfileService {
         Profile profile = getProfile(profileId);
 
         profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());
+
+        if(profile.getImgUrl() != null){
+            setProfileImg(profile, req.getProfileImg());
+        }
+
         profileRepository.save(profile);
 
         deleteProfileCache(profileId);
@@ -89,18 +94,13 @@ public class ProfileService {
         return new ProfileDetailRes(profile);
     }
 
-    public void setProfileImg( ProfileImgEditReq req, Long profileId) {
-        Profile profile = getProfile(profileId);
-
+    public void setProfileImg(Profile profile, MultipartFile profileImg) {
         if(profile.getImgUrl() != null){
             awsS3Service.deleteImage(profile.getImgUrl());
         }
 
-        String imgUrl = awsS3Service.upload(req.getProfileImg(), profile.getId());
+        String imgUrl = awsS3Service.upload(profileImg, profile.getId());
         profile.setImgUrl(imgUrl);
-        profileRepository.save(profile);
-
-        deleteProfileCache(profileId);
     }
 
 }
