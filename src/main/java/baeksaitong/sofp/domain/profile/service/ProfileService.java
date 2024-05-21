@@ -32,6 +32,8 @@ public class ProfileService {
         Profile profile = profileRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
+        profile.initialize();
+
         redisService.save(RedisPrefix.PROFILE, String.valueOf(id), profile);
 
         return profile;

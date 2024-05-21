@@ -27,7 +27,7 @@ public class RedisService {
 
     public void save(RedisPrefix prefix, String key, Object data) {
         ValueOperations<String, Object> values = redisTemplate.opsForValue();
-        values.set(prefix.name() + key, String.valueOf(data));
+        values.set(prefix.name() + key, data);
     }
 
     public void save(RedisPrefix prefix, String key, Object data, Duration duration) {
