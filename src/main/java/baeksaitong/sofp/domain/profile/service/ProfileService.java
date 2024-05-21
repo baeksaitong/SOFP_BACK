@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.profile.service;
 
+import baeksaitong.sofp.domain.profile.dto.response.ProfileListRes;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
@@ -15,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,6 +47,14 @@ public class ProfileService {
         if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
             redisService.delete(RedisPrefix.PROFILE, String.valueOf(id));
         }
+    }
+
+    public ProfileListRes getProfileList(Member member) {
+        List<ProfileBasicRes> res = profileRepository.findAllByMember(member)
+                .stream()
+                .map(ProfileBasicRes::new)
+                .collect(Collectors.toList());
+        return new ProfileListRes(res);
     }
 
     public void addProfile(ProfileReq req, Member member){
