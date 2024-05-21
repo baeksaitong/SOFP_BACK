@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common.collection;
+package baeksaitong.sofp.domain.history.collection;
 
 import jakarta.persistence.Id;
 import lombok.Builder;

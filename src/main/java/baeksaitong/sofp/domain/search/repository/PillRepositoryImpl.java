@@ -2,7 +2,7 @@ package baeksaitong.sofp.domain.search.repository;
 
 
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
-import baeksaitong.sofp.global.common.entity.Pill;
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.SimpleExpression;

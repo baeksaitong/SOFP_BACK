@@ -11,8 +11,8 @@ import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
-import baeksaitong.sofp.global.common.entity.Member;
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.member.entity.Member;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
-import static baeksaitong.sofp.global.common.entity.enums.MemberRole.ROLE_USER;
+import static baeksaitong.sofp.domain.member.entity.enums.MemberRole.ROLE_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +59,7 @@ public class AuthService {
 
         Member save = memberRepository.save(member);
 
-        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(),"기본 색상"), save);
+        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(),"기본 색상", null), save);
 
         return new LoginRes(
                 true,
@@ -94,7 +94,7 @@ public class AuthService {
     }
 
     public LoginRes oauthLogin(
-            String email, String id, LocalDate birthday, String name, MemberGender gender, Boolean agreement
+            String email, String id, LocalDate birthday, String name, Gender gender, Boolean agreement
     ){
         boolean isNew = false;
 

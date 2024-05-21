@@ -1,6 +1,7 @@
-package baeksaitong.sofp.global.common.entity;
+package baeksaitong.sofp.domain.member.entity;
 
-import baeksaitong.sofp.global.common.entity.enums.MemberRole;
+import baeksaitong.sofp.global.common.entity.BaseTimeEntity;
+import baeksaitong.sofp.domain.member.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

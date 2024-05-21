@@ -1,5 +1,6 @@
-package baeksaitong.sofp.global.common.entity;
+package baeksaitong.sofp.domain.pill.entity;
 
+import baeksaitong.sofp.domain.profile.entity.Profile;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,15 +9,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ProfileDiseaseAllergy {
+public class ProfilePill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "disease_allergy_id")
-    private DiseaseAllergy diseaseAllergy;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     private Profile profile;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pill_id")
+    private Pill pill;
 }

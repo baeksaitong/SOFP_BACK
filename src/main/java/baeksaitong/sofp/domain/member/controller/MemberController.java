@@ -4,7 +4,7 @@ import baeksaitong.sofp.domain.member.dto.response.*;
 import baeksaitong.sofp.domain.member.dto.request.*;
 import baeksaitong.sofp.domain.member.service.MemberService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
-import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.domain.member.entity.Member;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

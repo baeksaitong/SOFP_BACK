@@ -5,7 +5,7 @@ import baeksaitong.sofp.domain.auth.dto.kakao.KakaoToken;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.KakaoFeignClient;
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class KakaoService {
                 profile.getId().toString(),
                 profile.getBirthday(),
                 profile.getName(),
-                (profile.getGender().equals("male")) ? MemberGender.MALE : MemberGender.FEMALE,
+                (profile.getGender().equals("male")) ? Gender.MALE : Gender.FEMALE,
                 Boolean.TRUE
         );
     }

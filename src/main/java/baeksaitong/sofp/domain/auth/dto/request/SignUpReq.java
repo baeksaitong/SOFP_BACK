@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.auth.dto.request;
 
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import baeksaitong.sofp.global.common.validation.ValidEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +26,7 @@ public class SignUpReq {
     @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 일치하지 않습니다.")
     @Schema(description = "아이디(이메일)", example = "example@example.com")
     private String email;
-    @ValidEnum(enumClass = MemberGender.class, message = "유효하지 않은 성별입니다", ignoreCase=true)
+    @ValidEnum(enumClass = Gender.class, message = "유효하지 않은 성별입니다", ignoreCase=true)
     @Schema(description = "성별", example = "MALE(male)/FEMALE(female)")
     private String gender;
     @Pattern(regexp = PW_REGEXP, message = "유효하지 않는 비밀번호입니다.")

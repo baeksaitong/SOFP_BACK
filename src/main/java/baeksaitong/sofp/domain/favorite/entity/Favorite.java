@@ -1,5 +1,7 @@
-package baeksaitong.sofp.global.common.entity;
+package baeksaitong.sofp.domain.favorite.entity;
 
+import baeksaitong.sofp.domain.pill.entity.Pill;
+import baeksaitong.sofp.domain.profile.entity.Profile;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;

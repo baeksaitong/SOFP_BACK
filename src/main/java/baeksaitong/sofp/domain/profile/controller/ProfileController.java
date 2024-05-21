@@ -5,7 +5,7 @@ import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
-import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

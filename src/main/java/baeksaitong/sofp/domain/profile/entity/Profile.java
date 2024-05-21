@@ -1,6 +1,8 @@
-package baeksaitong.sofp.global.common.entity;
+package baeksaitong.sofp.domain.profile.entity;
 
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.member.entity.Member;
+import baeksaitong.sofp.global.common.entity.BaseTimeEntity;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -20,7 +22,7 @@ public class Profile extends BaseTimeEntity implements Serializable {
 
     private String name;
     private LocalDate birthday;
-    private MemberGender gender;
+    private Gender gender;
     private String color;
     @Column(name = "img_url")
     private String imgUrl;
@@ -34,7 +36,7 @@ public class Profile extends BaseTimeEntity implements Serializable {
         Hibernate.initialize(this);
     }
 
-    public void edit(String name, LocalDate birthday, MemberGender gender, String color) {
+    public void edit(String name, LocalDate birthday, Gender gender, String color) {
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;

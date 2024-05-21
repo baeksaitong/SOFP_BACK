@@ -1,8 +1,8 @@
 package baeksaitong.sofp.domain.pill.repository;
 
-import baeksaitong.sofp.global.common.entity.Profile;
-import baeksaitong.sofp.global.common.entity.ProfilePill;
-import baeksaitong.sofp.global.common.entity.Pill;
+import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.domain.pill.entity.ProfilePill;
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

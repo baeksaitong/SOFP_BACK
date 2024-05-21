@@ -1,7 +1,7 @@
 package baeksaitong.sofp.domain.health.repository;
 
-import baeksaitong.sofp.global.common.entity.Profile;
-import baeksaitong.sofp.global.common.entity.ProfileDiseaseAllergy;
+import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.domain.health.entity.ProfileDiseaseAllergy;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

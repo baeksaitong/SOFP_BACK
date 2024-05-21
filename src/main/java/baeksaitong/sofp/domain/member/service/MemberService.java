@@ -7,7 +7,7 @@ import baeksaitong.sofp.domain.member.dto.response.ProfileListRes;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
-import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.domain.member.entity.Member;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

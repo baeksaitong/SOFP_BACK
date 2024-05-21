@@ -1,7 +1,7 @@
 package baeksaitong.sofp.global.common.service;
 
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
-import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.profile.dto.request;
 
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +15,7 @@ public class ProfileReq {
     private String color;
     private MultipartFile profileImg;
 
-    public MemberGender getGender(){
-        return MemberGender.from(gender);
+    public Gender getGender(){
+        return Gender.from(gender);
     }
 }

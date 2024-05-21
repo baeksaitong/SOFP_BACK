@@ -1,14 +1,14 @@
 package baeksaitong.sofp.domain.profile.dto.response;
 
-import baeksaitong.sofp.global.common.entity.Profile;
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 
 import java.time.LocalDate;
 
 public record ProfileDetailRes(
         String name,
         LocalDate birthday,
-        MemberGender gender,
+        Gender gender,
         String color,
         String imgURL) {
     public ProfileDetailRes(Profile profile){

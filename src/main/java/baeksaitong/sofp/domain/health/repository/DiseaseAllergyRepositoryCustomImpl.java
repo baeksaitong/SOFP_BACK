@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.health.repository;
 
-import baeksaitong.sofp.global.common.entity.DiseaseAllergy;
+import baeksaitong.sofp.domain.health.entity.DiseaseAllergy;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static baeksaitong.sofp.global.common.entity.QDiseaseAllergy.diseaseAllergy;
+import static baeksaitong.sofp.domain.health.entity.QDiseaseAllergy.diseaseAllergy;
 
 
 @Repository

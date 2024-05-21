@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.history.repository;
 
-import baeksaitong.sofp.global.common.collection.History;
+import baeksaitong.sofp.domain.history.collection.History;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

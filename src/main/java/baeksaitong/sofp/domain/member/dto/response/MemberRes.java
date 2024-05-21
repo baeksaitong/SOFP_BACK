@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.member.dto.response;
 
-import baeksaitong.sofp.global.common.entity.Member;
+import baeksaitong.sofp.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record MemberRes(

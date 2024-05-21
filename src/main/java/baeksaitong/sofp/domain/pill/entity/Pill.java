@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common.entity;
+package baeksaitong.sofp.domain.pill.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

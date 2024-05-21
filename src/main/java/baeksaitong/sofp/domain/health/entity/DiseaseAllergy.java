@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common.entity;
+package baeksaitong.sofp.domain.health.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
