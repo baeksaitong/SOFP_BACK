@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.member.dto.request;
+package baeksaitong.sofp.domain.health.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

@@ -1,10 +1,10 @@
 package baeksaitong.sofp.global.common.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,15 +13,17 @@ public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "img_url")
+    @Nullable
+    private String imgUrl;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pill_id")
     private Pill pill;
 
-    @Column(name = "img_url")
-    private String imgUrl;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 }

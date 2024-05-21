@@ -133,7 +133,7 @@ public class JwtTokenProvider {
             throw new CustomJwtException(JwtErrorCode.CANNOT_REFRESH);
         }
 
-        String redisToken = redisService.get(REFRESH_TOKEN, userId);
+        String redisToken = (String) redisService.get(REFRESH_TOKEN, userId);
 
         if (!redisToken.equals(refreshToken)) {
             throw new CustomJwtException(JwtErrorCode.INVALID_JWT_TOKEN);

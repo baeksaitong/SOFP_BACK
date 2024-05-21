@@ -9,7 +9,9 @@ import java.time.Duration;
 @AllArgsConstructor
 public enum RedisPrefix {
     REFRESH_TOKEN(Duration.ofDays(180)),
-    SING_UP(Duration.ofMinutes(10));
+    SING_UP(Duration.ofMinutes(10)),
+    PROFILE(Duration.ofDays(1))
+    ;
 
     final Duration duration;
 }

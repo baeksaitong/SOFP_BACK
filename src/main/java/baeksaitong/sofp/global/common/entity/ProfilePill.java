@@ -8,16 +8,15 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberDiseaseAllergy {
+public class ProfilePill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "disease_id")
-    private DiseaseAllergy diseaseAllergy;
-
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "pill_id")
+    private Pill pill;
 }

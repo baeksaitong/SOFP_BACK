@@ -1,6 +1,5 @@
 package baeksaitong.sofp.global.common.entity;
 
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.common.entity.enums.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -16,26 +14,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Setter
 @Getter
 public class Member extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private LocalDate birthday;
     private String email;
-    private String pwd;
-
-    @Column(name = "img_url")
-    private String imgUrl;
-
+    private String password;
     private Boolean advertisement;
-
-    @Enumerated(EnumType.STRING)
-    private MemberGender gender;
-
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
@@ -46,7 +33,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getPassword() {
-        return pwd;
+        return password;
     }
 
     @Override
@@ -72,5 +59,13 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAdvertisement(Boolean advertisement) {
+        this.advertisement = advertisement;
     }
 }

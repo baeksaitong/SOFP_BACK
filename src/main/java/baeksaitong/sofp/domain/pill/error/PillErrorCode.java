@@ -1,4 +1,4 @@
-package baeksaitong.sofp.domain.health.error;
+package baeksaitong.sofp.domain.pill.error;
 
 import baeksaitong.sofp.global.error.code.ErrorCode;
 import lombok.AllArgsConstructor;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum DiseaseErrorCode implements ErrorCode {
-    NO_SUCH_DISEASE(HttpStatus.BAD_REQUEST, "D-000", "존재하지 않는 질병 정보입니다.");
+public enum PillErrorCode implements ErrorCode {
+    NO_SUCH_PILL(HttpStatus.BAD_REQUEST, "P-000", "존재하지 않는 알약입니다.");
     private final HttpStatus status;
     private final String code;
     private final String message;

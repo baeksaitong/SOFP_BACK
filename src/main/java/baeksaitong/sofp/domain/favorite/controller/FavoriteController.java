@@ -4,18 +4,14 @@ import baeksaitong.sofp.domain.favorite.dto.request.FavoriteReq;
 import baeksaitong.sofp.domain.favorite.dto.response.FavoriteRes;
 import baeksaitong.sofp.domain.favorite.service.FavoriteService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
-import baeksaitong.sofp.global.common.entity.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "⭐ Favorite")
 @RequestMapping("/app/favorite")
@@ -30,8 +26,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기 추가 성공")
     })
     @PostMapping("/add")
-    private ResponseEntity<?> addFavorite(@ModelAttribute @Validated FavoriteReq req, @AuthenticationPrincipal Member member){
-        favoriteService.addFavorite(req, member);
+    private ResponseEntity<String> addFavorite(@RequestParam Long profileId, @ModelAttribute @Validated FavoriteReq req){
+        favoriteService.addFavorite(req, profileId);
         return BaseResponse.ok("즐겨찾기 추가 성공");
     }
 
@@ -40,8 +36,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기 삭제 성공")
     })
     @GetMapping("/delete")
-    private ResponseEntity<?> deleteFavorite(@RequestParam Long favoriteId){
-        favoriteService.deleteFavorite(favoriteId);
+    private ResponseEntity<String> deleteFavorite(@RequestParam Long pillSerialNumber, @RequestParam Long profileId){
+        favoriteService.deleteFavorite(pillSerialNumber, profileId);
         return BaseResponse.ok("즐겨찾기 삭제 성공");
     }
 
@@ -50,8 +46,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기에 등록된 알약 리스트 획득")
     })
     @GetMapping
-    private ResponseEntity<?> getFavorite(@AuthenticationPrincipal Member member){
-        List<FavoriteRes> res = favoriteService.getFavorite(member);
+    private ResponseEntity<FavoriteRes> getFavorite(@RequestParam Long profileId){
+        FavoriteRes res = favoriteService.getFavorite(profileId);
         return BaseResponse.ok(res);
     }
 }

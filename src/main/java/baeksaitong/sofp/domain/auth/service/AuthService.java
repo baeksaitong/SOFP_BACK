@@ -9,6 +9,8 @@ import baeksaitong.sofp.domain.auth.dto.response.RefreshAccessRes;
 import baeksaitong.sofp.domain.auth.dto.response.TokenRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
+import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.enums.MemberGender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -35,6 +37,7 @@ public class AuthService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final ProfileService profileService;
 
     public void checkId(CheckIdReq req) {
         if(memberRepository.existsByEmail(req.getEmail())){
@@ -48,16 +51,15 @@ public class AuthService {
         }
 
         Member member = Member.builder()
-                .name(req.getName())
                 .email(req.getEmail())
-                .birthday(req.getBirthday())
-                .pwd(passwordEncoder.encode(req.getPassword()))
-                .gender(MemberGender.from(req.getGender()))
+                .password(passwordEncoder.encode(req.getPassword()))
                 .advertisement(req.getAdvertisement())
                 .role(ROLE_USER)
                 .build();
 
-        memberRepository.save(member);
+        Member save = memberRepository.save(member);
+
+        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(),"기본 색상"), save);
 
         return new LoginRes(
                 true,
