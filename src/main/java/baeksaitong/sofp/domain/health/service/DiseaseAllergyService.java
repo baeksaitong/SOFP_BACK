@@ -23,14 +23,16 @@ public class DiseaseAllergyService {
     private final ProfileService profileService;
     private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
 
-    public List<String> getAllDiseaseAllergyList() {
-        return diseaseAllergyRepository.findAll().stream()
+    public DiseaseAllergyRes getAllDiseaseAllergyList() {
+        return new DiseaseAllergyRes(
+                diseaseAllergyRepository.findAll().stream()
                 .map(DiseaseAllergy::getName)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList())
+        );
     }
 
-    public List<String> searchDiseaseAllergyList(String keyword) {
-        return diseaseAllergyRepository.findByKeyword(keyword);
+    public DiseaseAllergyRes searchDiseaseAllergyList(String keyword) {
+        return new DiseaseAllergyRes(diseaseAllergyRepository.findByKeyword(keyword));
     }
 
     public DiseaseAllergyRes getDiseaseAllergyList(Long profileId) {
