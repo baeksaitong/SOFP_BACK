@@ -59,7 +59,7 @@ public class AuthService {
 
         Member save = memberRepository.save(member);
 
-        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(),req.getColor()), save);
+        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(),"기본 색상"), save);
 
         return new LoginRes(
                 true,
