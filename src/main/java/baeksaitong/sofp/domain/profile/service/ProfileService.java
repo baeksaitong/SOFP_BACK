@@ -9,6 +9,8 @@ import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.redis.RedisPrefix;
+import baeksaitong.sofp.global.redis.RedisService;
 import baeksaitong.sofp.global.s3.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final AwsS3Service awsS3Service;
+    private final RedisService redisService;
+
+    public Profile getProfile(Long id){
+        if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
+            return (Profile) redisService.get(RedisPrefix.PROFILE, String.valueOf(id));
+        }
+
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+
+        redisService.save(RedisPrefix.PROFILE, String.valueOf(id), profile);
+
+        return profile;
+    }
+
+    private void deleteProfileCache(Long id){
+        if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
+            redisService.delete(RedisPrefix.PROFILE, String.valueOf(id));
+        }
+    }
 
     public void addProfile(ProfileReq req, Member member){
         if(profileRepository.countByMember(member) > 3){
