@@ -34,7 +34,7 @@ public class ProfileService {
 
         profile.initialize();
 
-        redisService.save(RedisPrefix.PROFILE, String.valueOf(id), profile);
+        redisService.save(RedisPrefix.PROFILE, String.valueOf(id), profile, RedisPrefix.PROFILE.getDuration());
 
         return profile;
     }
