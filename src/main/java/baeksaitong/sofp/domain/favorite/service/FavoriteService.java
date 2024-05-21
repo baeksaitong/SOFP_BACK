@@ -11,7 +11,6 @@ import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.Favorite;
-import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -33,11 +32,11 @@ public class FavoriteService {
     private final ProfileRepository profileRepository;
     private final AwsS3Service s3Service;
 
-    public void addFavorite(FavoriteReq req, String name, Member member) {
+    public void addFavorite(FavoriteReq req, Long profileId) {
         Pill pill = pillRepository.findBySerialNumber(req.getPillSeralNumber())
                 .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
 
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         if(favoriteRepository.existsByPillAndProfile(pill,profile)) {
@@ -71,8 +70,8 @@ public class FavoriteService {
         favoriteRepository.delete(favorite);
     }
 
-    public FavoriteRes getFavorite(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public FavoriteRes getFavorite(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         List<Favorite> favoriteList = favoriteRepository.findAllByProfile(profile);

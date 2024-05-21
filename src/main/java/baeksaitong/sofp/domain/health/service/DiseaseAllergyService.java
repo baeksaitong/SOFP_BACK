@@ -7,7 +7,6 @@ import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.entity.DiseaseAllergy;
-import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.ProfileDiseaseAllergy;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -36,8 +35,8 @@ public class DiseaseAllergyService {
         return diseaseAllergyRepository.findByKeyword(keyword);
     }
 
-    public DiseaseAllergyRes getDiseaseAllergyList(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public DiseaseAllergyRes getDiseaseAllergyList(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         return new DiseaseAllergyRes(
@@ -48,8 +47,8 @@ public class DiseaseAllergyService {
         );
     }
 
-    public DiseaseAllergyRes editDiseaseAllergy(String name, DiseaseAllergyEditReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public DiseaseAllergyRes editDiseaseAllergy(DiseaseAllergyEditReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         List<String> addListReq = req.getAddDiseaseAllergyList();

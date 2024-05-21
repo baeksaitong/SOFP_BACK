@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryReq {
-
-    private String name;
     private int count;
     private int size=5;
 }

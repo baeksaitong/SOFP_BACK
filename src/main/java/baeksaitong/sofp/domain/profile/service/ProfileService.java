@@ -37,27 +37,27 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    public ProfileBasicRes getProfileBasic(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public ProfileBasicRes getProfileBasic(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
         return new ProfileBasicRes(profile);
     }
 
-    public ProfileDetailRes getProfileDetail(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public ProfileDetailRes getProfileDetail(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
         return new ProfileDetailRes(profile);
     }
 
-    public void deleteProfile(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public void deleteProfile(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         profileRepository.delete(profile);
     }
 
-    public ProfileDetailRes editProfile(String name, ProfileReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public ProfileDetailRes editProfile(ProfileReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());
@@ -66,8 +66,8 @@ public class ProfileService {
         return new ProfileDetailRes(profile);
     }
 
-    public void setProfileImg(String name, ProfileImgEditReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public void setProfileImg( ProfileImgEditReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         if(profile.getImgUrl() != null){

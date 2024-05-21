@@ -20,14 +20,14 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @GetMapping("/basic")
-    public ResponseEntity<ProfileBasicRes> getProfileBasic(@RequestParam String name, @AuthenticationPrincipal Member member){
-        ProfileBasicRes res = profileService.getProfileBasic(name, member);
+    public ResponseEntity<ProfileBasicRes> getProfileBasic(@RequestParam Long profileId){
+        ProfileBasicRes res = profileService.getProfileBasic(profileId);
         return BaseResponse.ok(res);
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<ProfileDetailRes> getProfileDetail(@RequestParam String name, @AuthenticationPrincipal Member member){
-        ProfileDetailRes res = profileService.getProfileDetail(name, member);
+    public ResponseEntity<ProfileDetailRes> getProfileDetail(@RequestParam Long profileId){
+        ProfileDetailRes res = profileService.getProfileDetail(profileId);
         return BaseResponse.ok(res);
     }
 
@@ -38,20 +38,20 @@ public class ProfileController {
     }
 
     @GetMapping("/delete")
-    public ResponseEntity<String> deleteProfile(@RequestParam String name, @AuthenticationPrincipal Member member){
-        profileService.deleteProfile(name, member);
+    public ResponseEntity<String> deleteProfile(@RequestParam Long profileId){
+        profileService.deleteProfile(profileId);
         return BaseResponse.ok("프로필 삭제에 성공했습니다.");
     }
 
     @PostMapping("/edit")
-    public ResponseEntity<ProfileDetailRes> editProfile(@RequestParam String name, @RequestBody ProfileReq req, @AuthenticationPrincipal Member member){
-        ProfileDetailRes res = profileService.editProfile(name, req, member);
+    public ResponseEntity<ProfileDetailRes> editProfile(@RequestBody ProfileReq req, @RequestParam Long profileId){
+        ProfileDetailRes res = profileService.editProfile(req, profileId);
         return BaseResponse.ok(res);
     }
 
     @PostMapping("/img")
-    public ResponseEntity<String> setProfileImg(@RequestParam String name, @ModelAttribute ProfileImgEditReq req, @AuthenticationPrincipal Member member){
-        profileService.setProfileImg(name, req,member);
+    public ResponseEntity<String> setProfileImg( @ModelAttribute ProfileImgEditReq req, @RequestParam Long profileId){
+        profileService.setProfileImg(req, profileId);
         return BaseResponse.ok("프로필 사진을 등록에 성공했습니다");
     }
 }

@@ -7,7 +7,6 @@ import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
-import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.ProfilePill;
@@ -29,15 +28,15 @@ public class PillService {
     private final ProfilePillRepository profilePillRepository;
     private final PillRepository pillRepository;
 
-    public PillRes getPillList(String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public PillRes getPillList(Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         return getPillRes(profile);
     }
 
-    public PillRes addPill(String name, PillReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public PillRes addPill(PillReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         List<Long> pillSerailNumberList = req.getPillSerailNumberList();
@@ -68,8 +67,8 @@ public class PillService {
         return getPillRes(profile);
     }
 
-    public PillRes removePill(String name, PillReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public PillRes removePill(PillReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         List<Long> pillSerailNumberList = req.getPillSerailNumberList();

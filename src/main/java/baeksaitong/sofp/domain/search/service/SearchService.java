@@ -1,20 +1,19 @@
 package baeksaitong.sofp.domain.search.service;
 
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
-import baeksaitong.sofp.domain.pill.repository.PillRepository;
-import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
+import baeksaitong.sofp.domain.history.service.HistoryService;
+import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
-import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
+import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.error.SearchErrorCode;
 import baeksaitong.sofp.domain.search.feign.PillFeignClient;
 import baeksaitong.sofp.global.common.entity.Favorite;
-import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -48,8 +47,8 @@ public class SearchService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
 
-    public KeywordRes findByKeyword(KeywordReq req, String name, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(name, member)
+    public KeywordRes findByKeyword(KeywordReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         Page<Pill> result = pillRepository.findByKeyword(req);
@@ -78,13 +77,14 @@ public class SearchService {
                 }).collect(Collectors.toList());
     }
 
-    public PillInfoRes getPillInfo(String serialNumber, String name, Member member) {
+    public PillInfoRes getPillInfo(String serialNumber, Long profileId) {
 
         Profile profile = null;
 
-        if(name != null && member != null) {
-            profile = profileRepository.findByNameAndMember(name, member)
+        if(profileId != null) {
+            profile = profileRepository.findById(profileId)
                     .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+
         }
 
         PillInfoRes result;
@@ -122,7 +122,7 @@ public class SearchService {
 
     private Boolean checkIsWaring(String serialNumber, Set<String> allergyAndDiseaseSet){
 
-        String cautionGeneral = getPillInfo(serialNumber, null, null).getCautionGeneral();
+        String cautionGeneral = getPillInfo(serialNumber, null).getCautionGeneral();
         return allergyAndDiseaseSet.stream().anyMatch(cautionGeneral::contains);
     }
 

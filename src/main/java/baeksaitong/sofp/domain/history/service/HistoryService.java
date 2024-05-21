@@ -10,7 +10,6 @@ import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.common.collection.History;
-import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -51,8 +50,8 @@ public class HistoryService {
         historyRepository.save(history);
     }
 
-    public HistoryRes getRecentViewPill(HistoryReq req, Member member) {
-        Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
+    public HistoryRes getRecentViewPill(HistoryReq req, Long profileId) {
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         History history = historyRepository.findById(profile.getId()).orElse(null);
@@ -66,8 +65,8 @@ public class HistoryService {
         return changePillIdListToHistoryRes(recentViewPill, req.getCount(), req.getSize());
     }
 
-    public HistoryRes deleteRecentViewPill(HistoryDeleteReq req, Member member){
-        Profile profile = profileRepository.findByNameAndMember(req.getName(), member)
+    public HistoryRes deleteRecentViewPill(HistoryDeleteReq req, Long profileId){
+        Profile profile = profileRepository.findById(profileId)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
 
         History history = historyRepository.findById(profile.getId()).orElseThrow(

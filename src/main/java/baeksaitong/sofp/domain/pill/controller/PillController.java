@@ -4,10 +4,8 @@ import baeksaitong.sofp.domain.pill.dto.request.PillReq;
 import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.service.PillService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
-import baeksaitong.sofp.global.common.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,26 +15,20 @@ public class PillController {
     private final PillService pillService;
 
     @GetMapping
-    public ResponseEntity<PillRes> getPillList(
-            @RequestParam String name, @AuthenticationPrincipal Member member
-    ){
-        PillRes res = pillService.getPillList(name, member);
+    public ResponseEntity<PillRes> getPillList(@RequestParam Long profileId){
+        PillRes res = pillService.getPillList(profileId);
         return BaseResponse.ok(res);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PillRes> addPill(
-            @RequestParam String name, @RequestBody PillReq req, @AuthenticationPrincipal Member member
-    ){
-        PillRes res = pillService.addPill(name, req, member);
+    public ResponseEntity<PillRes> addPill(@RequestBody PillReq req,@RequestParam Long profileId){
+        PillRes res = pillService.addPill(req, profileId);
         return BaseResponse.ok(res);
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<PillRes> removePill(
-            @RequestParam String name, @RequestBody PillReq req, @AuthenticationPrincipal Member member
-    ){
-        PillRes res = pillService.removePill(name, req, member);
+    public ResponseEntity<PillRes> removePill(@RequestBody PillReq req, @RequestParam Long profileId){
+        PillRes res = pillService.removePill(req, profileId);
         return BaseResponse.ok(res);
     }
 }

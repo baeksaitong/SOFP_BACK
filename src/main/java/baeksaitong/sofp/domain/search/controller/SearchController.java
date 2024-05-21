@@ -1,12 +1,11 @@
 package baeksaitong.sofp.domain.search.controller;
 
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
-import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
+import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.service.SearchService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
-import baeksaitong.sofp.global.common.entity.Member;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,7 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +31,8 @@ public class SearchController {
             @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
     })
     @PostMapping("/keyword")
-    public ResponseEntity<KeywordRes> findByKeyword(
-            @RequestBody KeywordReq req, @RequestParam String name, @AuthenticationPrincipal Member member
-    ){
-        KeywordRes res = searchService.findByKeyword(req, name, member);
+    public ResponseEntity<KeywordRes> findByKeyword(@RequestBody KeywordReq req, @RequestParam Long profileId){
+        KeywordRes res = searchService.findByKeyword(req, profileId);
         return BaseResponse.ok(res);
     }
 
@@ -47,9 +43,8 @@ public class SearchController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/info")
-    public ResponseEntity<PillInfoRes> getPillDetailInfo(
-            @RequestParam String serialNumber, @RequestParam String name, @AuthenticationPrincipal Member member){
-        PillInfoRes res = searchService.getPillInfo(serialNumber, name, member);
+    public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber, @RequestParam Long profileId){
+        PillInfoRes res = searchService.getPillInfo(serialNumber, profileId);
         return BaseResponse.ok(res);
     }
 
