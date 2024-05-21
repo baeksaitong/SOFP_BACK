@@ -23,10 +23,11 @@ public class Pill {
     @Column(name = "pro_or_gen")
     private String proOrGen;
     private String formulation;
-    private String shape;
+    @Column(name = "form_classification")
+    private String formClassification;
     private String efficacy;
     private String ingredient;
-
+    private String shape;
     @Column(name = "sign_front")
     private String signFront;
     @Column(name = "sign_back")
