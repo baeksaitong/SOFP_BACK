@@ -1,8 +1,8 @@
 package baeksaitong.sofp.domain.favorite.repository;
 
-import baeksaitong.sofp.global.common.entity.Favorite;
-import baeksaitong.sofp.global.common.entity.Pill;
-import baeksaitong.sofp.global.common.entity.Profile;
+import baeksaitong.sofp.domain.favorite.entity.Favorite;
+import baeksaitong.sofp.domain.pill.entity.Pill;
+import baeksaitong.sofp.domain.profile.entity.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

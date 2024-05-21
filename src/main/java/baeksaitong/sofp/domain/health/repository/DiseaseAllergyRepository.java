@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.health.repository;
 
-import baeksaitong.sofp.global.common.entity.DiseaseAllergy;
+import baeksaitong.sofp.domain.health.entity.DiseaseAllergy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

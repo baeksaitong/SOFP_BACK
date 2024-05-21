@@ -11,7 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @AllArgsConstructor
 public class FavoriteReq {
-    @Schema(description = "검색 타입", example = "COMMON(common)/IMAGE(image)")
+    @Schema(description = "검색 타입 <br>" +
+            "- 이미지 검색 결과에서 즐겨찾기 추가시에만 IMAGE(image) 사용, 그 외는 COMMON(common) 사용", example = "COMMON(common)/IMAGE(image)")
     @ValidEnum(enumClass = SearchType.class, message = "검색 타입이 필요합니다.", ignoreCase = true)
     private String searchType;
 

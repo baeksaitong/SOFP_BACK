@@ -1,7 +1,7 @@
 package baeksaitong.sofp.domain.pill.repository;
 
 import baeksaitong.sofp.domain.search.repository.PillRepositoryCustom;
-import baeksaitong.sofp.global.common.entity.Pill;
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

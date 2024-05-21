@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.history.dto.response;
 
-import baeksaitong.sofp.global.common.entity.Pill;
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record HistoryDto(

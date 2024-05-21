@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
-import static baeksaitong.sofp.global.common.Constants.EMAIL_REGEXP;
+import static baeksaitong.sofp.global.common.constants.Constants.EMAIL_REGEXP;
 
 @Builder
 @AllArgsConstructor

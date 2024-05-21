@@ -1,20 +1,24 @@
 package baeksaitong.sofp.domain.profile.service;
 
+import baeksaitong.sofp.domain.profile.dto.response.ProfileListRes;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
-import baeksaitong.sofp.global.common.entity.Member;
-import baeksaitong.sofp.global.common.entity.Profile;
+import baeksaitong.sofp.domain.member.entity.Member;
+import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
-import baeksaitong.sofp.global.redis.RedisPrefix;
-import baeksaitong.sofp.global.redis.RedisService;
-import baeksaitong.sofp.global.s3.AwsS3Service;
+import baeksaitong.sofp.global.redis.constants.RedisPrefix;
+import baeksaitong.sofp.global.redis.service.RedisService;
+import baeksaitong.sofp.global.s3.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -43,6 +47,14 @@ public class ProfileService {
         if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
             redisService.delete(RedisPrefix.PROFILE, String.valueOf(id));
         }
+    }
+
+    public ProfileListRes getProfileList(Member member) {
+        List<ProfileBasicRes> res = profileRepository.findAllByMember(member)
+                .stream()
+                .map(ProfileBasicRes::new)
+                .collect(Collectors.toList());
+        return new ProfileListRes(res);
     }
 
     public void addProfile(ProfileReq req, Member member){

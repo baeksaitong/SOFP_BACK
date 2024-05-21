@@ -6,7 +6,7 @@ import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
 import baeksaitong.sofp.domain.auth.dto.response.LoginRes;
 import baeksaitong.sofp.domain.auth.error.AuthErrorCode;
 import baeksaitong.sofp.domain.auth.feign.NaverFeignClient;
-import baeksaitong.sofp.global.common.entity.enums.MemberGender;
+import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 
-import static baeksaitong.sofp.global.common.Constants.*;
+import static baeksaitong.sofp.global.common.constants.Constants.*;
 
 @Slf4j
 @Service
@@ -51,7 +51,7 @@ public class NaverService {
                 profile.getId(),
                 profile.getBirthday(),
                 profile.getName(),
-                (profile.getGender().equals("M")) ? MemberGender.MALE : MemberGender.FEMALE,
+                (profile.getGender().equals("M")) ? Gender.MALE : Gender.FEMALE,
                 getAgreement(token.accessToken())
         );
 

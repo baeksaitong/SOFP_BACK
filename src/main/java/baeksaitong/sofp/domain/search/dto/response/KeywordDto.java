@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.search.dto.response;
 
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record KeywordDto(
@@ -22,4 +23,16 @@ public record KeywordDto(
         @Schema(description = "즐겨찾기에 존재 시 저장된 즐겨찾기 ID")
         Long FavoriteId
 ) {
+        public KeywordDto(Pill pill, Boolean isWaring, Long favoriteId){
+                this(pill.getSerialNumber(),
+                        pill.getName(),
+                        pill.getClassification(),
+                        pill.getProOrGen(),
+                        pill.getImgUrl(),
+                        pill.getChart(),
+                        pill.getEnterprise(),
+                        isWaring,
+                        favoriteId
+                );
+        }
 }

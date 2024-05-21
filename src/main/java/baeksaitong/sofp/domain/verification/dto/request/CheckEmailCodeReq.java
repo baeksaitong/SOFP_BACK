@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static baeksaitong.sofp.global.common.Constants.*;
+import static baeksaitong.sofp.global.common.constants.Constants.*;
 
 @Getter
 @NoArgsConstructor

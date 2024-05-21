@@ -2,13 +2,13 @@ package baeksaitong.sofp.domain.verification.service;
 
 import baeksaitong.sofp.domain.verification.error.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
-import baeksaitong.sofp.global.redis.RedisService;
+import baeksaitong.sofp.global.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
-import static baeksaitong.sofp.global.redis.RedisPrefix.SING_UP;
+import static baeksaitong.sofp.global.redis.constants.RedisPrefix.SING_UP;
 
 @Service
 @RequiredArgsConstructor

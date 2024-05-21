@@ -2,7 +2,7 @@ package baeksaitong.sofp.domain.search.repository;
 
 
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
-import baeksaitong.sofp.global.common.entity.Pill;
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.SimpleExpression;
@@ -17,7 +17,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static baeksaitong.sofp.global.common.entity.QPill.pill;
+import static baeksaitong.sofp.domain.pill.entity.QPill.*;
+
 
 @Repository
 @RequiredArgsConstructor

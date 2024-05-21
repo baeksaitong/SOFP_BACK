@@ -28,10 +28,18 @@ public class SearchController {
 
     @Operation(summary = "\uD83D\uDD11 모양 및 검색어 검색", description = "모양 및 검색어로 알약을 검색합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
+            @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다."),
+            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "code : S-000 | message : 알약 정보를 불려오는데 실패했습니다. <br>" +
+                    "code : S-001 | message : 알약 정보가 존재하지 않습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/keyword")
-    public ResponseEntity<KeywordRes> findByKeyword(@RequestBody KeywordReq req, @RequestParam Long profileId){
+    public ResponseEntity<KeywordRes> findByKeyword(
+            @RequestBody @Validated KeywordReq req,
+            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    ){
         KeywordRes res = searchService.findByKeyword(req, profileId);
         return BaseResponse.ok(res);
     }
@@ -39,12 +47,16 @@ public class SearchController {
     @Operation(summary = "\uD83D\uDD11 알약 세부 정보", description = "알약 세부 정보를 제공 합니다." )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "알약 세부 사항 및 경고 사항을 알려줍니다."),
-            @ApiResponse(responseCode = "404", description = "code: S-000 | message: 알약 정보를 불려오는데 실패했습니다.",
+            @ApiResponse(responseCode = "500", description = "code : S-000 | message : 알약 정보를 불려오는데 실패했습니다. <br>" +
+                    "code : S-001 | message : 알약 정보가 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping("/info")
-    public ResponseEntity<PillInfoRes> getPillDetailInfo(@RequestParam String serialNumber, @RequestParam Long profileId){
-        PillInfoRes res = searchService.getPillInfo(serialNumber, profileId);
+    public ResponseEntity<PillInfoRes> getPillDetailInfo(
+            @RequestParam @Schema(name = "알약 시리얼 번호") String pillSerialNumber,
+            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    ){
+        PillInfoRes res = searchService.getPillInfo(pillSerialNumber, profileId);
         return BaseResponse.ok(res);
     }
 
