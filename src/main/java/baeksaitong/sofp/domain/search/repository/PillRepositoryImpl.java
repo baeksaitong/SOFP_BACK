@@ -50,13 +50,17 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
         return cond.and(keywordLike(req.getKeyword()))
                 .and(shapeEq(pill.shape, req.getShape()))
                 .and(signLike(req.getSign()))
-                .and(bothSideEq(pill.colorFront, pill.colorBack, req.getColor()))
-                .and(formulationLike(req.getFormulation()))
-                .and(bothSideEq(pill.lineFront, pill.lineBack, req.getLine()));
+                .and(ColorLike(req.getColor()))
+                .and(formulationEq(req.getFormulation()))
+                .and(LineEq(pill.lineFront, pill.lineBack, req.getLine()));
     }
 
-    private <T> BooleanExpression bothSideEq(SimpleExpression<T> front, SimpleExpression<T> back, T value) {
+    private <T> BooleanExpression LineEq(SimpleExpression<T> front, SimpleExpression<T> back, T value) {
         return value == null || value.equals("전체") ? null : front.eq(value).or(back.eq(value));
+    }
+
+    private BooleanExpression ColorLike(String value) {
+        return value == null ? null : pill.colorFront.contains(value).or(pill.colorBack.contains(value));
     }
 
     private BooleanExpression signLike(String value) {
@@ -67,11 +71,11 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
         return value == null || value.equals("전체") ? null : path.eq(value);
     }
 
-    private BooleanExpression formulationLike(String value) {
-        return value == null || value.equals("전체") ? null : pill.formulation.startsWith(value).or(pill.formulation.endsWith(value));
+    private BooleanExpression formulationEq(String value) {
+        return value == null || value.equals("전체") ? null : pill.formClassification.eq(value);
     }
 
     private BooleanExpression keywordLike(String keyword) {
-        return keyword != null ? pill.name.contains(keyword) : null;
+        return keyword == null || keyword.isEmpty()  ? null : pill.name.contains(keyword).or(pill.efficacy.contains(keyword)).or(pill.ingredient.contains(keyword));
     }
 }

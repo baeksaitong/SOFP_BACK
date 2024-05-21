@@ -9,6 +9,8 @@ public record KeywordDto(
         String name,
         @Schema(description = "알약 분류")
         String classification,
+        @Schema(description = "일반, 전문 의약품")
+        String proOrGen,
         @Schema(description = "알약 이미지")
         String imgUrl,
         @Schema(description = "알약 성상")
