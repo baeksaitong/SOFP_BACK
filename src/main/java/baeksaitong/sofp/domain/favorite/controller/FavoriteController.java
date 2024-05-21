@@ -36,8 +36,8 @@ public class FavoriteController {
             @ApiResponse(responseCode = "200", description = "즐겨찾기 삭제 성공")
     })
     @GetMapping("/delete")
-    private ResponseEntity<String> deleteFavorite(@RequestParam Long favoriteId){
-        favoriteService.deleteFavorite(favoriteId);
+    private ResponseEntity<String> deleteFavorite(@RequestParam Long pillSerialNumber, @RequestParam Long profileId){
+        favoriteService.deleteFavorite(pillSerialNumber, profileId);
         return BaseResponse.ok("즐겨찾기 삭제 성공");
     }
 

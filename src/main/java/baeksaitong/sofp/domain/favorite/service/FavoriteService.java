@@ -48,8 +48,8 @@ public class FavoriteService {
                         .build()
         );
 
-        if(req.getSearchType().equals(SearchType.IMAGE)) {
-            //favorite.setImgUrl(s3Service.upload(req.getImage(), favorite.getId()));
+        if(SearchType.from(req.getSearchType()) == SearchType.IMAGE) {
+            favorite.setImgUrl(s3Service.upload(req.getImage(), favorite.getId()));
         }
 
         favoriteRepository.save(favorite);
@@ -57,8 +57,13 @@ public class FavoriteService {
 
 
 
-    public void deleteFavorite(Long favoriteId) {
-        Favorite favorite = favoriteRepository.findById(favoriteId).get();
+    public void deleteFavorite(Long pillSerialNumber, Long profileId) {
+        Profile profile = profileService.getProfile(profileId);
+        Pill pill = pillRepository.findBySerialNumber(pillSerialNumber)
+                .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
+
+        Favorite favorite = favoriteRepository.findByPillAndProfile(pill, profile)
+                .orElseThrow(() -> new BusinessException(FavoriteErrorCode.NO_SUCH_FAVORITE));
 
         String imgUrl = favorite.getImgUrl();
         if(imgUrl != null){

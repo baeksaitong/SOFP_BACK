@@ -13,11 +13,9 @@ public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "img_url")
     @Nullable
     private String imgUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     private Profile profile;
@@ -25,4 +23,7 @@ public class Favorite {
     @JoinColumn(name = "pill_id")
     private Pill pill;
 
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 }
