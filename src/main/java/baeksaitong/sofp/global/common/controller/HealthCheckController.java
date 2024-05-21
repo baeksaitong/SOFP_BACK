@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common;
+package baeksaitong.sofp.global.common.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

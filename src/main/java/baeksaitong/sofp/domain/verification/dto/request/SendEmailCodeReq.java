@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static baeksaitong.sofp.global.common.Constants.EMAIL_REGEXP;
+import static baeksaitong.sofp.global.common.constants.Constants.EMAIL_REGEXP;
 
 @Getter
 @NoArgsConstructor

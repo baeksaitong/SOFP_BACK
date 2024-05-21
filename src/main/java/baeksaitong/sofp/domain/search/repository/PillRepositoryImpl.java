@@ -17,7 +17,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static baeksaitong.sofp.global.common.entity.QPill.pill;
+import static baeksaitong.sofp.domain.pill.entity.QPill.*;
+
 
 @Repository
 @RequiredArgsConstructor

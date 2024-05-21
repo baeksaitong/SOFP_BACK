@@ -1,7 +1,7 @@
-package baeksaitong.sofp.global.s3;
+package baeksaitong.sofp.global.s3.service;
 
-import baeksaitong.sofp.global.error.code.CommonErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.s3.error.S3ErrorCode;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;

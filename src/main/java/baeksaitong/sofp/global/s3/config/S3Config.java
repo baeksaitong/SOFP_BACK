@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.config;
+package baeksaitong.sofp.global.s3.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

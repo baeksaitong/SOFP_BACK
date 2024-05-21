@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.config;
+package baeksaitong.sofp.global.redis.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate5.jakarta.Hibernate5JakartaModule;

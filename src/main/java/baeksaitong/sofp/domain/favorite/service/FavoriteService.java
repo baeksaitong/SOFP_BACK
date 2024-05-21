@@ -13,7 +13,7 @@ import baeksaitong.sofp.domain.favorite.entity.Favorite;
 import baeksaitong.sofp.domain.pill.entity.Pill;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
-import baeksaitong.sofp.global.s3.AwsS3Service;
+import baeksaitong.sofp.global.s3.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

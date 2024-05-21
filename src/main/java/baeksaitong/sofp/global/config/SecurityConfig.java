@@ -1,7 +1,7 @@
 package baeksaitong.sofp.global.config;
 
-import baeksaitong.sofp.global.jwt.JwtAuthenticationFilter;
-import baeksaitong.sofp.global.jwt.JwtTokenProvider;
+import baeksaitong.sofp.global.jwt.filter.JwtAuthenticationFilter;
+import baeksaitong.sofp.global.jwt.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

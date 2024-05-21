@@ -1,5 +1,6 @@
-package baeksaitong.sofp.global.jwt;
+package baeksaitong.sofp.global.jwt.filter;
 
+import baeksaitong.sofp.global.jwt.provider.JwtTokenProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

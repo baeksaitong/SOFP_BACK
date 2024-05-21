@@ -14,7 +14,7 @@ import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.domain.member.entity.Member;
 import baeksaitong.sofp.domain.profile.entity.enums.Gender;
 import baeksaitong.sofp.global.error.exception.BusinessException;
-import baeksaitong.sofp.global.jwt.JwtTokenProvider;
+import baeksaitong.sofp.global.jwt.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common.service;
+package baeksaitong.sofp.global.jwt.service;
 
 import baeksaitong.sofp.domain.member.repository.MemberRepository;
 import baeksaitong.sofp.domain.member.entity.Member;

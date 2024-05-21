@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.common;
+package baeksaitong.sofp.global.common.constants;
 
 public class Constants {
     public static final String OAUTH_GRANT_TYPE = "authorization_code";

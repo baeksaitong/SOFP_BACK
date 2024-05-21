@@ -10,7 +10,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-import static baeksaitong.sofp.global.common.Constants.*;
+import static baeksaitong.sofp.global.common.constants.Constants.*;
 
 @Getter
 @Builder

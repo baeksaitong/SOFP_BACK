@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.redis;
+package baeksaitong.sofp.global.redis.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

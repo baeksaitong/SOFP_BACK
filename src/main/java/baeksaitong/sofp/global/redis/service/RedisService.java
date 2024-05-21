@@ -1,5 +1,6 @@
-package baeksaitong.sofp.global.redis;
+package baeksaitong.sofp.global.redis.service;
 
+import baeksaitong.sofp.global.redis.constants.RedisPrefix;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

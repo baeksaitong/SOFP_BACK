@@ -1,9 +1,9 @@
-package baeksaitong.sofp.global.jwt;
+package baeksaitong.sofp.global.jwt.provider;
 
-import baeksaitong.sofp.global.common.service.CustomMemberDetailsService;
+import baeksaitong.sofp.global.jwt.service.CustomMemberDetailsService;
 import baeksaitong.sofp.global.jwt.error.CustomJwtException;
 import baeksaitong.sofp.global.jwt.error.code.JwtErrorCode;
-import baeksaitong.sofp.global.redis.RedisService;
+import baeksaitong.sofp.global.redis.service.RedisService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
@@ -22,8 +22,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-import static baeksaitong.sofp.global.jwt.JwtConstants.*;
-import static baeksaitong.sofp.global.redis.RedisPrefix.*;
+import static baeksaitong.sofp.global.jwt.constants.JwtConstants.*;
+import static baeksaitong.sofp.global.redis.constants.RedisPrefix.*;
 
 @RequiredArgsConstructor
 @Component

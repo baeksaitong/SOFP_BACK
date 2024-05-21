@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.jwt;
+package baeksaitong.sofp.global.jwt.constants;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

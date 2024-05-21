@@ -1,4 +1,4 @@
-package baeksaitong.sofp.global.s3;
+package baeksaitong.sofp.global.s3.error;
 
 import baeksaitong.sofp.global.error.code.ErrorCode;
 import lombok.AllArgsConstructor;

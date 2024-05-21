@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 
-import static baeksaitong.sofp.global.common.Constants.*;
+import static baeksaitong.sofp.global.common.constants.Constants.*;
 
 @Slf4j
 @Service
