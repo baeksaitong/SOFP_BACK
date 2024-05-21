@@ -4,12 +4,10 @@ import baeksaitong.sofp.domain.health.dto.request.DiseaseAllergyEditReq;
 import baeksaitong.sofp.domain.health.dto.response.DiseaseAllergyRes;
 import baeksaitong.sofp.domain.health.repository.DiseaseAllergyRepository;
 import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
-import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
-import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.common.entity.DiseaseAllergy;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.ProfileDiseaseAllergy;
-import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DiseaseAllergyService {
     private final DiseaseAllergyRepository diseaseAllergyRepository;
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
 
     public List<String> getAllDiseaseAllergyList() {
@@ -36,8 +34,7 @@ public class DiseaseAllergyService {
     }
 
     public DiseaseAllergyRes getDiseaseAllergyList(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         return new DiseaseAllergyRes(
                 profileDiseaseAllergyRepository.findAllByProfile(profile)
@@ -48,8 +45,7 @@ public class DiseaseAllergyService {
     }
 
     public DiseaseAllergyRes editDiseaseAllergy(DiseaseAllergyEditReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         List<String> addListReq = req.getAddDiseaseAllergyList();
         List<String> delListReq = req.getRemoveDiseaseAllergyList();

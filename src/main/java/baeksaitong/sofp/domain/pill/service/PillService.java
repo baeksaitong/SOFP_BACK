@@ -5,12 +5,10 @@ import baeksaitong.sofp.domain.pill.dto.response.PillInfoDTO;
 import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
-import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
-import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.common.entity.Profile;
 import baeksaitong.sofp.global.common.entity.ProfilePill;
-import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,20 +22,18 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class PillService {
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     private final ProfilePillRepository profilePillRepository;
     private final PillRepository pillRepository;
 
     public PillRes getPillList(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         return getPillRes(profile);
     }
 
     public PillRes addPill(PillReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         List<Long> pillSerailNumberList = req.getPillSerailNumberList();
         List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);
@@ -68,8 +64,7 @@ public class PillService {
     }
 
     public PillRes removePill(PillReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         List<Long> pillSerailNumberList = req.getPillSerailNumberList();
         List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);

@@ -4,8 +4,7 @@ import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
-import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
-import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
 import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
@@ -38,7 +37,7 @@ public class SearchService {
     private final PillFeignClient pillFeignClient;
     private final FavoriteRepository favoriteRepository;
     private final HistoryService historyService;
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
     private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
 
     @Value("${api.public-data.url.pill-info}")
@@ -48,8 +47,7 @@ public class SearchService {
     private String serviceKey;
 
     public KeywordRes findByKeyword(KeywordReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         Page<Pill> result = pillRepository.findByKeyword(req);
 
@@ -82,9 +80,7 @@ public class SearchService {
         Profile profile = null;
 
         if(profileId != null) {
-            profile = profileRepository.findById(profileId)
-                    .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
-
+            profile = profileService.getProfile(profileId);
         }
 
         PillInfoRes result;

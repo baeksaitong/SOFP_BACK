@@ -60,37 +60,35 @@ public class ProfileService {
     }
 
     public ProfileBasicRes getProfileBasic(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = getProfile(profileId);
         return new ProfileBasicRes(profile);
     }
 
     public ProfileDetailRes getProfileDetail(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = getProfile(profileId);
         return new ProfileDetailRes(profile);
     }
 
     public void deleteProfile(Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = getProfile(profileId);
 
         profileRepository.delete(profile);
+        deleteProfileCache(profileId);
     }
 
     public ProfileDetailRes editProfile(ProfileReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = getProfile(profileId);
 
         profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());
         profileRepository.save(profile);
+
+        deleteProfileCache(profileId);
 
         return new ProfileDetailRes(profile);
     }
 
     public void setProfileImg( ProfileImgEditReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = getProfile(profileId);
 
         if(profile.getImgUrl() != null){
             awsS3Service.deleteImage(profile.getImgUrl());
@@ -99,6 +97,8 @@ public class ProfileService {
         String imgUrl = awsS3Service.upload(req.getProfileImg(), profile.getId());
         profile.setImgUrl(imgUrl);
         profileRepository.save(profile);
+
+        deleteProfileCache(profileId);
     }
 
 }

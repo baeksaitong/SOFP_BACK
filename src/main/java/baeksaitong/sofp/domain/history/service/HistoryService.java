@@ -7,8 +7,7 @@ import baeksaitong.sofp.domain.history.dto.response.HistoryRes;
 import baeksaitong.sofp.domain.history.error.HistoryErrorCode;
 import baeksaitong.sofp.domain.history.repository.HistoryRepository;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
-import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
-import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.common.collection.History;
 import baeksaitong.sofp.global.common.entity.Pill;
 import baeksaitong.sofp.global.common.entity.Profile;
@@ -27,7 +26,7 @@ import java.util.stream.Collectors;
 public class HistoryService {
     private final HistoryRepository historyRepository;
     private final PillRepository pillRepository;
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
 
     public void addRecentView(Long profileId, Long pillId){
         History history = historyRepository.findById(profileId).orElse(null);
@@ -51,8 +50,7 @@ public class HistoryService {
     }
 
     public HistoryRes getRecentViewPill(HistoryReq req, Long profileId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         History history = historyRepository.findById(profile.getId()).orElse(null);
 
@@ -66,8 +64,7 @@ public class HistoryService {
     }
 
     public HistoryRes deleteRecentViewPill(HistoryDeleteReq req, Long profileId){
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
+        Profile profile = profileService.getProfile(profileId);
 
         History history = historyRepository.findById(profile.getId()).orElseThrow(
                 () -> new BusinessException(HistoryErrorCode.NO_SUCH_RECENT_VIEW_PILL)
