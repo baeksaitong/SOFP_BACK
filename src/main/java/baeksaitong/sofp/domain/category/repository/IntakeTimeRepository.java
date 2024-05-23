@@ -13,6 +13,5 @@ public interface IntakeTimeRepository extends JpaRepository<IntakeTime,Long> {
     List<IntakeTime> findAllByCategory(Category category);
     List<IntakeTime> findAllByCategoryIn(List<Category> category);
     void deleteAllByCategoryAndTimeIn(Category category, List<LocalTime> timeList);
-
-
+    void deleteAllByCategory(Category category);
 }

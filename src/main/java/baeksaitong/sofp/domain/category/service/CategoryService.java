@@ -12,6 +12,8 @@ import baeksaitong.sofp.domain.category.error.CategoryErrorCode;
 import baeksaitong.sofp.domain.category.repository.CategoryRepository;
 import baeksaitong.sofp.domain.category.repository.IntakeDayRepository;
 import baeksaitong.sofp.domain.category.repository.IntakeTimeRepository;
+import baeksaitong.sofp.domain.pill.entity.ProfilePill;
+import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
@@ -36,6 +38,7 @@ public class CategoryService {
     private final IntakeDayRepository intakeDayRepository;
     private final ProfileService profileService;
     private final ProfileRepository profileRepository;
+    private final ProfilePillRepository profilePillRepository;
 
 
     public void addCategory(CategoryReq req, Long profileId) {
@@ -183,5 +186,24 @@ public class CategoryService {
     private List<LocalTime> getTimeList(List<LocalTime> timeList) {
         return Optional.ofNullable(timeList)
                 .orElse(Collections.emptyList());
+    }
+
+    public void deleteCategory(Long categoryId, Boolean isAllDelete) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+        intakeTimeRepository.deleteAllByCategory(category);
+        intakeDayRepository.deleteAllByCategory(category);
+
+        List<ProfilePill> profilePillList = profilePillRepository.findAllByCategory(category);
+
+        if(isAllDelete){
+            profilePillRepository.deleteAll(profilePillList);
+        }else{
+            List<ProfilePill> editProfilePillList = profilePillList.stream()
+                    .peek(profilePill -> profilePill.setCategory(null))
+                    .toList();
+            profilePillRepository.saveAll(editProfilePillList);
+        }
+
+        categoryRepository.delete(category);
     }
 }

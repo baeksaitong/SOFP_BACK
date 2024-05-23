@@ -43,6 +43,15 @@ public class CategoryController {
         return BaseResponse.ok(res);
     }
 
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteCategory(
+            @RequestParam Long categoryId,
+            @RequestParam Boolean isAllDelete
+    ){
+        categoryService.deleteCategory(categoryId, isAllDelete);
+        return BaseResponse.ok("카테고리 삭제에 성공했습니다.");
+    }
+
     @GetMapping("/all")
     public ResponseEntity<CategoryListByProfileRes> getCategoryListByProfile(@RequestParam Long profileId){
         CategoryListByProfileRes res = categoryService.getCategoryListByProfile(profileId);
