@@ -6,10 +6,12 @@ import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.category.error.CategoryErrorCode;
 import baeksaitong.sofp.domain.category.repository.CategoryRepository;
 import baeksaitong.sofp.domain.category.service.CategoryService;
+import baeksaitong.sofp.domain.pill.dto.request.MovePillReq;
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
 import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillInfoDTO;
 import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
+import baeksaitong.sofp.domain.pill.error.PillErrorCode;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
@@ -101,5 +103,15 @@ public class PillService {
         CategoryDetailRes categoryDetailRes = categoryService.getCategoryDetailRes(category);
 
         return new PillCategoryRes(categoryDetailRes, pillInfoDTOList);
+    }
+
+    public void movePill(MovePillReq req, Long profileId) {
+        Profile profile = profileService.getProfile(profileId);
+        Pill pill = pillRepository.findBySerialNumber(req.getPillSerialNumber()).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
+        ProfilePill profilePill = profilePillRepository.findByPillAndProfile(pill, profile).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PROFILE_PILL));
+        Category category = categoryRepository.findById(req.getCategoryId()).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+
+        profilePill.setCategory(category);
+        profilePillRepository.save(profilePill);
     }
 }

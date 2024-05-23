@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.pill.controller;
 
+import baeksaitong.sofp.domain.pill.dto.request.MovePillReq;
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
 import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
@@ -67,5 +68,14 @@ public class PillController {
     ){
         pillService.removePill(req, profileId);
         return BaseResponse.ok("알약 삭제에 성공했습니다.");
+    }
+
+    @PostMapping("/move")
+    public ResponseEntity<String> movePill(
+        @RequestBody MovePillReq req,
+        @RequestParam Long profileId
+    ){
+        pillService.movePill(req, profileId);
+        return BaseResponse.ok("알약 이동에 성공했습니다.");
     }
 }
