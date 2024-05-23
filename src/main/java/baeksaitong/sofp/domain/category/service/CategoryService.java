@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.category.service;
 
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
+import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
 import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.category.entity.IntakeDay;
 import baeksaitong.sofp.domain.category.entity.IntakeTime;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -64,5 +66,20 @@ public class CategoryService {
 
         intakeTimeRepository.saveAll(intakeTimeList);
 
+    }
+
+    public CategoryDetailRes getCategoryInfo(Long categoryId, Long profileId) {
+        Profile profile = profileService.getProfile(profileId);
+        Category category = categoryRepository.findByIdAndProfile(categoryId, profile).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+        List<Day> days = intakeDayRepository.findAllByCategory(category)
+                .stream()
+                .map(IntakeDay::getDay)
+                .toList();
+        List<LocalTime> times = intakeTimeRepository.findAllByCategory(category)
+                .stream()
+                .map(IntakeTime::getTime)
+                .toList();
+
+        return new CategoryDetailRes(category,days,times);
     }
 }
