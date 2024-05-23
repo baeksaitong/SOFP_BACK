@@ -10,7 +10,6 @@ import baeksaitong.sofp.domain.pill.dto.request.PillReq;
 import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillInfoDTO;
 import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
-import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
@@ -49,7 +48,7 @@ public class PillService {
         );
     }
 
-    public PillRes addPill(PillReq req, Long profileId) {
+    public void addPill(PillReq req, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
         List<Long> pillSerailNumberList = req.getPillSerailNumberList();
@@ -76,21 +75,15 @@ public class PillService {
         }
 
         profilePillRepository.saveAll(addProfilePillList);
-
-        List<ProfilePill> profilePillList = profilePillRepository.findAllByProfile(profile);
-        return new PillRes(getPillRes(profilePillList));
     }
 
-    public PillRes removePill(PillReq req, Long profileId) {
+    public void removePill(PillReq req, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
         List<Long> pillSerailNumberList = req.getPillSerailNumberList();
         List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);
 
         profilePillRepository.deleteAllByProfileAndPillIn(profile,pillList);
-        List<ProfilePill> profilePillList = profilePillRepository.findAllByProfile(profile);
-
-        return new PillRes(getPillRes(profilePillList));
     }
 
     private List<PillInfoDTO> getPillRes(List<ProfilePill> profilePillList) {
