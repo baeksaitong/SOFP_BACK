@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.pill.controller;
 
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
 import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
+import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.service.PillService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
@@ -24,17 +25,11 @@ import org.springframework.web.bind.annotation.*;
 public class PillController {
     private final PillService pillService;
 
-    @Operation(summary = "\uD83D\uDD11 복용중인 알약 조회", description = "사용자가 등록한 복용중인 알약 리스트를 가져옵니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "알약 리스트"),
-            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
-                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
-    })
     @GetMapping("/main")
-    public ResponseEntity<PillRes> getPillList(
+    public ResponseEntity<PillMainRes> getPillList(
             @RequestParam @Schema(name = "프로필 ID") Long profileId
     ){
-        PillRes res = pillService.getPillList(profileId);
+        PillMainRes res = pillService.getPillList(profileId);
         return BaseResponse.ok(res);
     }
 

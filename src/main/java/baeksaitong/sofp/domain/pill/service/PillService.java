@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.pill.service;
 
 import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
 import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.category.error.CategoryErrorCode;
 import baeksaitong.sofp.domain.category.repository.CategoryRepository;
@@ -8,6 +9,7 @@ import baeksaitong.sofp.domain.category.service.CategoryService;
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
 import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillInfoDTO;
+import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
@@ -35,11 +37,16 @@ public class PillService {
     private final CategoryRepository categoryRepository;
     private final CategoryService categoryService;
 
-    public PillRes getPillList(Long profileId) {
+    public PillMainRes getPillList(Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
-        List<ProfilePill> profilePillList = profilePillRepository.findAllByProfile(profile);
-        return new PillRes(getPillRes(profilePillList));
+        List<ProfilePill> profilePillList = profilePillRepository.findAllByProfileAndCategoryIsNull(profile);
+        CategoryListByProfileRes categoryListByProfile = categoryService.getCategoryListByProfile(profileId);
+
+        return new PillMainRes(
+                categoryListByProfile.categoryList(),
+                getPillRes(profilePillList)
+        );
     }
 
     public PillRes addPill(PillReq req, Long profileId) {

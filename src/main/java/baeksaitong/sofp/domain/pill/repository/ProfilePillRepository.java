@@ -15,4 +15,5 @@ public interface ProfilePillRepository extends JpaRepository<ProfilePill, Long> 
     void deleteAllByProfileAndPillIn(Profile profile, List<Pill> pill);
     List<ProfilePill> findAllByProfile(Profile profile);
     List<ProfilePill> findAllByCategory(Category category);
+    List<ProfilePill> findAllByProfileAndCategoryIsNull(Profile profile);
 }
