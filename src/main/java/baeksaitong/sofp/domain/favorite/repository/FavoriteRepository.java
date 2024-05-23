@@ -14,4 +14,5 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     List<Favorite> findAllByProfile(Profile profile);
     Optional<Favorite> findByPillAndProfile(Pill pill, Profile profile);
     Boolean existsByPillAndProfile(Pill pill, Profile profile);
+    void deleteAllByProfile(Profile profile);
 }
