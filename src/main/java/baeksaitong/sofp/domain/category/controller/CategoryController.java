@@ -1,0 +1,119 @@
+package baeksaitong.sofp.domain.category.controller;
+
+import baeksaitong.sofp.domain.category.dto.request.CategoryEditReq;
+import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
+import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
+import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryListByDayRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
+import baeksaitong.sofp.domain.category.service.CategoryService;
+import baeksaitong.sofp.global.common.dto.BaseResponse;
+import baeksaitong.sofp.global.error.dto.ErrorResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+@Tag(name = "\uD83C\uDFF7️ Category")
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/app/category")
+public class CategoryController {
+    private final CategoryService categoryService;
+
+    @Operation(summary = "\uD83D\uDD11 카테고리 추가", description = "주어진 조건에 맞게 카테고리를 추가합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "카테고리 추가에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다. <br>" +
+                    "code: C-001 | message: 이미 존재하는 카테고리 이름입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/add")
+    public ResponseEntity<String> addCategory(
+            @RequestBody @Validated CategoryReq req,
+            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    ){
+        categoryService.addCategory(req, profileId);
+        return BaseResponse.ok("카테고리 추가에 성공했습니다.");
+    }
+
+    @Operation(summary = "\uD83D\uDD11 카테고리 정보", description = "카테고리 정보를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "카테고리 정보"),
+            @ApiResponse(responseCode = "404", description = "code: C-000 | message: 존재하지 않는 카테고리입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/info")
+    public ResponseEntity<CategoryDetailRes> getCategoryInfo(
+            @RequestParam @Schema(name = "카테고리 ID") Long categoryId
+    ){
+        CategoryDetailRes res = categoryService.getCategoryInfo(categoryId);
+        return BaseResponse.ok(res);
+    }
+    @Operation(summary = "\uD83D\uDD11 카테고리 수정", description = "카테고리 정보를 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "수정된 카테고리 정보"),
+            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다. <br>" +
+                    "code: C-000 | message: 존재하지 않는 카테고리입니다. <br>" +
+                    "code: C-001 | message: 이미 존재하는 카테고리 이름입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @PostMapping("/edit")
+    public ResponseEntity<CategoryDetailRes> editCategory(
+            @RequestBody @Validated CategoryEditReq req,
+            @RequestParam @Schema(name = "카테고리 ID") Long categoryId,
+            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    ){
+        CategoryDetailRes res = categoryService.editCategory(categoryId, profileId, req);
+        return BaseResponse.ok(res);
+    }
+
+    @Operation(summary = "\uD83D\uDD11 카테고리 삭제", description = "카테고리를 삭제합니다. <br>" +
+            "- 카테고리에 속한 알약 존재 시 삭제 여부에 따라 삭제 혹은 유지합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "카테고리 삭제에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "code: C-000 | message: 존재하지 않는 카테고리입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteCategory(
+            @RequestParam @Schema(name = "카테고리 ID") Long categoryId,
+            @RequestParam @Schema(name = "카테고리에 속한 알약 존재 시 삭제 여부(true=모두 삭제, false=알약 유지)") Boolean isAllDelete
+    ){
+        categoryService.deleteCategory(categoryId, isAllDelete);
+        return BaseResponse.ok("카테고리 삭제에 성공했습니다.");
+    }
+
+    @Operation(summary = "\uD83D\uDD11 프로필에 속한 카테고리 전체 조회", description = "프로필에 속한 모든 카테고리를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "카테고리 정보(카테고리 ID, 카테고리 이름) 리스트"),
+            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @GetMapping("/all")
+    public ResponseEntity<CategoryListByProfileRes> getCategoryListByProfile(
+            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    ){
+        CategoryListByProfileRes res = categoryService.getCategoryListByProfile(profileId);
+        return BaseResponse.ok(res);
+    }
+
+    @Operation(summary = "\uD83D\uDD11 날짜에 해당하는 모든 프로필 카테고리 전체 조회", description = "주어진 날짜와 프로필 ID 리스트에 해당하는 모든 카테고리를 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "카테고리 정보(카테고리 ID, 카테고리 이름) 리스트")
+    })
+
+    @PostMapping("/all")
+    public ResponseEntity<CategoryListByDayRes> getCategoryListByDay(
+            @RequestBody @Validated CategoryListByDay req
+    ){
+        CategoryListByDayRes res = categoryService.getCategoryListByDay(req);
+        return BaseResponse.ok(res);
+    }
+}
