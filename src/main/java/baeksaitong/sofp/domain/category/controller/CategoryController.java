@@ -27,8 +27,8 @@ public class CategoryController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity<CategoryDetailRes> getCategoryInfo(@RequestParam Long categoryId, @RequestParam Long profileId){
-        CategoryDetailRes res = categoryService.getCategoryInfo(categoryId, profileId);
+    public ResponseEntity<CategoryDetailRes> getCategoryInfo(@RequestParam Long categoryId){
+        CategoryDetailRes res = categoryService.getCategoryInfo(categoryId);
         return BaseResponse.ok(res);
     }
 
