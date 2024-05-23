@@ -51,10 +51,10 @@ public class PillController {
             @RequestBody @Validated PillReq req,
             @RequestParam @Schema(name = "프로필 ID") Long profileId){
         pillService.addPill(req, profileId);
-        return BaseResponse.ok("알약이 성공적으로 추가 됬습니다.");
+        return BaseResponse.ok("알약 추가에 성공했습니다.");
     }
 
-    @Operation(summary = "\uD83D\uDD11 복용중인 알약 삭제", description = "등록한 복용중인 알약을 삭제합니다.")
+    @Operation(summary = "\uD83D\uDD11 복용중인 알약 삭제", description = "알약 시리얼 번호 리스트를 사용하여 등록한 복용중인 알약을 삭제합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "알약이 성공적으로 삭제됬습니다."),
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
@@ -63,8 +63,9 @@ public class PillController {
     @PostMapping("/delete")
     public ResponseEntity<String> removePill(
             @RequestBody @Validated PillReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId){
+            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    ){
         pillService.removePill(req, profileId);
-        return BaseResponse.ok("알약이 성공적으로 삭제됬습니다.");
+        return BaseResponse.ok("알약 삭제에 성공했습니다.");
     }
 }
