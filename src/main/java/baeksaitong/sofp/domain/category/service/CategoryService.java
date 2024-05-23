@@ -2,6 +2,8 @@ package baeksaitong.sofp.domain.category.service;
 
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryProfileDto;
 import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.category.entity.IntakeDay;
 import baeksaitong.sofp.domain.category.entity.IntakeTime;
@@ -81,5 +83,15 @@ public class CategoryService {
                 .toList();
 
         return new CategoryDetailRes(category,days,times);
+    }
+
+    public CategoryListByProfileRes getCategoryListByProfile(Long profileId) {
+        Profile profile = profileService.getProfile(profileId);
+        List<CategoryProfileDto> categoryList = categoryRepository.findAllByProfile(profile)
+                .stream()
+                .map(CategoryProfileDto::new)
+                .toList();
+
+        return new CategoryListByProfileRes(categoryList);
     }
 }

@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.category.controller;
 
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
 import baeksaitong.sofp.domain.category.service.CategoryService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,4 +30,9 @@ public class CategoryController {
         return BaseResponse.ok(res);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<CategoryListByProfileRes> getCategoryListByProfile(@RequestParam Long profileId){
+        CategoryListByProfileRes res = categoryService.getCategoryListByProfile(profileId);
+        return BaseResponse.ok(res);
+    }
 }
