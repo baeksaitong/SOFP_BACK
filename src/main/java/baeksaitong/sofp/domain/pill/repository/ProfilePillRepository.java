@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.pill.repository;
 
+import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.pill.entity.ProfilePill;
 import baeksaitong.sofp.domain.pill.entity.Pill;
@@ -13,4 +14,5 @@ public interface ProfilePillRepository extends JpaRepository<ProfilePill, Long> 
 
     void deleteAllByProfileAndPillIn(Profile profile, List<Pill> pill);
     List<ProfilePill> findAllByProfile(Profile profile);
+    List<ProfilePill> findAllByCategory(Category category);
 }

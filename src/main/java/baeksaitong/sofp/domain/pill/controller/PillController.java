@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.pill.controller;
 
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
+import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.service.PillService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
@@ -29,11 +30,19 @@ public class PillController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping
+    @GetMapping("/main")
     public ResponseEntity<PillRes> getPillList(
             @RequestParam @Schema(name = "프로필 ID") Long profileId
     ){
         PillRes res = pillService.getPillList(profileId);
+        return BaseResponse.ok(res);
+    }
+
+    @GetMapping("/category")
+    public ResponseEntity<PillCategoryRes> getPillListByCategory(
+            @RequestParam Long categoryId
+    ){
+        PillCategoryRes res = pillService.getPillListByCategory(categoryId);
         return BaseResponse.ok(res);
     }
 

@@ -75,6 +75,10 @@ public class CategoryService {
 
     public CategoryDetailRes getCategoryInfo(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+        return getCategoryDetailRes(category);
+    }
+
+    public CategoryDetailRes getCategoryDetailRes(Category category) {
         List<Day> days = intakeDayRepository.findAllByCategory(category)
                 .stream()
                 .map(IntakeDay::getDay)
@@ -84,7 +88,7 @@ public class CategoryService {
                 .map(IntakeTime::getTime)
                 .toList();
 
-        return new CategoryDetailRes(category,days,times);
+        return new CategoryDetailRes(category, days, times);
     }
 
     public CategoryListByProfileRes getCategoryListByProfile(Long profileId) {
