@@ -15,4 +15,5 @@ public interface IntakeDayRepository extends JpaRepository<IntakeDay,Long> {
     List<IntakeDay> findAllByCategory(Category category);
     @EntityGraph(attributePaths = {"category", "category.profile"})
     List<IntakeDay> findAllByDayAndProfileIn(Day day, List<Profile> profiles);
+    void deleteAllByCategoryAndDayIn(Category category, List<Day> dayList);
 }

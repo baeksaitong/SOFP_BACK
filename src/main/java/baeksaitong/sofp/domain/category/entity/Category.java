@@ -22,4 +22,11 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     private Profile profile;
+
+    public void edit(String name, Boolean alarm, LocalDate period){
+        this.name = name;
+        this.alarm = alarm;
+        this.period = period;
+    }
+
 }

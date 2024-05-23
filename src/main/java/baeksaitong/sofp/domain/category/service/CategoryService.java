@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.category.service;
 
+import baeksaitong.sofp.domain.category.dto.request.CategoryEditReq;
 import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.*;
@@ -20,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -125,5 +128,60 @@ public class CategoryService {
                 .collect(Collectors.toList());
 
         return new CategoryListByDayRes(categoryDayDtoList);
+    }
+
+    public CategoryDetailRes editCategory(Long categoryId, Long profileId, CategoryEditReq req) {
+        Profile profile = profileService.getProfile(profileId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+
+        if(!req.getName().equals(category.getName()) && categoryRepository.existsByNameAndProfile(req.getName(), profile)){
+            throw new BusinessException(CategoryErrorCode.DUPLICATE_CATEGORY_NAME);
+        }
+
+        category.edit(req.getName(), req.getAlarm(), req.getPeriod());
+        categoryRepository.save(category);
+
+
+        List<Day> deleteDayList = getDayList(req.getDeleteIntakeDayList());
+        intakeDayRepository.deleteAllByCategoryAndDayIn(category, deleteDayList);
+
+        List<LocalTime> deleteTimeList = getTimeList(req.getDeleteIntakeTimeList());
+        intakeTimeRepository.deleteAllByCategoryAndTimeIn(category, deleteTimeList);
+
+
+        List<LocalTime> addTimeList = getTimeList(req.getAddintakeTimeList());
+        List<IntakeTime> addIntakeTimeList = addTimeList.stream()
+                .map(time -> IntakeTime.builder()
+                        .time(time)
+                        .category(category)
+                        .build())
+                .collect(Collectors.toList());
+        intakeTimeRepository.saveAll(addIntakeTimeList);
+
+
+        List<IntakeDay> addIntakeDayList = getDayList(req.getAddIntakeDayList())
+                .stream()
+                .map(day -> IntakeDay.builder()
+                        .day(day)
+                        .category(category)
+                        .profile(profile)
+                        .build()
+                ).toList();
+        intakeDayRepository.saveAll(addIntakeDayList);
+
+        return getCategoryDetailRes(category);
+    }
+
+    private List<Day> getDayList(List<String> stringList) {
+        return Optional.ofNullable(stringList)
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(Day::from)
+                .collect(Collectors.toList());
+    }
+
+    private List<LocalTime> getTimeList(List<LocalTime> timeList) {
+        return Optional.ofNullable(timeList)
+                .orElse(Collections.emptyList());
     }
 }

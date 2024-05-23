@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.category.controller;
 
+import baeksaitong.sofp.domain.category.dto.request.CategoryEditReq;
 import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
@@ -29,6 +30,16 @@ public class CategoryController {
     @GetMapping("/info")
     public ResponseEntity<CategoryDetailRes> getCategoryInfo(@RequestParam Long categoryId){
         CategoryDetailRes res = categoryService.getCategoryInfo(categoryId);
+        return BaseResponse.ok(res);
+    }
+
+    @PostMapping("/edit")
+    public ResponseEntity<CategoryDetailRes> editCategory(
+            @RequestBody CategoryEditReq req,
+            @RequestParam Long categoryId,
+            @RequestParam Long profileId
+    ){
+        CategoryDetailRes res = categoryService.editCategory(categoryId, profileId, req);
         return BaseResponse.ok(res);
     }
 
