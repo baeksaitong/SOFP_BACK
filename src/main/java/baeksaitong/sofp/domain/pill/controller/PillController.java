@@ -24,10 +24,19 @@ import org.springframework.web.bind.annotation.*;
 public class PillController {
     private final PillService pillService;
 
+    @Operation(summary = "\uD83D\uDD11 복용중인 알약 조회", description = "사용자가 등록한 복용중인 알약 리스트를 가져옵니다." +
+            "<br> - categoryId 미입력 or null : 카테고리 미등록 복용중인 알약 조회" +
+            "<br> - categoryId 입력시 : 카테고리에 등록 된 복용중인 알약 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "복용중인 알약 리스트"),
+            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다. <br>" +
+                    "code: C-000 | message: 존재하지 않는 카테고리입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @GetMapping
     public ResponseEntity<PillRes> getPillList(
             @RequestParam @Schema(name = "프로필 ID") Long profileId,
-            @RequestParam(required = false) Long categoryId
+            @RequestParam(required = false) @Schema(name = "카테고리 ID") Long categoryId
     ){
         PillRes res = pillService.getPillList(profileId, categoryId);
         return BaseResponse.ok(res);
@@ -35,7 +44,7 @@ public class PillController {
 
     @Operation(summary = "\uD83D\uDD11 복용중인 알약 추가", description = "알약 시리얼 번호 리스트를 사용하여 복용중인 알약을 추가합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "알약이 성공적으로 추가 됬습니다."),
+            @ApiResponse(responseCode = "200", description = "알약 추가에 성공했습니다."),
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -49,7 +58,7 @@ public class PillController {
 
     @Operation(summary = "\uD83D\uDD11 복용중인 알약 삭제", description = "알약 시리얼 번호 리스트를 사용하여 등록한 복용중인 알약을 삭제합니다.")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "알약이 성공적으로 삭제됬습니다."),
+            @ApiResponse(responseCode = "200", description = "알약 삭제에 성공했습니다."),
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -62,9 +71,18 @@ public class PillController {
         return BaseResponse.ok("알약 삭제에 성공했습니다.");
     }
 
+    @Operation(summary = "\uD83D\uDD11 복용중인 알약 이동", description = "사용자가 등록한 복용중인 알약을 주어진 카테고리에 이동합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "알약 이동에 성공했습니다."),
+            @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다. <br>" +
+                    "code: C-000 | message: 존재하지 않는 카테고리입니다. <br>" +
+                    "code: P-000 | message: 존재하지 않는 알약입니다. <br>" +
+                    "code: P-001 | message: 복용중인 알약으로 등록되지 않은 알약입니다.",
+                    content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/move")
     public ResponseEntity<String> movePill(
-        @RequestBody MovePillReq req,
+        @RequestBody @Validated MovePillReq req,
         @RequestParam Long profileId
     ){
         pillService.movePill(req, profileId);
