@@ -1,9 +1,8 @@
 package baeksaitong.sofp.domain.category.service;
 
+import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
-import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
-import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
-import baeksaitong.sofp.domain.category.dto.response.CategoryProfileDto;
+import baeksaitong.sofp.domain.category.dto.response.*;
 import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.category.entity.IntakeDay;
 import baeksaitong.sofp.domain.category.entity.IntakeTime;
@@ -13,6 +12,7 @@ import baeksaitong.sofp.domain.category.repository.CategoryRepository;
 import baeksaitong.sofp.domain.category.repository.IntakeDayRepository;
 import baeksaitong.sofp.domain.category.repository.IntakeTimeRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,6 +32,7 @@ public class CategoryService {
     private final IntakeTimeRepository intakeTimeRepository;
     private final IntakeDayRepository intakeDayRepository;
     private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
 
 
     public void addCategory(CategoryReq req, Long profileId) {
@@ -93,5 +96,31 @@ public class CategoryService {
                 .toList();
 
         return new CategoryListByProfileRes(categoryList);
+    }
+
+    public CategoryListByDayRes getCategoryListByDay(CategoryListByDay req) {
+        List<Profile> profileList = profileRepository.findAllById(req.getProfileIdList());
+
+        List<IntakeDay> intakeDays = intakeDayRepository.findAllByDayAndProfileIn(Day.from(req.getDay()), profileList);
+
+        List<Category> categoryList = intakeDays.stream()
+                .map(IntakeDay::getCategory)
+                .distinct()
+                .toList();
+        List<IntakeTime> intakeTimes = intakeTimeRepository.findAllByCategoryIn(categoryList);
+
+        Map<Category, List<IntakeTime>> intakeTimeMap = intakeTimes.stream()
+                .collect(Collectors.groupingBy(IntakeTime::getCategory));
+
+        List<CategoryDayDto> categoryDayDtoList = categoryList.stream()
+                .map(category -> new CategoryDayDto(
+                        category.getId(),
+                        category.getProfile().getColor(),
+                        category.getName(),
+                        intakeTimeMap.getOrDefault(category, List.of()).stream().map(IntakeTime::getTime).collect(Collectors.toList())
+                ))
+                .collect(Collectors.toList());
+
+        return new CategoryListByDayRes(categoryDayDtoList);
     }
 }

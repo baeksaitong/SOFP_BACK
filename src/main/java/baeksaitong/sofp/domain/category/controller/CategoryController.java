@@ -1,7 +1,9 @@
 package baeksaitong.sofp.domain.category.controller;
 
+import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
+import baeksaitong.sofp.domain.category.dto.response.CategoryListByDayRes;
 import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
 import baeksaitong.sofp.domain.category.service.CategoryService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
@@ -33,6 +35,12 @@ public class CategoryController {
     @GetMapping("/all")
     public ResponseEntity<CategoryListByProfileRes> getCategoryListByProfile(@RequestParam Long profileId){
         CategoryListByProfileRes res = categoryService.getCategoryListByProfile(profileId);
+        return BaseResponse.ok(res);
+    }
+
+    @PostMapping("/all")
+    public ResponseEntity<CategoryListByDayRes> getCategoryListByDay(@RequestBody CategoryListByDay req){
+        CategoryListByDayRes res = categoryService.getCategoryListByDay(req);
         return BaseResponse.ok(res);
     }
 }
