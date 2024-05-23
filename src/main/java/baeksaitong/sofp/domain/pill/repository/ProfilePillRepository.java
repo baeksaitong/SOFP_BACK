@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface ProfilePillRepository extends JpaRepository<ProfilePill, Long> {
 
     void deleteAllByProfileAndPillIn(Profile profile, List<Pill> pill);
+    void deleteAllByProfile(Profile profile);
     Optional<ProfilePill> findByPillAndProfile(Pill pill, Profile profile);
     List<ProfilePill> findAllByProfile(Profile profile);
     List<ProfilePill> findAllByCategory(Category category);

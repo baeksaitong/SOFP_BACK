@@ -1,13 +1,18 @@
 package baeksaitong.sofp.domain.profile.service;
 
-import baeksaitong.sofp.domain.profile.dto.response.ProfileListRes;
+import baeksaitong.sofp.domain.category.service.CategoryService;
+import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
+import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
+import baeksaitong.sofp.domain.history.repository.HistoryRepository;
+import baeksaitong.sofp.domain.member.entity.Member;
+import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.dto.request.ProfileReq;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileBasicRes;
 import baeksaitong.sofp.domain.profile.dto.response.ProfileDetailRes;
+import baeksaitong.sofp.domain.profile.dto.response.ProfileListRes;
+import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
-import baeksaitong.sofp.domain.member.entity.Member;
-import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.redis.constants.RedisPrefix;
 import baeksaitong.sofp.global.redis.service.RedisService;
@@ -25,8 +30,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProfileService {
     private final ProfileRepository profileRepository;
+    private final ProfilePillRepository profilePillRepository;
+    private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final HistoryRepository historyRepository;
     private final AwsS3Service awsS3Service;
     private final RedisService redisService;
+    private final CategoryService categoryService;
 
     public Profile getProfile(Long id){
         if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
@@ -85,6 +95,13 @@ public class ProfileService {
 
     public void deleteProfile(Long profileId) {
         Profile profile = getProfile(profileId);
+
+        categoryService.deleteCategoryByProfile(profile);
+
+        profilePillRepository.deleteAllByProfile(profile);
+        profileDiseaseAllergyRepository.deleteAllByProfile(profile);
+        favoriteRepository.deleteAllByProfile(profile);
+        historyRepository.deleteById(profileId);
 
         profileRepository.delete(profile);
         deleteProfileCache(profileId);

@@ -17,4 +17,6 @@ public interface IntakeDayRepository extends JpaRepository<IntakeDay,Long> {
     List<IntakeDay> findAllByDayAndProfileIn(Day day, List<Profile> profiles);
     void deleteAllByCategoryAndDayIn(Category category, List<Day> dayList);
     void deleteAllByCategory(Category category);
+    void deleteAllByCategoryIn(List<Category> category);
+
 }

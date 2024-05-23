@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ProfileDiseaseAllergyRepository extends JpaRepository<ProfileDiseaseAllergy, Long> {
     List<ProfileDiseaseAllergy> findAllByProfile(Profile profile);
+    void deleteAllByProfile(Profile profile);
 }

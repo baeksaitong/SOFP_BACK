@@ -206,4 +206,10 @@ public class CategoryService {
 
         categoryRepository.delete(category);
     }
+
+    public void deleteCategoryByProfile(Profile profile){
+        List<Category> categoryList = categoryRepository.findAllByProfile(profile);
+        intakeDayRepository.deleteAllByCategoryIn(categoryList);
+        intakeTimeRepository.deleteAllByCategoryIn(categoryList);
+    }
 }
