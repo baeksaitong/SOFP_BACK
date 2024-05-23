@@ -1,6 +1,9 @@
 package baeksaitong.sofp.domain.profile.service;
 
-import baeksaitong.sofp.domain.category.service.CategoryService;
+import baeksaitong.sofp.domain.category.entity.Category;
+import baeksaitong.sofp.domain.category.repository.CategoryRepository;
+import baeksaitong.sofp.domain.category.repository.IntakeDayRepository;
+import baeksaitong.sofp.domain.category.repository.IntakeTimeRepository;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
 import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.history.repository.HistoryRepository;
@@ -34,9 +37,11 @@ public class ProfileService {
     private final ProfileDiseaseAllergyRepository profileDiseaseAllergyRepository;
     private final FavoriteRepository favoriteRepository;
     private final HistoryRepository historyRepository;
+    private final CategoryRepository categoryRepository;
+    private final IntakeTimeRepository intakeTimeRepository;
+    private final IntakeDayRepository intakeDayRepository;
     private final AwsS3Service awsS3Service;
     private final RedisService redisService;
-    private final CategoryService categoryService;
 
     public Profile getProfile(Long id){
         if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
@@ -96,7 +101,9 @@ public class ProfileService {
     public void deleteProfile(Long profileId) {
         Profile profile = getProfile(profileId);
 
-        categoryService.deleteCategoryByProfile(profile);
+        List<Category> categoryList = categoryRepository.findAllByProfile(profile);
+        intakeDayRepository.deleteAllByCategoryIn(categoryList);
+        intakeTimeRepository.deleteAllByCategoryIn(categoryList);
 
         profilePillRepository.deleteAllByProfile(profile);
         profileDiseaseAllergyRepository.deleteAllByProfile(profile);
