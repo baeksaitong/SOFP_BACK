@@ -2,8 +2,7 @@ package baeksaitong.sofp.domain.pill.controller;
 
 import baeksaitong.sofp.domain.pill.dto.request.MovePillReq;
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
-import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
-import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
+import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.service.PillService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
@@ -25,19 +24,12 @@ import org.springframework.web.bind.annotation.*;
 public class PillController {
     private final PillService pillService;
 
-    @GetMapping("/main")
-    public ResponseEntity<PillMainRes> getPillList(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+    @GetMapping
+    public ResponseEntity<PillRes> getPillList(
+            @RequestParam @Schema(name = "프로필 ID") Long profileId,
+            @RequestParam(required = false) Long categoryId
     ){
-        PillMainRes res = pillService.getPillList(profileId);
-        return BaseResponse.ok(res);
-    }
-
-    @GetMapping("/category")
-    public ResponseEntity<PillCategoryRes> getPillListByCategory(
-            @RequestParam Long categoryId
-    ){
-        PillCategoryRes res = pillService.getPillListByCategory(categoryId);
+        PillRes res = pillService.getPillList(profileId, categoryId);
         return BaseResponse.ok(res);
     }
 

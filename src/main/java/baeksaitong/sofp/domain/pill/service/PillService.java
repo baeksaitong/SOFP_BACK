@@ -1,16 +1,12 @@
 package baeksaitong.sofp.domain.pill.service;
 
-import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
-import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
 import baeksaitong.sofp.domain.category.entity.Category;
 import baeksaitong.sofp.domain.category.error.CategoryErrorCode;
 import baeksaitong.sofp.domain.category.repository.CategoryRepository;
-import baeksaitong.sofp.domain.category.service.CategoryService;
 import baeksaitong.sofp.domain.pill.dto.request.MovePillReq;
 import baeksaitong.sofp.domain.pill.dto.request.PillReq;
-import baeksaitong.sofp.domain.pill.dto.response.PillCategoryRes;
 import baeksaitong.sofp.domain.pill.dto.response.PillInfoDTO;
-import baeksaitong.sofp.domain.pill.dto.response.PillMainRes;
+import baeksaitong.sofp.domain.pill.dto.response.PillRes;
 import baeksaitong.sofp.domain.pill.error.PillErrorCode;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
@@ -36,18 +32,19 @@ public class PillService {
     private final ProfilePillRepository profilePillRepository;
     private final PillRepository pillRepository;
     private final CategoryRepository categoryRepository;
-    private final CategoryService categoryService;
 
-    public PillMainRes getPillList(Long profileId) {
-        Profile profile = profileService.getProfile(profileId);
+    public PillRes getPillList(Long profileId, Long categoryId) {
+        List<ProfilePill> profilePillList;
 
-        List<ProfilePill> profilePillList = profilePillRepository.findAllByProfileAndCategoryIsNull(profile);
-        CategoryListByProfileRes categoryListByProfile = categoryService.getCategoryListByProfile(profileId);
+        if(categoryId == null) {
+            Profile profile = profileService.getProfile(profileId);
+            profilePillList = profilePillRepository.findAllByProfileAndCategoryIsNull(profile);
+        }else{
+            Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+            profilePillList = profilePillRepository.findAllByCategory(category);
+        }
 
-        return new PillMainRes(
-                categoryListByProfile.categoryList(),
-                getPillRes(profilePillList)
-        );
+        return new PillRes(getPillRes(profilePillList));
     }
 
     public void addPill(PillReq req, Long profileId) {
@@ -93,16 +90,6 @@ public class PillService {
                 .stream()
                 .map(profilePill -> new PillInfoDTO(profilePill.getPill()))
                 .collect(Collectors.toList());
-    }
-
-    public PillCategoryRes getPillListByCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
-
-        List<ProfilePill> profilePillList = profilePillRepository.findAllByCategory(category);
-        List<PillInfoDTO> pillInfoDTOList = getPillRes(profilePillList);
-        CategoryDetailRes categoryDetailRes = categoryService.getCategoryDetailRes(category);
-
-        return new PillCategoryRes(categoryDetailRes, pillInfoDTOList);
     }
 
     public void movePill(MovePillReq req, Long profileId) {
