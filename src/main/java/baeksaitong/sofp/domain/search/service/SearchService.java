@@ -46,8 +46,19 @@ public class SearchService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
 
-    public KeywordRes findByKeyword(KeywordReq req, Long profileId) {
+    public KeywordRes findByKeyword(Long profileId, String keyword, String shape, String sign, String color, String formulation, String line) {
         Profile profile = profileService.getProfile(profileId);
+
+        KeywordReq req = KeywordReq.builder()
+                .keyword(keyword)
+                .line(line)
+                .shape(shape)
+                .sign(sign)
+                .color(color)
+                .formulation(formulation)
+                .page(0)
+                .limit(10)
+                .build();
 
         Page<Pill> result = pillRepository.findByKeyword(req);
 
