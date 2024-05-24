@@ -31,10 +31,10 @@ public class HistoryController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping
+    @PostMapping("/{profileId}")
     public ResponseEntity<HistoryRes> getRecentViewPill(
             @RequestBody @Validated HistoryReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         HistoryRes res = historyService.getRecentViewPill(req, profileId);
         return BaseResponse.ok(res);
@@ -47,10 +47,10 @@ public class HistoryController {
                     "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete")
+    @DeleteMapping("/{profileId}")
     public ResponseEntity<HistoryRes> deleteRecentViewPill(
             @RequestBody @Validated HistoryDeleteReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId){
+            @PathVariable @Schema(description = "프로필 ID") Long profileId){
         HistoryRes res =  historyService.deleteRecentViewPill(req, profileId);
         return BaseResponse.ok(res);
     }
