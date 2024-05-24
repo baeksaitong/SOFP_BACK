@@ -28,7 +28,7 @@ public class DiseaseAllergyController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "질병 및 알레르기 전체 리스트")
     })
-    @GetMapping("/all")
+    @GetMapping
     ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(){
         return BaseResponse.ok(diseaseAllergyService.getAllDiseaseAllergyList());
     }
@@ -39,7 +39,7 @@ public class DiseaseAllergyController {
     })
     @GetMapping("/search")
     ResponseEntity<DiseaseAllergyRes> searchDiseaseAllergyList(
-            @RequestParam @Schema(name = "검색 키워드") String keyword
+            @RequestParam @Schema(description = "검색 키워드") String keyword
     ){
         return BaseResponse.ok(diseaseAllergyService.searchDiseaseAllergyList(keyword));
     }
@@ -50,9 +50,9 @@ public class DiseaseAllergyController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping
+    @GetMapping("/{profileId}")
     public ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         DiseaseAllergyRes res = diseaseAllergyService.getDiseaseAllergyList(profileId);
         return BaseResponse.ok(res);
@@ -64,10 +64,10 @@ public class DiseaseAllergyController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/edit")
+    @PatchMapping("/{profileId}")
     public ResponseEntity<DiseaseAllergyRes> editDiseaseAllergy(
             @RequestBody @Validated DiseaseAllergyEditReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId){
+            @PathVariable @Schema(description = "프로필 ID") Long profileId){
         DiseaseAllergyRes res = diseaseAllergyService.editDiseaseAllergy(req, profileId);
         return BaseResponse.ok(res);
     }
