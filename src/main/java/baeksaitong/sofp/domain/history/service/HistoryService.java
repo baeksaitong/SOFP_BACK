@@ -1,16 +1,15 @@
 package baeksaitong.sofp.domain.history.service;
 
-import baeksaitong.sofp.domain.history.dto.request.HistoryDeleteReq;
+import baeksaitong.sofp.domain.history.collection.History;
 import baeksaitong.sofp.domain.history.dto.request.HistoryReq;
 import baeksaitong.sofp.domain.history.dto.response.HistoryDto;
 import baeksaitong.sofp.domain.history.dto.response.HistoryRes;
 import baeksaitong.sofp.domain.history.error.HistoryErrorCode;
 import baeksaitong.sofp.domain.history.repository.HistoryRepository;
-import baeksaitong.sofp.domain.pill.repository.PillRepository;
-import baeksaitong.sofp.domain.profile.service.ProfileService;
-import baeksaitong.sofp.domain.history.collection.History;
 import baeksaitong.sofp.domain.pill.entity.Pill;
+import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,7 +62,7 @@ public class HistoryService {
         return changePillIdListToHistoryRes(recentViewPill, req.getCount(), req.getSize());
     }
 
-    public HistoryRes deleteRecentViewPill(HistoryDeleteReq req, Long profileId){
+    public void deleteRecentViewPill(Long pillSerialNumber, Long profileId){
         Profile profile = profileService.getProfile(profileId);
 
         History history = historyRepository.findById(profile.getId()).orElseThrow(
@@ -72,16 +71,11 @@ public class HistoryService {
 
         List<Long> recentViewPill = history.getRecentViewPill();
 
-        List<Long> updatedRecentViewPill = recentViewPill.stream()
-                .filter(pillId -> !req.getPillIdList().contains(pillId))
-                .collect(Collectors.toList());
+        recentViewPill.remove(pillSerialNumber);
 
-        history.setRecentViewPill(updatedRecentViewPill);
+        history.setRecentViewPill(recentViewPill);
 
         historyRepository.save(history);
-
-        return changePillIdListToHistoryRes(history.getRecentViewPill(), req.getCount(), req.getSize());
-
     }
 
     private HistoryRes changePillIdListToHistoryRes(List<Long> pillIdList, int count, int size){

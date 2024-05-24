@@ -1,6 +1,5 @@
 package baeksaitong.sofp.domain.history.controller;
 
-import baeksaitong.sofp.domain.history.dto.request.HistoryDeleteReq;
 import baeksaitong.sofp.domain.history.dto.request.HistoryReq;
 import baeksaitong.sofp.domain.history.dto.response.HistoryRes;
 import baeksaitong.sofp.domain.history.service.HistoryService;
@@ -48,10 +47,10 @@ public class HistoryController {
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @DeleteMapping("/{profileId}")
-    public ResponseEntity<HistoryRes> deleteRecentViewPill(
-            @RequestBody @Validated HistoryDeleteReq req,
-            @PathVariable @Schema(description = "프로필 ID") Long profileId){
-        HistoryRes res =  historyService.deleteRecentViewPill(req, profileId);
-        return BaseResponse.ok(res);
+    public ResponseEntity<String> deleteRecentViewPill(
+            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @RequestParam @Schema(description = "알약 시리얼 번호") Long pillSerialNumber){
+        historyService.deleteRecentViewPill(pillSerialNumber, profileId);
+        return BaseResponse.ok("최근 본 알약 삭제에 성공 했습니다.");
     }
 }
