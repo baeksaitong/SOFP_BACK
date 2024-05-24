@@ -24,19 +24,21 @@ import org.springframework.web.bind.annotation.*;
 public class PillController {
     private final PillService pillService;
 
-    @Operation(summary = "\uD83D\uDD11 복용중인 알약 조회", description = "사용자가 등록한 복용중인 알약 리스트를 가져옵니다." +
+    @Operation(summary = "\uD83D\uDD11 복용중인 알약 리스트 조회", description = "사용자가 등록한 복용중인 알약 리스트를 가져옵니다." +
             "<br> - categoryId 미입력 or null : 카테고리 미등록 복용중인 알약 조회" +
-            "<br> - categoryId 입력시 : 카테고리에 등록 된 복용중인 알약 조회")
+            "<br> - categoryId 입력시 : 카테고리에 등록 된 복용중인 알약 조회" +
+            "<br> - categoryId, profileId 둘중 하나는 필수적으로 입력이 필요")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "복용중인 알약 리스트"),
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다. <br>" +
-                    "code: C-000 | message: 존재하지 않는 카테고리입니다.",
+                    "code: C-000 | message: 존재하지 않는 카테고리입니다." +
+                    "code: P-002 | message: 프로필 정보 혹은 카테고리 정보가 필요합니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @GetMapping
     public ResponseEntity<PillRes> getPillList(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId,
-            @RequestParam(required = false) @Schema(name = "카테고리 ID") Long categoryId
+            @RequestParam(required = false) @Schema(description = "프로필 ID") Long profileId,
+            @RequestParam(required = false) @Schema(description = "카테고리 ID") Long categoryId
     ){
         PillRes res = pillService.getPillList(profileId, categoryId);
         return BaseResponse.ok(res);
@@ -48,10 +50,10 @@ public class PillController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/add")
+    @PostMapping("/{profileId}")
     public ResponseEntity<String> addPill(
             @RequestBody @Validated PillReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId){
+            @PathVariable @Schema(description = "프로필 ID") Long profileId){
         pillService.addPill(req, profileId);
         return BaseResponse.ok("알약 추가에 성공했습니다.");
     }
@@ -62,10 +64,10 @@ public class PillController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/delete")
+    @DeleteMapping("/{profileId}")
     public ResponseEntity<String> removePill(
             @RequestBody @Validated PillReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         pillService.removePill(req, profileId);
         return BaseResponse.ok("알약 삭제에 성공했습니다.");
@@ -80,10 +82,10 @@ public class PillController {
                     "code: P-001 | message: 복용중인 알약으로 등록되지 않은 알약입니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/move")
+    @PatchMapping("/{profileId}")
     public ResponseEntity<String> movePill(
         @RequestBody @Validated MovePillReq req,
-        @RequestParam Long profileId
+        @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         pillService.movePill(req, profileId);
         return BaseResponse.ok("알약 이동에 성공했습니다.");
