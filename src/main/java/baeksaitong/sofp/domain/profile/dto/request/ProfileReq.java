@@ -10,7 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProfileReq {
     @NotNull(message = "이름이 필요합니다.")
     @Schema(description = "이름")
