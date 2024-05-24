@@ -1,13 +1,14 @@
 package baeksaitong.sofp.domain.category.controller;
 
 import baeksaitong.sofp.domain.category.dto.request.CategoryEditReq;
-import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.CategoryDetailRes;
 import baeksaitong.sofp.domain.category.dto.response.CategoryListByDayRes;
 import baeksaitong.sofp.domain.category.dto.response.CategoryListByProfileRes;
+import baeksaitong.sofp.domain.category.entity.enums.Day;
 import baeksaitong.sofp.domain.category.service.CategoryService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
+import baeksaitong.sofp.global.common.validation.ValidEnum;
 import baeksaitong.sofp.global.error.dto.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -103,16 +104,17 @@ public class CategoryController {
         return BaseResponse.ok(res);
     }
 
-    @Operation(summary = "\uD83D\uDD11 날짜에 해당하는 모든 프로필 카테고리 전체 조회", description = "주어진 날짜와 프로필 ID 리스트에 해당하는 모든 카테고리를 조회합니다.")
+    @Operation(summary = "\uD83D\uDD11 날짜에 해당하는 카테고리 전체 조회", description = "주어진 날짜와 프로필 ID 리스트에 해당하는 모든 카테고리를 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "카테고리 정보(카테고리 ID, 카테고리 이름) 리스트")
     })
-
-    @PostMapping
+    @GetMapping("/{profileId}/{day}")
     public ResponseEntity<CategoryListByDayRes> getCategoryListByDay(
-            @RequestBody @Validated CategoryListByDay req
+            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @ValidEnum(enumClass = Day.class, ignoreCase=true, message = "잘못된 요일 입력입니다.")
+            @PathVariable @Schema(description = "조회 요일", example = "MON,TUE,WED,THU,FRI,SAT,SUN") String day
     ){
-        CategoryListByDayRes res = categoryService.getCategoryListByDay(req);
+        CategoryListByDayRes res = categoryService.getCategoryListByDay(profileId, day);
         return BaseResponse.ok(res);
     }
 }
