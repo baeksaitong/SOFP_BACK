@@ -36,12 +36,14 @@ public class PillService {
     public PillRes getPillList(Long profileId, Long categoryId) {
         List<ProfilePill> profilePillList;
 
-        if(categoryId == null) {
+        if(categoryId == null && profileId != null) {
             Profile profile = profileService.getProfile(profileId);
             profilePillList = profilePillRepository.findAllByProfileAndCategoryIsNull(profile);
-        }else{
+        }else if(categoryId != null && profileId == null){
             Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
             profilePillList = profilePillRepository.findAllByCategory(category);
+        }else{
+            throw new BusinessException(PillErrorCode.NEED_PROFILE_OR_CATEGORY);
         }
 
         return new PillRes(getPillRes(profilePillList));
