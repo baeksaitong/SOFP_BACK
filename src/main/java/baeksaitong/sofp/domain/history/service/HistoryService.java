@@ -1,7 +1,6 @@
 package baeksaitong.sofp.domain.history.service;
 
 import baeksaitong.sofp.domain.history.collection.History;
-import baeksaitong.sofp.domain.history.dto.request.HistoryReq;
 import baeksaitong.sofp.domain.history.dto.response.HistoryDto;
 import baeksaitong.sofp.domain.history.dto.response.HistoryRes;
 import baeksaitong.sofp.domain.history.error.HistoryErrorCode;
@@ -48,18 +47,29 @@ public class HistoryService {
         historyRepository.save(history);
     }
 
-    public HistoryRes getRecentViewPill(HistoryReq req, Long profileId) {
+    public HistoryRes getRecentViewPill(int count, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
         History history = historyRepository.findById(profile.getId()).orElse(null);
 
         if(history == null){
-            return new HistoryRes(0,new ArrayList<>());
+            return new HistoryRes(List.of());
         }
 
-        List<Long> recentViewPill = history.getRecentViewPill();
+        List<Long> pillIdList = history.getRecentViewPill();
 
-        return changePillIdListToHistoryRes(recentViewPill, req.getCount(), req.getSize());
+        List<Pill> pills = pillRepository.findAllBySerialNumberIn(pillIdList);
+
+
+        List<HistoryDto> historyDtoList = pills.stream()
+                .map(HistoryDto::new)
+                .collect(Collectors.toList());
+
+        int endIndex = Math.min(count, historyDtoList.size());
+        List<HistoryDto> result = historyDtoList.subList(0, endIndex);
+
+
+        return new HistoryRes(result);
     }
 
     public void deleteRecentViewPill(Long pillSerialNumber, Long profileId){
@@ -77,18 +87,4 @@ public class HistoryService {
 
         historyRepository.save(history);
     }
-
-    private HistoryRes changePillIdListToHistoryRes(List<Long> pillIdList, int count, int size){
-        List<Pill> pills = pillRepository.findAllBySerialNumberIn(pillIdList);
-
-
-        List<HistoryDto> historyDtoList = pills.stream()
-                .map(HistoryDto::new)
-                .collect(Collectors.toList());
-
-        int totalPage = (int) Math.ceil((double) count / size);
-
-        return new HistoryRes(totalPage, historyDtoList);
-    }
-
 }

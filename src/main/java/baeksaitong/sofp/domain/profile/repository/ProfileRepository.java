@@ -11,4 +11,5 @@ import java.util.List;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
     Long countByMember(Member member);
     List<Profile> findAllByMember(Member member);
+    List<Profile> findAllByIdIn(List<Long> idList);
 }
