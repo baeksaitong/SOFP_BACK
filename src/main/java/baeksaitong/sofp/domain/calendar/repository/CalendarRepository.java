@@ -13,5 +13,6 @@ import java.util.List;
 public interface CalendarRepository extends JpaRepository<Calendar, Long> {
     @Query("SELECT c.targetProfile FROM Calendar c WHERE c.ownerProfile = :ownerProfile")
     List<Profile> findTargetProfilesByOwnerProfile(@Param("ownerProfile") Profile ownerProfile);
+    List<Calendar> findAllByOwnerProfileAndTargetProfileIn(Profile ownerProfile, List<Profile> targetProfileList);
     Boolean existsByOwnerProfile(Profile profile);
 }
