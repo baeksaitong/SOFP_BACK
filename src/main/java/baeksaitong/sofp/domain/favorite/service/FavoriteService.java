@@ -1,17 +1,16 @@
 package baeksaitong.sofp.domain.favorite.service;
 
-import baeksaitong.sofp.domain.favorite.dto.enums.SearchType;
 import baeksaitong.sofp.domain.favorite.dto.request.FavoriteReq;
 import baeksaitong.sofp.domain.favorite.dto.response.FavoriteDto;
 import baeksaitong.sofp.domain.favorite.dto.response.FavoriteRes;
+import baeksaitong.sofp.domain.favorite.entity.Favorite;
 import baeksaitong.sofp.domain.favorite.error.FavoriteErrorCode;
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
+import baeksaitong.sofp.domain.pill.entity.Pill;
 import baeksaitong.sofp.domain.pill.error.PillErrorCode;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
-import baeksaitong.sofp.domain.profile.service.ProfileService;
-import baeksaitong.sofp.domain.favorite.entity.Favorite;
-import baeksaitong.sofp.domain.pill.entity.Pill;
 import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.s3.service.AwsS3Service;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +47,7 @@ public class FavoriteService {
                         .build()
         );
 
-        if(SearchType.from(req.getSearchType()) == SearchType.IMAGE) {
+        if(req.getImage() != null) {
             favorite.setImgUrl(s3Service.upload(req.getImage(), favorite.getId()));
         }
 
