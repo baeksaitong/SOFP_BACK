@@ -52,7 +52,7 @@ public class PillService {
     public void addPill(PillReq req, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
-        List<Long> pillSerailNumberList = req.getPillSerailNumberList();
+        List<Long> pillSerailNumberList = req.getPillSeriallNumberList();
         List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);
 
         Set<Pill> exitsPillList = profilePillRepository.findAllByProfile(profile)
@@ -78,13 +78,13 @@ public class PillService {
         profilePillRepository.saveAll(addProfilePillList);
     }
 
-    public void removePill(PillReq req, Long profileId) {
+    public void removePill(Long pillSerialNumber, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
-        List<Long> pillSerailNumberList = req.getPillSerailNumberList();
-        List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);
+        Pill pill = pillRepository.findBySerialNumber(pillSerialNumber)
+                        .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
 
-        profilePillRepository.deleteAllByProfileAndPillIn(profile,pillList);
+        profilePillRepository.deleteByProfileAndPill(profile, pill);
     }
 
     private List<PillInfoDTO> getPillRes(List<ProfilePill> profilePillList) {
