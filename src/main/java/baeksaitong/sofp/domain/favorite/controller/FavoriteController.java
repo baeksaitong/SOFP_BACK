@@ -32,9 +32,9 @@ public class FavoriteController {
                     "code: F-000 | message: 이미 즐겨찾기에 추가되어 있습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/add")
+    @PostMapping("/{profileId}")
     private ResponseEntity<String> addFavorite(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") Long profileId,
             @ModelAttribute @Validated FavoriteReq req
     ){
         favoriteService.addFavorite(req, profileId);
@@ -49,10 +49,10 @@ public class FavoriteController {
                     "code: F-001 | message: 해당 즐겨찾기 정보가 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/delete")
+    @DeleteMapping("/{profileId}")
     private ResponseEntity<String> deleteFavorite(
-            @RequestParam @Schema(name = "알약 시리얼 번호") Long pillSerialNumber,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @RequestParam @Schema(description = "알약 시리얼 번호") Long pillSerialNumber
     ){
         favoriteService.deleteFavorite(pillSerialNumber, profileId);
         return BaseResponse.ok("즐겨찾기 삭제 성공");
@@ -64,9 +64,9 @@ public class FavoriteController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping
+    @GetMapping("/{profileId}")
     private ResponseEntity<FavoriteRes> getFavorite(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @RequestParam @Schema(description = "프로필 ID") Long profileId
     ){
         FavoriteRes res = favoriteService.getFavorite(profileId);
         return BaseResponse.ok(res);

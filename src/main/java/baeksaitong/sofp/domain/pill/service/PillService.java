@@ -36,12 +36,14 @@ public class PillService {
     public PillRes getPillList(Long profileId, Long categoryId) {
         List<ProfilePill> profilePillList;
 
-        if(categoryId == null) {
+        if(categoryId == null && profileId != null) {
             Profile profile = profileService.getProfile(profileId);
             profilePillList = profilePillRepository.findAllByProfileAndCategoryIsNull(profile);
-        }else{
+        }else if(categoryId != null && profileId == null){
             Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
             profilePillList = profilePillRepository.findAllByCategory(category);
+        }else{
+            throw new BusinessException(PillErrorCode.NEED_PROFILE_OR_CATEGORY);
         }
 
         return new PillRes(getPillRes(profilePillList));
@@ -50,7 +52,7 @@ public class PillService {
     public void addPill(PillReq req, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
-        List<Long> pillSerailNumberList = req.getPillSerailNumberList();
+        List<Long> pillSerailNumberList = req.getPillSeriallNumberList();
         List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);
 
         Set<Pill> exitsPillList = profilePillRepository.findAllByProfile(profile)
@@ -76,13 +78,13 @@ public class PillService {
         profilePillRepository.saveAll(addProfilePillList);
     }
 
-    public void removePill(PillReq req, Long profileId) {
+    public void removePill(Long pillSerialNumber, Long profileId) {
         Profile profile = profileService.getProfile(profileId);
 
-        List<Long> pillSerailNumberList = req.getPillSerailNumberList();
-        List<Pill> pillList = pillRepository.findAllBySerialNumberIn(pillSerailNumberList);
+        Pill pill = pillRepository.findBySerialNumber(pillSerialNumber)
+                        .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
 
-        profilePillRepository.deleteAllByProfileAndPillIn(profile,pillList);
+        profilePillRepository.deleteByProfileAndPill(profile, pill);
     }
 
     private List<PillInfoDTO> getPillRes(List<ProfilePill> profilePillList) {

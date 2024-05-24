@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class PillReq {
     @Schema(description = "알약 시리얼 번호 리스트")
-    List<Long> pillSerailNumberList = new ArrayList<>();
+    List<Long> pillSeriallNumberList = new ArrayList<>();
 }

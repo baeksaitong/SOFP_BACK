@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy=EnumValidator.class)
+@Constraint(validatedBy = { EnumValidator.class, EnumListValidator.class })
 public @interface ValidEnum {
     String message() default "정해지지 않은 값입니다. 정해진 값을 입력해 주세요,";
 

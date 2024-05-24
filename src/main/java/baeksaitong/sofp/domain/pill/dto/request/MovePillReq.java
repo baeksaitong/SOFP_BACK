@@ -9,9 +9,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MovePillReq {
     @NotNull(message = "알약 시리얼 번호가 필요합니다.")
-    @Schema(name = "알약 시리얼 번호")
+    @Schema(description = "알약 시리얼 번호")
     private Long pillSerialNumber;
     @NotNull(message = "카테고리 ID가 필요합니다.")
-    @Schema(name = "카테고리 ID")
+    @Schema(description = "카테고리 ID")
     private Long categoryId;
 }

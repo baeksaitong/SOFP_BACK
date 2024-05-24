@@ -25,7 +25,7 @@ public class CategoryEditReq {
     private List<String> addIntakeDayList;
     @Schema(description = "삭제할 섭취 요일(없을 시 빈 배열 필요)", example = "MON,TUE,WED,THU,FRI,SAT,SUN")
     @NonNullList(message = "섭취 요일 리스트는 null 이거나 null 값을 포함할 수 없습니다.")
-    @ValidEnum(enumClass = Day.class, ignoreCase=true)
+    @ValidEnum(enumClass = Day.class, ignoreCase=true, message = "잘못된 요일 입력입니다.")
     private List<String> deleteIntakeDayList;
     @Schema(description = "추가할 섭취 시간(없을 시 빈 배열 필요)", example = "08:30 (HH:mm 형식)")
     @NonNullList(message = "섭취 시간 리스트는 null 이거나 null 값을 포함할 수 없습니다.")

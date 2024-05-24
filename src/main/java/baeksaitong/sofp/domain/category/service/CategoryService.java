@@ -1,7 +1,7 @@
 package baeksaitong.sofp.domain.category.service;
 
+import baeksaitong.sofp.domain.calendar.repository.CalendarRepository;
 import baeksaitong.sofp.domain.category.dto.request.CategoryEditReq;
-import baeksaitong.sofp.domain.category.dto.request.CategoryListByDay;
 import baeksaitong.sofp.domain.category.dto.request.CategoryReq;
 import baeksaitong.sofp.domain.category.dto.response.*;
 import baeksaitong.sofp.domain.category.entity.Category;
@@ -15,7 +15,6 @@ import baeksaitong.sofp.domain.category.repository.IntakeTimeRepository;
 import baeksaitong.sofp.domain.pill.entity.ProfilePill;
 import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
-import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
@@ -36,9 +35,9 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final IntakeTimeRepository intakeTimeRepository;
     private final IntakeDayRepository intakeDayRepository;
-    private final ProfileService profileService;
-    private final ProfileRepository profileRepository;
     private final ProfilePillRepository profilePillRepository;
+    private final ProfileService profileService;
+    private final CalendarRepository calendarRepository;
 
 
     public void addCategory(CategoryReq req, Long profileId) {
@@ -107,10 +106,12 @@ public class CategoryService {
         return new CategoryListByProfileRes(categoryList);
     }
 
-    public CategoryListByDayRes getCategoryListByDay(CategoryListByDay req) {
-        List<Profile> profileList = profileRepository.findAllById(req.getProfileIdList());
+    public CategoryListByDayRes getCategoryListByDay(Long profileId, String day) {
+        Profile profile = profileService.getProfile(profileId);
+        List<Profile> targetProfileList = calendarRepository.findTargetProfilesByOwnerProfile(profile);
+        targetProfileList.add(profile);
 
-        List<IntakeDay> intakeDays = intakeDayRepository.findAllByDayAndProfileIn(Day.from(req.getDay()), profileList);
+        List<IntakeDay> intakeDays = intakeDayRepository.findAllByDayAndProfileIn(Day.from(day), targetProfileList);
 
         List<Category> categoryList = intakeDays.stream()
                 .map(IntakeDay::getCategory)
@@ -133,9 +134,9 @@ public class CategoryService {
         return new CategoryListByDayRes(categoryDayDtoList);
     }
 
-    public CategoryDetailRes editCategory(Long categoryId, Long profileId, CategoryEditReq req) {
-        Profile profile = profileService.getProfile(profileId);
+    public CategoryDetailRes editCategory(Long categoryId, CategoryEditReq req) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+        Profile profile = category.getProfile();
 
         if(!req.getName().equals(category.getName()) && categoryRepository.existsByNameAndProfile(req.getName(), profile)){
             throw new BusinessException(CategoryErrorCode.DUPLICATE_CATEGORY_NAME);

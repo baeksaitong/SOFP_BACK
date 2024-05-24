@@ -42,7 +42,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 상세 정보")
     })
-    @PostMapping("/info")
+    @GetMapping
     public ResponseEntity<MemberRes> getMemberInfo(@AuthenticationPrincipal Member member){
         MemberRes res = memberService.getMemberInfo(member);
         return BaseResponse.ok(res);
@@ -53,7 +53,7 @@ public class MemberController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "회원 정보 수정에 성공했습니다")
     })
-    @PostMapping("/edit")
+    @PutMapping
     public ResponseEntity<MemberRes> editMember(@RequestBody @Validated MemberEditReq req,  @AuthenticationPrincipal Member member){
         MemberRes res = memberService.editMember(req, member);
         return BaseResponse.ok(res);
