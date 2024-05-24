@@ -133,9 +133,9 @@ public class CategoryService {
         return new CategoryListByDayRes(categoryDayDtoList);
     }
 
-    public CategoryDetailRes editCategory(Long categoryId, Long profileId, CategoryEditReq req) {
-        Profile profile = profileService.getProfile(profileId);
+    public CategoryDetailRes editCategory(Long categoryId, CategoryEditReq req) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+        Profile profile = category.getProfile();
 
         if(!req.getName().equals(category.getName()) && categoryRepository.existsByNameAndProfile(req.getName(), profile)){
             throw new BusinessException(CategoryErrorCode.DUPLICATE_CATEGORY_NAME);
