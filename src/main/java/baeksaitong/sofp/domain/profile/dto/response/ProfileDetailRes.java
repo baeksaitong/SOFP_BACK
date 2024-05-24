@@ -7,17 +7,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
 public record ProfileDetailRes(
-        @Schema(name = "프로필 ID")
+        @Schema(description = "프로필 ID")
         Long id,
-        @Schema(name = "이름")
+        @Schema(description = "이름")
         String name,
-        @Schema(name = "생일")
+        @Schema(description = "생일")
         LocalDate birthday,
-        @Schema(name = "성별")
+        @Schema(description = "성별")
         Gender gender,
-        @Schema(name = "색상")
+        @Schema(description = "색상")
         String color,
-        @Schema(name = "프로필 이미지")
+        @Schema(description = "프로필 이미지")
         String imgURL
 ) {
     public ProfileDetailRes(Profile profile){

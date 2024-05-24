@@ -4,13 +4,13 @@ import baeksaitong.sofp.domain.profile.entity.Profile;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record ProfileBasicRes(
-        @Schema(name = "프로필 ID")
+        @Schema(description = "프로필 ID")
         Long id,
-        @Schema(name = "이름")
+        @Schema(description = "이름")
         String name,
-        @Schema(name = "프로필 사진")
+        @Schema(description = "프로필 사진")
         String imgURL,
-        @Schema(name = "색상")
+        @Schema(description = "색상")
         String color
 ) {
     public ProfileBasicRes(Profile profile){
