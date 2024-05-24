@@ -32,7 +32,7 @@ public class ProfileController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "프로필 기본 정보 리스트")
     })
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<ProfileListRes> getProfileList(@AuthenticationPrincipal Member member){
         ProfileListRes res = profileService.getProfileList(member);
         return BaseResponse.ok(res);
@@ -44,9 +44,9 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "code: P-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/basic")
+    @GetMapping("/{profileId}")
     public ResponseEntity<ProfileBasicRes> getProfileBasic(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         ProfileBasicRes res = profileService.getProfileBasic(profileId);
         return BaseResponse.ok(res);
@@ -58,9 +58,9 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "code: P-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/detail")
+    @GetMapping("/{profileId}/detail")
     public ResponseEntity<ProfileDetailRes> getProfileDetail(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         ProfileDetailRes res = profileService.getProfileDetail(profileId);
         return BaseResponse.ok(res);
@@ -72,7 +72,7 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "code: U-000 | message: 더이상 프로필을 추가할 수 없습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<String> addProfile(
             @RequestBody @Validated ProfileReq req,
             @AuthenticationPrincipal Member member
@@ -87,9 +87,9 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @GetMapping("/delete")
+    @DeleteMapping("/{profileId}")
     public ResponseEntity<String> deleteProfile(
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         profileService.deleteProfile(profileId);
         return BaseResponse.ok("프로필 삭제에 성공했습니다.");
@@ -101,10 +101,10 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/edit")
+    @PutMapping("/{profileId}")
     public ResponseEntity<ProfileDetailRes> editProfile(
             @ModelAttribute @Validated ProfileReq req,
-            @RequestParam @Schema(name = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") Long profileId
     ){
         ProfileDetailRes res = profileService.editProfile(req, profileId);
         return BaseResponse.ok(res);
