@@ -7,7 +7,8 @@ import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
-import baeksaitong.sofp.domain.search.dto.KeywordDto;
+import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
+import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.error.SearchErrorCode;
@@ -49,7 +50,7 @@ public class SearchService {
     public KeywordRes findByKeyword(Long profileId, int limit, Long lastId, String keyword, String shape, String sign, String color, String formulation, String line) {
         Profile profile = profileService.getProfile(profileId);
 
-        KeywordDto req = KeywordDto.builder()
+        KeywordSearchDto req = KeywordSearchDto.builder()
                 .keyword(keyword)
                 .line(line)
                 .shape(shape)
@@ -62,12 +63,12 @@ public class SearchService {
 
         List<Pill> result = pillRepository.findByKeyword(req);
 
-        List<baeksaitong.sofp.domain.search.dto.response.KeywordDto> results = getKeywordDto(result, profile);
+        List<KeywordDto> results = getKeywordDto(result, profile);
 
         return new KeywordRes(results);
     }
 
-    public List<baeksaitong.sofp.domain.search.dto.response.KeywordDto> getKeywordDto(List<Pill> pillList, Profile profile) {
+    public List<KeywordDto> getKeywordDto(List<Pill> pillList, Profile profile) {
         Set<String> allergyAndDiseaseList = getAllergyAndDiseaseSet(profile);
 
         List<Favorite> favoriteList = favoriteRepository.findAllByProfileAndPillIn(profile, pillList);
@@ -77,7 +78,7 @@ public class SearchService {
         return pillList.stream()
                 .map(pill -> {
                     Favorite favorite = favoriteMap.get(pill.getId());
-                    return new baeksaitong.sofp.domain.search.dto.response.KeywordDto(
+                    return new KeywordDto(
                             pill,
                             checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
                             (favorite != null) ? favorite.getId() : null

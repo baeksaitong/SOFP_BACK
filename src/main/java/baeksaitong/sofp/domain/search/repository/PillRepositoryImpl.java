@@ -1,7 +1,7 @@
 package baeksaitong.sofp.domain.search.repository;
 
 
-import baeksaitong.sofp.domain.search.dto.KeywordDto;
+import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
 import baeksaitong.sofp.domain.pill.entity.Pill;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,7 +22,7 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Pill> findByKeyword(KeywordDto req) {
+    public List<Pill> findByKeyword(KeywordSearchDto req) {
         BooleanBuilder cond = filterBuilder(req);
 
         return queryFactory.select(pill)
@@ -38,7 +38,7 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
         return lastId == null ? null : pill.id.gt(lastId);
     }
 
-    private BooleanBuilder filterBuilder(KeywordDto req) {
+    private BooleanBuilder filterBuilder(KeywordSearchDto req) {
         BooleanBuilder cond = new BooleanBuilder();
 
         return cond.and(keywordLike(req.getKeyword()))
