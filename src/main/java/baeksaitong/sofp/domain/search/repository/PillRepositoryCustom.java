@@ -1,10 +1,11 @@
 package baeksaitong.sofp.domain.search.repository;
 
-import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
+import baeksaitong.sofp.domain.search.dto.KeywordDto;
 import baeksaitong.sofp.domain.pill.entity.Pill;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 
 public interface PillRepositoryCustom {
-    Page<Pill> findByKeyword(KeywordReq req);
+    List<Pill> findByKeyword(KeywordDto req);
 }
