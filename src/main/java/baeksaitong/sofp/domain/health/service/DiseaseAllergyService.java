@@ -39,10 +39,10 @@ public class DiseaseAllergyService {
         Profile profile = profileService.getProfile(profileId);
 
         return new DiseaseAllergyRes(
-                profileDiseaseAllergyRepository.findAllByProfile(profile)
+                profileDiseaseAllergyRepository.findAllDiseaseAllergyByProfile(profile)
                         .stream()
-                        .map(profileDiseaseAllergy -> profileDiseaseAllergy.getDiseaseAllergy().getName())
-                        .collect(Collectors.toList())
+                        .map(DiseaseAllergy::getName)
+                        .toList()
         );
     }
 

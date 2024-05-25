@@ -12,5 +12,6 @@ import java.util.List;
 public interface ProfileDiseaseAllergyRepository extends JpaRepository<ProfileDiseaseAllergy, Long> {
     @Query("SELECT p.diseaseAllergy FROM ProfileDiseaseAllergy p WHERE p.profile = :profile")
     List<DiseaseAllergy> findAllDiseaseAllergyByProfile(@Param("profile") Profile profile);
+    List<ProfileDiseaseAllergy> findAllByProfile(Profile profile);
     void deleteAllByProfile(Profile profile);
 }
