@@ -6,8 +6,7 @@ import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
-import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
-import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
+import baeksaitong.sofp.domain.search.dto.KeywordDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.error.SearchErrorCode;
@@ -19,7 +18,6 @@ import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -46,43 +44,37 @@ public class SearchService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
 
-    public KeywordRes findByKeyword(Long profileId, String keyword, String shape, String sign, String color, String formulation, String line) {
+    public KeywordRes findByKeyword(Long profileId, int limit, Long lastId, String keyword, String shape, String sign, String color, String formulation, String line) {
         Profile profile = profileService.getProfile(profileId);
 
-        KeywordReq req = KeywordReq.builder()
+        KeywordDto req = KeywordDto.builder()
                 .keyword(keyword)
                 .line(line)
                 .shape(shape)
                 .sign(sign)
                 .color(color)
                 .formulation(formulation)
-                .page(0)
-                .limit(10)
+                .limit(limit)
+                .lastId(lastId)
                 .build();
 
-        Page<Pill> result = pillRepository.findByKeyword(req);
+        List<Pill> result = pillRepository.findByKeyword(req);
 
-        List<KeywordDto> results = getKeywordDto(result.getContent(), profile);
+        List<baeksaitong.sofp.domain.search.dto.response.KeywordDto> results = getKeywordDto(result, profile);
 
-        return new KeywordRes(result.getTotalPages(), results);
+        return new KeywordRes(results);
     }
 
-    public List<KeywordDto> getKeywordDto(List<Pill> pillList, Profile profile) {
+    public List<baeksaitong.sofp.domain.search.dto.response.KeywordDto> getKeywordDto(List<Pill> pillList, Profile profile) {
         Set<String> allergyAndDiseaseList = getAllergyAndDiseaseSet(profile);
 
         return pillList.stream()
                 .map(pill -> {
                     Favorite favorite = favoriteRepository.findByPillAndProfile(pill, profile).orElse(null);
-                    return new KeywordDto(
-                            pill.getSerialNumber(),
-                                pill.getName(),
-                                pill.getClassification(),
-                                pill.getProOrGen(),
-                                pill.getImgUrl(),
-                                pill.getChart(),
-                                pill.getEnterprise(),
-                                checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
-                                (favorite != null) ? favorite.getId() : null
+                    return new baeksaitong.sofp.domain.search.dto.response.KeywordDto(
+                            pill,
+                            checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
+                            (favorite != null) ? favorite.getId() : null
                     );
                 }).collect(Collectors.toList());
     }
