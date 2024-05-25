@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.search.service;
 
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
+import baeksaitong.sofp.domain.health.entity.DiseaseAllergy;
 import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -68,9 +70,13 @@ public class SearchService {
     public List<baeksaitong.sofp.domain.search.dto.response.KeywordDto> getKeywordDto(List<Pill> pillList, Profile profile) {
         Set<String> allergyAndDiseaseList = getAllergyAndDiseaseSet(profile);
 
+        List<Favorite> favoriteList = favoriteRepository.findAllByProfileAndPillIn(profile, pillList);
+        Map<Long, Favorite> favoriteMap = favoriteList.stream()
+                .collect(Collectors.toMap(favorite -> favorite.getPill().getId(), fav -> fav));
+
         return pillList.stream()
                 .map(pill -> {
-                    Favorite favorite = favoriteRepository.findByPillAndProfile(pill, profile).orElse(null);
+                    Favorite favorite = favoriteMap.get(pill.getId());
                     return new baeksaitong.sofp.domain.search.dto.response.KeywordDto(
                             pill,
                             checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
@@ -81,22 +87,14 @@ public class SearchService {
 
     public PillInfoRes getPillInfo(String serialNumber, Long profileId) {
 
-        Profile profile = null;
+        Profile profile = profileService.getProfile(profileId);
 
-        if(profileId != null) {
-            profile = profileService.getProfile(profileId);
-        }
+        PillInfoRes result = callPillInfoAPI(serialNumber);
 
-        PillInfoRes result;
-        try {
-             result = pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
-             if(result.getCautionGeneral() != null){
-                 result.setWaringInfo(
-                         findAllWaringInfo(result.getCautionGeneral(), getAllergyAndDiseaseSet(profile))
-                 );
-             }
-        } catch (URISyntaxException e) {
-            throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
+        if(result.getCautionGeneral() != null){
+            Set<String> diseaseAllergy = getAllergyAndDiseaseSet(profile);
+            List<String> allWaring = findAllWaringInfo(result.getCautionGeneral(), diseaseAllergy);
+            result.setWaringInfo(allWaring);
         }
 
         if(result.getName() == null){
@@ -111,18 +109,26 @@ public class SearchService {
 
     }
 
+    private PillInfoRes callPillInfoAPI(String serialNumber) {
+        try {
+            return pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
+
+        } catch (URISyntaxException e) {
+            throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
+        }
+    }
+
     public void findByImage(ImageReq req) {
 
     }
 
     private Set<String> getAllergyAndDiseaseSet(Profile profile) {
-        return profileDiseaseAllergyRepository.findAllByProfile(profile).stream()
-                .map(memberDisease -> memberDisease.getDiseaseAllergy().getName()).collect(Collectors.toSet());
+        return profileDiseaseAllergyRepository.findAllDiseaseAllergyByProfile(profile)
+                .stream().map(DiseaseAllergy::getName).collect(Collectors.toSet());
     }
 
     private Boolean checkIsWaring(String serialNumber, Set<String> allergyAndDiseaseSet){
-
-        String cautionGeneral = getPillInfo(serialNumber, null).getCautionGeneral();
+        String cautionGeneral = callPillInfoAPI(serialNumber).getCautionGeneral();
         return allergyAndDiseaseSet.stream().anyMatch(cautionGeneral::contains);
     }
 
