@@ -1,18 +1,13 @@
 package baeksaitong.sofp.domain.search.repository;
 
 
-import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
+import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
 import baeksaitong.sofp.domain.pill.entity.Pill;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.SimpleExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,25 +22,23 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<Pill> findByKeyword(KeywordReq req) {
+    public List<Pill> findByKeyword(KeywordSearchDto req) {
         BooleanBuilder cond = filterBuilder(req);
-        Pageable pageable = PageRequest.of(req.getPage(),req.getLimit());
 
-        List<Pill> result = queryFactory.selectFrom(pill)
-                .where(cond)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        JPAQuery<Long> query = queryFactory
-                .select(pill.count())
+        return queryFactory.select(pill)
                 .from(pill)
-                .where(cond);
-
-        return PageableExecutionUtils.getPage(result, pageable, query::fetchOne);
+                .where(cond)
+                .where(lastIdCondition(req.getLastId()))
+                .orderBy(pill.id.asc())
+                .limit(req.getLimit())
+                .fetch();
     }
 
-    private BooleanBuilder filterBuilder(KeywordReq req) {
+    private BooleanExpression lastIdCondition(Long lastId) {
+        return lastId == null ? null : pill.id.gt(lastId);
+    }
+
+    private BooleanBuilder filterBuilder(KeywordSearchDto req) {
         BooleanBuilder cond = new BooleanBuilder();
 
         return cond.and(keywordLike(req.getKeyword()))

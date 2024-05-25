@@ -1,12 +1,13 @@
 package baeksaitong.sofp.domain.search.service;
 
 import baeksaitong.sofp.domain.favorite.repository.FavoriteRepository;
+import baeksaitong.sofp.domain.health.entity.DiseaseAllergy;
 import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository;
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
-import baeksaitong.sofp.domain.search.dto.request.KeywordReq;
+import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
@@ -19,12 +20,12 @@ import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,65 +47,55 @@ public class SearchService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
 
-    public KeywordRes findByKeyword(Long profileId, String keyword, String shape, String sign, String color, String formulation, String line) {
+    public KeywordRes findByKeyword(Long profileId, int limit, Long lastId, String keyword, String shape, String sign, String color, String formulation, String line) {
         Profile profile = profileService.getProfile(profileId);
 
-        KeywordReq req = KeywordReq.builder()
+        KeywordSearchDto req = KeywordSearchDto.builder()
                 .keyword(keyword)
                 .line(line)
                 .shape(shape)
                 .sign(sign)
                 .color(color)
                 .formulation(formulation)
-                .page(0)
-                .limit(10)
+                .limit(limit)
+                .lastId(lastId)
                 .build();
 
-        Page<Pill> result = pillRepository.findByKeyword(req);
+        List<Pill> result = pillRepository.findByKeyword(req);
 
-        List<KeywordDto> results = getKeywordDto(result.getContent(), profile);
+        List<KeywordDto> results = getKeywordDto(result, profile);
 
-        return new KeywordRes(result.getTotalPages(), results);
+        return new KeywordRes(results);
     }
 
     public List<KeywordDto> getKeywordDto(List<Pill> pillList, Profile profile) {
         Set<String> allergyAndDiseaseList = getAllergyAndDiseaseSet(profile);
 
+        List<Favorite> favoriteList = favoriteRepository.findAllByProfileAndPillIn(profile, pillList);
+        Map<Long, Favorite> favoriteMap = favoriteList.stream()
+                .collect(Collectors.toMap(favorite -> favorite.getPill().getId(), fav -> fav));
+
         return pillList.stream()
                 .map(pill -> {
-                    Favorite favorite = favoriteRepository.findByPillAndProfile(pill, profile).orElse(null);
+                    Favorite favorite = favoriteMap.get(pill.getId());
                     return new KeywordDto(
-                            pill.getSerialNumber(),
-                                pill.getName(),
-                                pill.getClassification(),
-                                pill.getProOrGen(),
-                                pill.getImgUrl(),
-                                pill.getChart(),
-                                pill.getEnterprise(),
-                                checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
-                                (favorite != null) ? favorite.getId() : null
+                            pill,
+                            checkIsWaring(pill.getSerialNumber().toString(), allergyAndDiseaseList),
+                            (favorite != null) ? favorite.getId() : null
                     );
                 }).collect(Collectors.toList());
     }
 
     public PillInfoRes getPillInfo(String serialNumber, Long profileId) {
 
-        Profile profile = null;
+        Profile profile = profileService.getProfile(profileId);
 
-        if(profileId != null) {
-            profile = profileService.getProfile(profileId);
-        }
+        PillInfoRes result = callPillInfoAPI(serialNumber);
 
-        PillInfoRes result;
-        try {
-             result = pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
-             if(result.getCautionGeneral() != null){
-                 result.setWaringInfo(
-                         findAllWaringInfo(result.getCautionGeneral(), getAllergyAndDiseaseSet(profile))
-                 );
-             }
-        } catch (URISyntaxException e) {
-            throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
+        if(result.getCautionGeneral() != null){
+            Set<String> diseaseAllergy = getAllergyAndDiseaseSet(profile);
+            List<String> allWaring = findAllWaringInfo(result.getCautionGeneral(), diseaseAllergy);
+            result.setWaringInfo(allWaring);
         }
 
         if(result.getName() == null){
@@ -119,18 +110,26 @@ public class SearchService {
 
     }
 
+    private PillInfoRes callPillInfoAPI(String serialNumber) {
+        try {
+            return pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
+
+        } catch (URISyntaxException e) {
+            throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
+        }
+    }
+
     public void findByImage(ImageReq req) {
 
     }
 
     private Set<String> getAllergyAndDiseaseSet(Profile profile) {
-        return profileDiseaseAllergyRepository.findAllByProfile(profile).stream()
-                .map(memberDisease -> memberDisease.getDiseaseAllergy().getName()).collect(Collectors.toSet());
+        return profileDiseaseAllergyRepository.findAllDiseaseAllergyByProfile(profile)
+                .stream().map(DiseaseAllergy::getName).collect(Collectors.toSet());
     }
 
     private Boolean checkIsWaring(String serialNumber, Set<String> allergyAndDiseaseSet){
-
-        String cautionGeneral = getPillInfo(serialNumber, null).getCautionGeneral();
+        String cautionGeneral = callPillInfoAPI(serialNumber).getCautionGeneral();
         return allergyAndDiseaseSet.stream().anyMatch(cautionGeneral::contains);
     }
 

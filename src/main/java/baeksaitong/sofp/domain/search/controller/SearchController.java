@@ -37,6 +37,8 @@ public class SearchController {
     @GetMapping("/keyword")
     public ResponseEntity<KeywordRes> findByKeyword(
             @RequestParam @Schema(description = "프로필 ID") Long profileId,
+            @RequestParam(required = false, defaultValue = "10") @Schema(description = "결과 요소 갯수 - 기본값 : 10") int limit,
+            @RequestParam(required = false) @Schema(description = "추가 요청시 이전 결과의 마지막 알약 요소 ID") Long lastId,
             @RequestParam(required = false) @Schema(description = "검색 키워드 - 알약 이름, 성분, 효능 정보",example = "가스디알정") String keyword,
             @RequestParam(required = false) @Schema(description = "알약 모양", example = "원형") String shape,
             @RequestParam(required = false) @Schema(description = "알약에 적힌 기호", example = "IDG") String sign,
@@ -44,7 +46,7 @@ public class SearchController {
             @RequestParam(required = false) @Schema(description = "알약 제형", example = "경질/연질/정제") String formulation,
             @RequestParam(required = false) @Schema(description = "알약 분할선", example = "-/+") String line
     ){
-        KeywordRes res = searchService.findByKeyword(profileId, keyword, shape, sign, color, formulation, line);
+        KeywordRes res = searchService.findByKeyword(profileId, limit, lastId, keyword, shape, sign, color, formulation, line);
         return BaseResponse.ok(res);
     }
 

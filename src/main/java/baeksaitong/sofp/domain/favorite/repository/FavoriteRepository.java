@@ -12,6 +12,7 @@ import java.util.Optional;
 @Repository
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     List<Favorite> findAllByProfile(Profile profile);
+    List<Favorite> findAllByProfileAndPillIn(Profile profile, List<Pill> pillList);
     Optional<Favorite> findByPillAndProfile(Pill pill, Profile profile);
     Boolean existsByPillAndProfile(Pill pill, Profile profile);
     void deleteAllByProfile(Profile profile);
