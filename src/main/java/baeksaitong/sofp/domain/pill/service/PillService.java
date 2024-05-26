@@ -15,6 +15,7 @@ import baeksaitong.sofp.domain.pill.entity.Pill;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.pill.entity.ProfilePill;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,10 @@ public class PillService {
     private final PillRepository pillRepository;
     private final CategoryRepository categoryRepository;
 
-    public PillRes getPillList(Long profileId, Long categoryId) {
+    public PillRes getPillList(String encryptedProfileId, String encryptedCategoryId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+        Long categoryId = EncryptionUtil.decrypt(encryptedCategoryId);
+
         List<ProfilePill> profilePillList;
 
         if(categoryId == null && profileId != null) {
@@ -49,7 +53,9 @@ public class PillService {
         return new PillRes(getPillRes(profilePillList));
     }
 
-    public void addPill(PillReq req, Long profileId) {
+    public void addPill(PillReq req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         List<Long> pillSerailNumberList = req.getPillSeriallNumberList();
@@ -78,7 +84,9 @@ public class PillService {
         profilePillRepository.saveAll(addProfilePillList);
     }
 
-    public void removePill(Long pillSerialNumber, Long profileId) {
+    public void removePill(Long pillSerialNumber, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         Pill pill = pillRepository.findBySerialNumber(pillSerialNumber)
@@ -94,7 +102,9 @@ public class PillService {
                 .collect(Collectors.toList());
     }
 
-    public void movePill(MovePillReq req, Long profileId) {
+    public void movePill(MovePillReq req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
         Pill pill = pillRepository.findBySerialNumber(req.getPillSerialNumber()).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
         ProfilePill profilePill = profilePillRepository.findByPillAndProfile(pill, profile).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PROFILE_PILL));

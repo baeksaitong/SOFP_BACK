@@ -17,6 +17,7 @@ import baeksaitong.sofp.domain.pill.repository.ProfilePillRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,9 @@ public class CategoryService {
     private final CalendarRepository calendarRepository;
 
 
-    public void addCategory(CategoryReq req, Long profileId) {
+    public void addCategory(CategoryReq req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
         if(categoryRepository.existsByNameAndProfile(req.getName(), profile)){
             throw new BusinessException(CategoryErrorCode.DUPLICATE_CATEGORY_NAME);
@@ -78,7 +81,9 @@ public class CategoryService {
 
     }
 
-    public CategoryDetailRes getCategoryInfo(Long categoryId) {
+    public CategoryDetailRes getCategoryInfo(String encryptedCategoryId) {
+        Long categoryId = EncryptionUtil.decrypt(encryptedCategoryId);
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
         return getCategoryDetailRes(category);
     }
@@ -96,7 +101,9 @@ public class CategoryService {
         return new CategoryDetailRes(category, days, times);
     }
 
-    public CategoryListByProfileRes getCategoryListByProfile(Long profileId) {
+    public CategoryListByProfileRes getCategoryListByProfile(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
         List<CategoryProfileDto> categoryList = categoryRepository.findAllByProfile(profile)
                 .stream()
@@ -106,7 +113,9 @@ public class CategoryService {
         return new CategoryListByProfileRes(categoryList);
     }
 
-    public CategoryListByDayRes getCategoryListByDay(Long profileId, String day) {
+    public CategoryListByDayRes getCategoryListByDay(String encryptedProfileId, String day) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
         List<Profile> targetProfileList = calendarRepository.findTargetProfilesByOwnerProfile(profile);
         targetProfileList.add(profile);
@@ -124,9 +133,7 @@ public class CategoryService {
 
         List<CategoryDayDto> categoryDayDtoList = categoryList.stream()
                 .map(category -> new CategoryDayDto(
-                        category.getId(),
-                        category.getProfile().getColor(),
-                        category.getName(),
+                        category,
                         intakeTimeMap.getOrDefault(category, List.of()).stream().map(IntakeTime::getTime).collect(Collectors.toList())
                 ))
                 .collect(Collectors.toList());
@@ -134,7 +141,9 @@ public class CategoryService {
         return new CategoryListByDayRes(categoryDayDtoList);
     }
 
-    public CategoryDetailRes editCategory(Long categoryId, CategoryEditReq req) {
+    public CategoryDetailRes editCategory(String encryptedCategoryId, CategoryEditReq req) {
+        Long categoryId = EncryptionUtil.decrypt(encryptedCategoryId);
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
         Profile profile = category.getProfile();
 
@@ -189,7 +198,9 @@ public class CategoryService {
                 .orElse(Collections.emptyList());
     }
 
-    public void deleteCategory(Long categoryId, Boolean isAllDelete) {
+    public void deleteCategory(String encryptedCategoryId, Boolean isAllDelete) {
+        Long categoryId = EncryptionUtil.decrypt(encryptedCategoryId);
+
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
         intakeTimeRepository.deleteAllByCategory(category);
         intakeDayRepository.deleteAllByCategory(category);

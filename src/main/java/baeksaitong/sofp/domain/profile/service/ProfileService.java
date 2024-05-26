@@ -20,6 +20,7 @@ import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.redis.constants.RedisPrefix;
 import baeksaitong.sofp.global.redis.service.RedisService;
 import baeksaitong.sofp.global.s3.service.AwsS3Service;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,17 +89,23 @@ public class ProfileService {
         profileRepository.save(profile);
     }
 
-    public ProfileBasicRes getProfileBasic(Long profileId) {
+    public ProfileBasicRes getProfileBasic(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = getProfile(profileId);
         return new ProfileBasicRes(profile);
     }
 
-    public ProfileDetailRes getProfileDetail(Long profileId) {
+    public ProfileDetailRes getProfileDetail(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = getProfile(profileId);
         return new ProfileDetailRes(profile);
     }
 
-    public void deleteProfile(Long profileId) {
+    public void deleteProfile(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = getProfile(profileId);
 
         List<Category> categoryList = categoryRepository.findAllByProfile(profile);
@@ -114,7 +121,9 @@ public class ProfileService {
         deleteProfileCache(profileId);
     }
 
-    public ProfileDetailRes editProfile(ProfileReq req, Long profileId) {
+    public ProfileDetailRes editProfile(ProfileReq req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = getProfile(profileId);
 
         profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());

@@ -13,6 +13,7 @@ import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.s3.service.AwsS3Service;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,9 @@ public class FavoriteService {
     private final ProfileService profileService;
     private final AwsS3Service s3Service;
 
-    public void addFavorite(FavoriteReq req, Long profileId) {
+    public void addFavorite(FavoriteReq req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Pill pill = pillRepository.findBySerialNumber(req.getPillSeralNumber())
                 .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
 
@@ -56,7 +59,9 @@ public class FavoriteService {
 
 
 
-    public void deleteFavorite(Long pillSerialNumber, Long profileId) {
+    public void deleteFavorite(Long pillSerialNumber, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
         Pill pill = pillRepository.findBySerialNumber(pillSerialNumber)
                 .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
@@ -72,7 +77,9 @@ public class FavoriteService {
         favoriteRepository.delete(favorite);
     }
 
-    public FavoriteRes getFavorite(Long profileId) {
+    public FavoriteRes getFavorite(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         List<Favorite> favoriteList = favoriteRepository.findAllByProfile(profile);

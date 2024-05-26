@@ -10,6 +10,7 @@ import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +48,9 @@ public class HistoryService {
         historyRepository.save(history);
     }
 
-    public HistoryRes getRecentViewPill(int count, Long profileId) {
+    public HistoryRes getRecentViewPill(int count, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         History history = historyRepository.findById(profile.getId()).orElse(null);
@@ -72,7 +75,9 @@ public class HistoryService {
         return new HistoryRes(result);
     }
 
-    public void deleteRecentViewPill(Long pillSerialNumber, Long profileId){
+    public void deleteRecentViewPill(Long pillSerialNumber, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         History history = historyRepository.findById(profile.getId()).orElseThrow(
