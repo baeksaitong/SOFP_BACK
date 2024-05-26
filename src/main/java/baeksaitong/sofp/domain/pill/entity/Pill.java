@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.pill.entity;
 
 import baeksaitong.sofp.global.util.EncryptionUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class Pill {
     @Column(name = "img_url")
     private String imgUrl;
 
+    @JsonIgnore
     public String getEncryptedId(){
         return EncryptionUtil.encrypt(this.id);
     }
