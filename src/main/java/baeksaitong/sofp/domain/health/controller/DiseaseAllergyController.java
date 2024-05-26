@@ -52,7 +52,7 @@ public class DiseaseAllergyController {
     })
     @GetMapping("/{profileId}")
     public ResponseEntity<DiseaseAllergyRes> getDiseaseAllergyList(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         DiseaseAllergyRes res = diseaseAllergyService.getDiseaseAllergyList(profileId);
         return BaseResponse.ok(res);
@@ -67,7 +67,7 @@ public class DiseaseAllergyController {
     @PatchMapping("/{profileId}")
     public ResponseEntity<DiseaseAllergyRes> editDiseaseAllergy(
             @RequestBody @Validated DiseaseAllergyEditReq req,
-            @PathVariable @Schema(description = "프로필 ID") Long profileId){
+            @PathVariable @Schema(description = "프로필 ID") String profileId){
         DiseaseAllergyRes res = diseaseAllergyService.editDiseaseAllergy(req, profileId);
         return BaseResponse.ok(res);
     }

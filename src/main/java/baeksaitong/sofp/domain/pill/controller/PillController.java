@@ -37,8 +37,8 @@ public class PillController {
     })
     @GetMapping
     public ResponseEntity<PillRes> getPillList(
-            @RequestParam(required = false) @Schema(description = "프로필 ID") Long profileId,
-            @RequestParam(required = false) @Schema(description = "카테고리 ID") Long categoryId
+            @RequestParam(required = false) @Schema(description = "프로필 ID") String profileId,
+            @RequestParam(required = false) @Schema(description = "카테고리 ID") String categoryId
     ){
         PillRes res = pillService.getPillList(profileId, categoryId);
         return BaseResponse.ok(res);
@@ -53,7 +53,7 @@ public class PillController {
     @PostMapping("/{profileId}")
     public ResponseEntity<String> addPill(
             @RequestBody @Validated PillReq req,
-            @PathVariable @Schema(description = "프로필 ID") Long profileId){
+            @PathVariable @Schema(description = "프로필 ID") String profileId){
         pillService.addPill(req, profileId);
         return BaseResponse.ok("알약 추가에 성공했습니다.");
     }
@@ -67,7 +67,7 @@ public class PillController {
     })
     @DeleteMapping("/{profileId}")
     public ResponseEntity<String> removePill(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @RequestParam @Schema(description = "알약 시리얼 번호") Long pillSerialNumber
     ){
         pillService.removePill(pillSerialNumber, profileId);
@@ -86,7 +86,7 @@ public class PillController {
     @PatchMapping("/{profileId}")
     public ResponseEntity<String> movePill(
         @RequestBody @Validated MovePillReq req,
-        @PathVariable @Schema(description = "프로필 ID") Long profileId
+        @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         pillService.movePill(req, profileId);
         return BaseResponse.ok("알약 이동에 성공했습니다.");

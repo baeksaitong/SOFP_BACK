@@ -36,7 +36,7 @@ public class SearchController {
     })
     @GetMapping("/keyword")
     public ResponseEntity<KeywordRes> findByKeyword(
-            @RequestParam @Schema(description = "프로필 ID") Long profileId,
+            @RequestParam @Schema(description = "프로필 ID") String profileId,
             @RequestParam(required = false, defaultValue = "10") @Schema(description = "결과 요소 갯수 - 기본값 : 10") int limit,
             @RequestParam(required = false) @Schema(description = "추가 요청시 이전 결과의 마지막 알약 요소 ID") Long lastId,
             @RequestParam(required = false) @Schema(description = "검색 키워드 - 알약 이름, 성분, 효능 정보",example = "가스디알정") String keyword,
@@ -60,7 +60,7 @@ public class SearchController {
     @GetMapping("/{pillSerialNumber}")
     public ResponseEntity<PillInfoRes> getPillDetailInfo(
             @PathVariable @Schema(description = "알약 시리얼 번호") String pillSerialNumber,
-            @RequestParam @Schema(description = "프로필 ID") Long profileId
+            @RequestParam @Schema(description = "프로필 ID") String profileId
     ){
         PillInfoRes res = searchService.getPillInfo(pillSerialNumber, profileId);
         return BaseResponse.ok(res);
