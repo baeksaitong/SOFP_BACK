@@ -66,7 +66,7 @@ public class FavoriteController {
     })
     @GetMapping("/{profileId}")
     private ResponseEntity<FavoriteRes> getFavorite(
-            @RequestParam @Schema(description = "프로필 ID") String profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         FavoriteRes res = favoriteService.getFavorite(profileId);
         return BaseResponse.ok(res);
