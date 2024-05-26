@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record KeywordDto(
         @Schema(description = "알약 ID")
-        Long pillId,
+        String pillId,
         @Schema(description = "알약 시리얼 번호")
         Long serialNumber,
         @Schema(description = "알약 이름")
@@ -26,7 +26,7 @@ public record KeywordDto(
         Long FavoriteId
 ) {
         public KeywordDto(Pill pill, Boolean isWaring, Long favoriteId){
-                this(pill.getId(),
+                this(pill.getEncryptedId(),
                         pill.getSerialNumber(),
                         pill.getName(),
                         pill.getClassification(),

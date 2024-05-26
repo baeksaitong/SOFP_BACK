@@ -38,7 +38,7 @@ public class CategoryController {
     @PostMapping("/{profileId}")
     public ResponseEntity<String> addCategory(
             @RequestBody @Validated CategoryReq req,
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         categoryService.addCategory(req, profileId);
         return BaseResponse.ok("카테고리 추가에 성공했습니다.");
@@ -52,7 +52,7 @@ public class CategoryController {
     })
     @GetMapping("/{categoryId}")
     public ResponseEntity<CategoryDetailRes> getCategoryInfo(
-            @PathVariable @Schema(description = "카테고리 ID") Long categoryId
+            @PathVariable @Schema(description = "카테고리 ID") String categoryId
     ){
         CategoryDetailRes res = categoryService.getCategoryInfo(categoryId);
         return BaseResponse.ok(res);
@@ -68,7 +68,7 @@ public class CategoryController {
     @PutMapping("/{categoryId}")
     public ResponseEntity<CategoryDetailRes> editCategory(
             @RequestBody @Validated CategoryEditReq req,
-            @PathVariable @Schema(description = "카테고리 ID") Long categoryId
+            @PathVariable @Schema(description = "카테고리 ID") String categoryId
     ){
         CategoryDetailRes res = categoryService.editCategory(categoryId, req);
         return BaseResponse.ok(res);
@@ -83,7 +83,7 @@ public class CategoryController {
     })
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<String> deleteCategory(
-            @PathVariable @Schema(description = "카테고리 ID") Long categoryId,
+            @PathVariable @Schema(description = "카테고리 ID") String categoryId,
             @RequestParam @Schema(description = "카테고리에 속한 알약 존재 시 삭제 여부(true=모두 삭제, false=알약 유지)") Boolean isAllDelete
     ){
         categoryService.deleteCategory(categoryId, isAllDelete);
@@ -98,7 +98,7 @@ public class CategoryController {
     })
     @GetMapping
     public ResponseEntity<CategoryListByProfileRes> getCategoryListByProfile(
-            @RequestParam @Schema(description = "프로필 ID") Long profileId
+            @RequestParam @Schema(description = "프로필 ID") String profileId
     ){
         CategoryListByProfileRes res = categoryService.getCategoryListByProfile(profileId);
         return BaseResponse.ok(res);
@@ -110,7 +110,7 @@ public class CategoryController {
     })
     @GetMapping("/{profileId}/{day}")
     public ResponseEntity<CategoryListByDayRes> getCategoryListByDay(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @ValidEnum(enumClass = Day.class, ignoreCase=true, message = "잘못된 요일 입력입니다.")
             @PathVariable @Schema(description = "조회 요일", example = "MON,TUE,WED,THU,FRI,SAT,SUN") String day
     ){

@@ -3,6 +3,8 @@ package baeksaitong.sofp.domain.profile.entity;
 import baeksaitong.sofp.domain.member.entity.Member;
 import baeksaitong.sofp.global.common.entity.BaseTimeEntity;
 import baeksaitong.sofp.domain.profile.entity.enums.Gender;
+import baeksaitong.sofp.global.util.EncryptionUtil;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 public class Profile extends BaseTimeEntity implements Serializable {
     @Id
@@ -45,5 +48,9 @@ public class Profile extends BaseTimeEntity implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getEncryptedId(){
+        return EncryptionUtil.encrypt(this.id);
     }
 }

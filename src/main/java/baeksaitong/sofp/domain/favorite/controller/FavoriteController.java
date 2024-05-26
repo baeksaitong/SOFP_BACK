@@ -34,7 +34,7 @@ public class FavoriteController {
     })
     @PostMapping("/{profileId}")
     private ResponseEntity<String> addFavorite(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @ModelAttribute @Validated FavoriteReq req
     ){
         favoriteService.addFavorite(req, profileId);
@@ -51,7 +51,7 @@ public class FavoriteController {
     })
     @DeleteMapping("/{profileId}")
     private ResponseEntity<String> deleteFavorite(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @RequestParam @Schema(description = "알약 시리얼 번호") Long pillSerialNumber
     ){
         favoriteService.deleteFavorite(pillSerialNumber, profileId);
@@ -66,7 +66,7 @@ public class FavoriteController {
     })
     @GetMapping("/{profileId}")
     private ResponseEntity<FavoriteRes> getFavorite(
-            @RequestParam @Schema(description = "프로필 ID") Long profileId
+            @RequestParam @Schema(description = "프로필 ID") String profileId
     ){
         FavoriteRes res = favoriteService.getFavorite(profileId);
         return BaseResponse.ok(res);

@@ -17,6 +17,7 @@ import baeksaitong.sofp.domain.favorite.entity.Favorite;
 import baeksaitong.sofp.domain.pill.entity.Pill;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +48,9 @@ public class SearchService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
 
-    public KeywordRes findByKeyword(Long profileId, int limit, Long lastId, String keyword, String shape, String sign, String color, String formulation, String line) {
+    public KeywordRes findByKeyword(String encryptedProfileId, int limit, Long lastId, String keyword, String shape, String sign, String color, String formulation, String line) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         KeywordSearchDto req = KeywordSearchDto.builder()
@@ -86,7 +89,8 @@ public class SearchService {
                 }).collect(Collectors.toList());
     }
 
-    public PillInfoRes getPillInfo(String serialNumber, Long profileId) {
+    public PillInfoRes getPillInfo(String serialNumber, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
 
         Profile profile = profileService.getProfile(profileId);
 

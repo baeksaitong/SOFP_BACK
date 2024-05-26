@@ -31,7 +31,7 @@ public class CalendarController {
     })
     @GetMapping("/{profileId}")
     public ResponseEntity<TargetProfileRes> getTargetProfile(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         TargetProfileRes res = calendarService.getTargetProfile(profileId);
         return BaseResponse.ok(res);
@@ -45,7 +45,7 @@ public class CalendarController {
     })
     @PutMapping("/{profileId}")
     public ResponseEntity<String> editTargetProfile(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @RequestBody @Validated EditTargetProfile req
     ){
         calendarService.editTargetProfile(req, profileId);

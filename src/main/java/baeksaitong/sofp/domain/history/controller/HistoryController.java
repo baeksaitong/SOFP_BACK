@@ -31,7 +31,7 @@ public class HistoryController {
     })
     @PostMapping("/{profileId}")
     public ResponseEntity<HistoryRes> getRecentViewPill(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @Schema(description = "조회할 요소 개수 - 입력 가능 범위 : 1~40")
             @Size(min = 1, max = 40, message = "조회 요소 범위는 1 부터 40 이내의 정수입니다.") @RequestParam int count
     ){
@@ -48,7 +48,7 @@ public class HistoryController {
     })
     @DeleteMapping("/{profileId}")
     public ResponseEntity<String> deleteRecentViewPill(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId,
+            @PathVariable @Schema(description = "프로필 ID") String profileId,
             @RequestParam @Schema(description = "알약 시리얼 번호") Long pillSerialNumber){
         historyService.deleteRecentViewPill(pillSerialNumber, profileId);
         return BaseResponse.ok("최근 본 알약 삭제에 성공 했습니다.");

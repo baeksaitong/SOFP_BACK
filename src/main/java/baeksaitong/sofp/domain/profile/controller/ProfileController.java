@@ -46,7 +46,7 @@ public class ProfileController {
     })
     @GetMapping("/{profileId}")
     public ResponseEntity<ProfileBasicRes> getProfileBasic(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         ProfileBasicRes res = profileService.getProfileBasic(profileId);
         return BaseResponse.ok(res);
@@ -60,7 +60,7 @@ public class ProfileController {
     })
     @GetMapping("/{profileId}/detail")
     public ResponseEntity<ProfileDetailRes> getProfileDetail(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         ProfileDetailRes res = profileService.getProfileDetail(profileId);
         return BaseResponse.ok(res);
@@ -89,7 +89,7 @@ public class ProfileController {
     })
     @DeleteMapping("/{profileId}")
     public ResponseEntity<String> deleteProfile(
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         profileService.deleteProfile(profileId);
         return BaseResponse.ok("프로필 삭제에 성공했습니다.");
@@ -104,7 +104,7 @@ public class ProfileController {
     @PutMapping("/{profileId}")
     public ResponseEntity<ProfileDetailRes> editProfile(
             @ModelAttribute @Validated ProfileReq req,
-            @PathVariable @Schema(description = "프로필 ID") Long profileId
+            @PathVariable @Schema(description = "프로필 ID") String profileId
     ){
         ProfileDetailRes res = profileService.editProfile(req, profileId);
         return BaseResponse.ok(res);

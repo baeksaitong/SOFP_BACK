@@ -8,6 +8,7 @@ import baeksaitong.sofp.domain.profile.service.ProfileService;
 import baeksaitong.sofp.domain.health.entity.DiseaseAllergy;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.health.entity.ProfileDiseaseAllergy;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,9 @@ public class DiseaseAllergyService {
         return new DiseaseAllergyRes(diseaseAllergyRepository.findByKeyword(keyword));
     }
 
-    public DiseaseAllergyRes getDiseaseAllergyList(Long profileId) {
+    public DiseaseAllergyRes getDiseaseAllergyList(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         return new DiseaseAllergyRes(
@@ -46,7 +49,9 @@ public class DiseaseAllergyService {
         );
     }
 
-    public DiseaseAllergyRes editDiseaseAllergy(DiseaseAllergyEditReq req, Long profileId) {
+    public DiseaseAllergyRes editDiseaseAllergy(DiseaseAllergyEditReq req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+
         Profile profile = profileService.getProfile(profileId);
 
         List<String> addListReq = req.getAddDiseaseAllergyList();

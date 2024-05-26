@@ -7,6 +7,7 @@ import baeksaitong.sofp.domain.calendar.repository.CalendarRepository;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,25 +25,27 @@ public class CalendarService {
     private final ProfileRepository profileRepository;
     private final ProfileService profileService;
 
-    public TargetProfileRes getTargetProfile(Long profileId) {
+    public TargetProfileRes getTargetProfile(String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
         Profile profile = profileService.getProfile(profileId);
 
         if(!calendarRepository.existsByOwnerProfile(profile)){
             return new TargetProfileRes(new ArrayList<>());
         }
 
-        Set<Long> targetProfileIdList = calendarRepository.findTargetProfilesByOwnerProfile(profile)
-                .stream().map(Profile::getId).collect(Collectors.toSet());
-        targetProfileIdList.add(profileId);
+        Set<String> targetProfileIdList = calendarRepository.findTargetProfilesByOwnerProfile(profile)
+                .stream().map(Profile::getEncryptedId).collect(Collectors.toSet());
+        targetProfileIdList.add(String.valueOf(encryptedProfileId));
 
         return new TargetProfileRes(targetProfileIdList.stream().toList());
     }
 
-    public void editTargetProfile(EditTargetProfile req, Long profileId) {
+    public void editTargetProfile(EditTargetProfile req, String encryptedProfileId) {
+        Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
         Profile profile = profileService.getProfile(profileId);
 
-        List<Long> addTargetProfileIdList = req.getAddTargetProfileIdList();
-        List<Long> deleteTargetProfileIdList = req.getDeleteTargetProfileIdList();
+        List<Long> addTargetProfileIdList = req.getDecryptAdd();
+        List<Long> deleteTargetProfileIdList = req.getDecryptDelete();
 
         List<Profile> addProfileList = profileRepository.findAllByIdIn(addTargetProfileIdList);
         List<Profile> deleteProfileList = profileRepository.findAllByIdIn(deleteTargetProfileIdList);
