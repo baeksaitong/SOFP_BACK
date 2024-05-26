@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.category.entity;
 
 import baeksaitong.sofp.domain.profile.entity.Profile;
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +30,7 @@ public class Category {
         this.period = period;
     }
 
+    public String getEncryptedId(){
+        return EncryptionUtil.encrypt(this.id);
+    }
 }

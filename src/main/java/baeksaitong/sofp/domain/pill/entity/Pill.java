@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.pill.entity;
 
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,4 +43,8 @@ public class Pill {
     private String colorBack;
     @Column(name = "img_url")
     private String imgUrl;
+
+    public String getEncryptedId(){
+        return EncryptionUtil.encrypt(this.id);
+    }
 }
