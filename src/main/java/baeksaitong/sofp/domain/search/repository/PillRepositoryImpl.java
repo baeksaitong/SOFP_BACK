@@ -49,26 +49,26 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
     }
 
     private BooleanExpression lineEq(String value) {
-        return value == null || value.isEmpty() ? null : pill.lineFront.eq(value).or(pill.lineBack.eq(value));
+        return value == null || value.isEmpty() || value.equals("null") ? null : pill.lineFront.eq(value).or(pill.lineBack.eq(value));
     }
 
     private BooleanExpression colorLike(String value) {
-        return value == null || value.isEmpty() ? null : pill.colorFront.contains(value).or(pill.colorBack.contains(value));
+        return value == null || value.isEmpty() || value.equals("null") ? null : pill.colorFront.contains(value).or(pill.colorBack.contains(value));
     }
 
     private BooleanExpression signLike(String value) {
-        return value == null || value.isEmpty() ? null : pill.signFront.contains(value).or(pill.signBack.contains(value));
+        return value == null || value.isEmpty() || value.equals("null") ? null : pill.signFront.contains(value).or(pill.signBack.contains(value));
     }
 
     private BooleanExpression shapeEq(String value) {
-        return value == null || value.isEmpty() ? null : pill.shape.eq(value);
+        return value == null || value.isEmpty() || value.equals("null") ? null : pill.shape.eq(value);
     }
 
     private BooleanExpression formulationEq(String value) {
-        return value == null || value.isEmpty() ? null : pill.formClassification.eq(value);
+        return value == null || value.isEmpty() || value.equals("null") ? null : pill.formClassification.eq(value);
     }
 
     private BooleanExpression keywordLike(String keyword) {
-        return keyword == null || keyword.isEmpty()  ? null : pill.name.contains(keyword).or(pill.efficacy.contains(keyword)).or(pill.ingredient.contains(keyword));
+        return keyword == null || keyword.isEmpty() || keyword.equals("null") ? null : pill.name.contains(keyword).or(pill.efficacy.contains(keyword)).or(pill.ingredient.contains(keyword));
     }
 }
