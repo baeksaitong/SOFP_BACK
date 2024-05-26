@@ -50,7 +50,7 @@ public class FavoriteService {
                         .build()
         );
 
-        if(req.getImage() != null) {
+        if(req.getImage() != null && req.getImage().getName().isEmpty()) {
             favorite.setImgUrl(s3Service.upload(req.getImage(), favorite.getId()));
         }
 
