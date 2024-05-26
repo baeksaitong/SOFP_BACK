@@ -5,7 +5,6 @@ import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
 import baeksaitong.sofp.domain.pill.entity.Pill;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -42,31 +41,31 @@ public class PillRepositoryImpl implements PillRepositoryCustom {
         BooleanBuilder cond = new BooleanBuilder();
 
         return cond.and(keywordLike(req.getKeyword()))
-                .and(shapeEq(pill.shape, req.getShape()))
+                .and(shapeEq(req.getShape()))
                 .and(signLike(req.getSign()))
-                .and(ColorLike(req.getColor()))
+                .and(colorLike(req.getColor()))
                 .and(formulationEq(req.getFormulation()))
-                .and(LineEq(pill.lineFront, pill.lineBack, req.getLine()));
+                .and(lineEq(req.getLine()));
     }
 
-    private <T> BooleanExpression LineEq(SimpleExpression<T> front, SimpleExpression<T> back, T value) {
-        return value == null || value.equals("전체") ? null : front.eq(value).or(back.eq(value));
+    private BooleanExpression lineEq(String value) {
+        return value == null || value.isEmpty() ? null : pill.lineFront.eq(value).or(pill.lineBack.eq(value));
     }
 
-    private BooleanExpression ColorLike(String value) {
-        return value == null ? null : pill.colorFront.contains(value).or(pill.colorBack.contains(value));
+    private BooleanExpression colorLike(String value) {
+        return value == null || value.isEmpty() ? null : pill.colorFront.contains(value).or(pill.colorBack.contains(value));
     }
 
     private BooleanExpression signLike(String value) {
-        return value == null ? null : pill.signFront.contains(value).or(pill.signBack.contains(value));
+        return value == null || value.isEmpty() ? null : pill.signFront.contains(value).or(pill.signBack.contains(value));
     }
 
-    private <T> BooleanExpression shapeEq(SimpleExpression<T> path, T value) {
-        return value == null || value.equals("전체") ? null : path.eq(value);
+    private BooleanExpression shapeEq(String value) {
+        return value == null || value.isEmpty() ? null : pill.shape.eq(value);
     }
 
     private BooleanExpression formulationEq(String value) {
-        return value == null || value.equals("전체") ? null : pill.formClassification.eq(value);
+        return value == null || value.isEmpty() ? null : pill.formClassification.eq(value);
     }
 
     private BooleanExpression keywordLike(String keyword) {
