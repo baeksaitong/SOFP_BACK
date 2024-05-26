@@ -89,12 +89,12 @@ public class SearchService {
                 }).collect(Collectors.toList());
     }
 
-    public PillInfoRes getPillInfo(String serialNumber, String encryptedProfileId) {
+    public PillInfoRes getPillInfo(Long serialNumber, String encryptedProfileId) {
         Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
 
         Profile profile = profileService.getProfile(profileId);
 
-        PillInfoRes result = callPillInfoAPI(serialNumber);
+        PillInfoRes result = callPillInfoAPI(String.valueOf(serialNumber));
 
         if(result.getCautionGeneral() != null){
             Set<String> diseaseAllergy = getAllergyAndDiseaseSet(profile);
@@ -107,7 +107,7 @@ public class SearchService {
         }
 
         if(profile != null) {
-            historyService.addRecentView(profile.getId(), Long.parseLong(serialNumber));
+            historyService.addRecentView(profile.getId(), serialNumber);
         }
 
         return result;

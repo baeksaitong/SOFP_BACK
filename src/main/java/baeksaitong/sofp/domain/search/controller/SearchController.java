@@ -59,7 +59,7 @@ public class SearchController {
     })
     @GetMapping("/{pillSerialNumber}")
     public ResponseEntity<PillInfoRes> getPillDetailInfo(
-            @PathVariable @Schema(description = "알약 시리얼 번호") String pillSerialNumber,
+            @PathVariable @Schema(description = "알약 시리얼 번호") Long pillSerialNumber,
             @RequestParam @Schema(description = "프로필 ID") String profileId
     ){
         PillInfoRes res = searchService.getPillInfo(pillSerialNumber, profileId);
