@@ -108,7 +108,7 @@ public class PillService {
         Profile profile = profileService.getProfile(profileId);
         Pill pill = pillRepository.findBySerialNumber(req.getPillSerialNumber()).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
         ProfilePill profilePill = profilePillRepository.findByPillAndProfile(pill, profile).orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PROFILE_PILL));
-        Category category = categoryRepository.findById(req.getCategoryId()).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
+        Category category = categoryRepository.findById(req.getDecryptCategoryId()).orElseThrow(() -> new BusinessException(CategoryErrorCode.NO_SUCH_CATEGORY));
 
         profilePill.setCategory(category);
         profilePillRepository.save(profilePill);

@@ -44,8 +44,8 @@ public class CalendarService {
         Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
         Profile profile = profileService.getProfile(profileId);
 
-        List<Long> addTargetProfileIdList = req.getAddTargetProfileIdList();
-        List<Long> deleteTargetProfileIdList = req.getDeleteTargetProfileIdList();
+        List<Long> addTargetProfileIdList = req.getDecryptAdd();
+        List<Long> deleteTargetProfileIdList = req.getDecryptDelete();
 
         List<Profile> addProfileList = profileRepository.findAllByIdIn(addTargetProfileIdList);
         List<Profile> deleteProfileList = profileRepository.findAllByIdIn(deleteTargetProfileIdList);

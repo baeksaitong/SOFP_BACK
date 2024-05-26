@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.pill.dto.request;
 
+import baeksaitong.sofp.global.util.EncryptionUtil;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,5 +14,9 @@ public class MovePillReq {
     private Long pillSerialNumber;
     @NotNull(message = "카테고리 ID가 필요합니다.")
     @Schema(description = "카테고리 ID")
-    private Long categoryId;
+    private String categoryId;
+
+    public Long getDecryptCategoryId(){
+        return EncryptionUtil.decrypt(categoryId);
+    }
 }
