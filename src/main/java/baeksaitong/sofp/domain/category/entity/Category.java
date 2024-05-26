@@ -2,6 +2,7 @@ package baeksaitong.sofp.domain.category.entity;
 
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.global.util.EncryptionUtil;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +31,7 @@ public class Category {
         this.period = period;
     }
 
+    @JsonIgnore
     public String getEncryptedId(){
         return EncryptionUtil.encrypt(this.id);
     }
