@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public record ProfileDetailRes(
         @Schema(description = "프로필 ID")
-        Long id,
+        String id,
         @Schema(description = "이름")
         String name,
         @Schema(description = "생일")
@@ -21,6 +21,6 @@ public record ProfileDetailRes(
         String imgURL
 ) {
     public ProfileDetailRes(Profile profile){
-        this(profile.getId(), profile.getName(),profile.getBirthday(), profile.getGender(), profile.getColor(), profile.getImgUrl());
+        this(profile.getEncryptedId(), profile.getName(),profile.getBirthday(), profile.getGender(), profile.getColor(), profile.getImgUrl());
     }
 }

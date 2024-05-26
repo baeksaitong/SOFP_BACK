@@ -11,7 +11,7 @@ import java.util.List;
 
 public record CategoryDetailRes(
         @Schema(description = "카테고리 id")
-        Long id,
+        String id,
         @Schema(description = "카테고리 이름")
         String name,
         @Schema(description = "알람 허용 여부")
@@ -25,6 +25,6 @@ public record CategoryDetailRes(
         List<LocalTime> intakeTimeList
 ){
     public CategoryDetailRes(Category category, List<Day> intakeDayList, List<LocalTime> intakeTimeList){
-        this(category.getId(), category.getName(), category.getAlarm(), category.getPeriod(), intakeDayList, intakeTimeList);
+        this(category.getEncryptedId(), category.getName(), category.getAlarm(), category.getPeriod(), intakeDayList, intakeTimeList);
     }
 }

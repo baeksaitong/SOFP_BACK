@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record ProfileBasicRes(
         @Schema(description = "프로필 ID")
-        Long id,
+        String id,
         @Schema(description = "이름")
         String name,
         @Schema(description = "프로필 사진")
@@ -14,6 +14,6 @@ public record ProfileBasicRes(
         String color
 ) {
     public ProfileBasicRes(Profile profile){
-        this(profile.getId(), profile.getName(), profile.getImgUrl(), profile.getColor());
+        this(profile.getEncryptedId(), profile.getName(), profile.getImgUrl(), profile.getColor());
     }
 }
