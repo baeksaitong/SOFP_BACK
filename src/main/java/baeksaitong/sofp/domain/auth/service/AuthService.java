@@ -59,7 +59,8 @@ public class AuthService {
 
         Member save = memberRepository.save(member);
 
-        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(),"기본 색상", null), save);
+        String basicColor = "보라";
+        profileService.addProfile(new ProfileReq(req.getName(), req.getBirthday(),req.getGender(), basicColor, null), save);
 
         return new LoginRes(
                 true,

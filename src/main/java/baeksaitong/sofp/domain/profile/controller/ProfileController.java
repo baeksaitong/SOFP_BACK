@@ -101,7 +101,7 @@ public class ProfileController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PutMapping("/{profileId}")
+    @PutMapping(value = "/{profileId}",  consumes = "multipart/form-data")
     public ResponseEntity<ProfileDetailRes> editProfile(
             @ModelAttribute @Validated ProfileReq req,
             @PathVariable @Schema(description = "프로필 ID") String profileId

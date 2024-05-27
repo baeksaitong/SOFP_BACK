@@ -32,7 +32,7 @@ public class FavoriteController {
                     "code: F-000 | message: 이미 즐겨찾기에 추가되어 있습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/{profileId}")
+    @PostMapping(value = "/{profileId}",  consumes = "multipart/form-data")
     private ResponseEntity<String> addFavorite(
             @PathVariable @Schema(description = "프로필 ID") String profileId,
             @ModelAttribute @Validated FavoriteReq req
