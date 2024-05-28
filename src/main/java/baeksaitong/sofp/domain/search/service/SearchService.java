@@ -6,10 +6,12 @@ import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
+import baeksaitong.sofp.domain.search.dto.pillInfo.Doc;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
+import baeksaitong.sofp.domain.search.dto.pillInfo.PillInfoDto;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.error.SearchErrorCode;
 import baeksaitong.sofp.domain.search.feign.PillFeignClient;
@@ -18,13 +20,18 @@ import baeksaitong.sofp.domain.pill.entity.Pill;
 import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.util.EncryptionUtil;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,27 +101,35 @@ public class SearchService {
 
         Profile profile = profileService.getProfile(profileId);
 
-        PillInfoRes result = callPillInfoAPI(String.valueOf(serialNumber));
-
-        if(result.getCautionGeneral() != null){
-            Set<String> diseaseAllergy = getAllergyAndDiseaseSet(profile);
-            List<String> allWaring = findAllWaringInfo(result.getCautionGeneral(), diseaseAllergy);
-            result.setWaringInfo(allWaring);
-        }
+        PillInfoDto result = callPillInfoAPI(String.valueOf(serialNumber));
 
         if(result.getName() == null){
             throw new BusinessException(SearchErrorCode.PILL_INFO_ERROR);
         }
 
+        List<String> allWaring = new ArrayList<>();
+
+        if(result.getCautionGeneral() != null){
+            Set<String> diseaseAllergy = getAllergyAndDiseaseSet(profile);
+             allWaring = findAllWaringInfo(result.getCautionGeneral(), diseaseAllergy);
+        }
+
+        Doc efficacyEffect = parseXML(result.getEfficacyEffect());
+        Doc dosageUsage = parseXML(result.getDosageUsage());
+        Doc cautionGeneral = parseXML(result.getCautionGeneral());
+        Doc cautionProfessional = parseXML(result.getCautionProfessional());
+
+        PillInfoRes res = new PillInfoRes(result, efficacyEffect, dosageUsage, cautionGeneral, cautionProfessional, allWaring);
+
         if(profile != null) {
             historyService.addRecentView(profile.getId(), serialNumber);
         }
 
-        return result;
+        return res;
 
     }
 
-    private PillInfoRes callPillInfoAPI(String serialNumber) {
+    private PillInfoDto callPillInfoAPI(String serialNumber) {
         try {
             return pillFeignClient.getPillInfo(new URI(pillInfoUrl), serviceKey, "json", serialNumber);
 
@@ -141,5 +156,21 @@ public class SearchService {
         return allergyAndDiseaseSet.stream()
                 .filter(cautionGeneral::contains)
                 .collect(Collectors.toList());
+    }
+
+    private Doc parseXML(String input) {
+        if (input == null) {
+            return new Doc();
+        }
+
+       try {
+           JAXBContext jaxbContext = JAXBContext.newInstance(Doc.class);
+           Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+           StringReader reader = new StringReader(input);
+           return (Doc) unmarshaller.unmarshal(reader);
+
+       } catch (JAXBException e){
+           throw new BusinessException(SearchErrorCode.FAILURE_PARSE_XML);
+       }
     }
 }
