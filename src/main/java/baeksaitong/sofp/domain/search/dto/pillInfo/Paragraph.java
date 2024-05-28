@@ -1,12 +1,15 @@
 package baeksaitong.sofp.domain.search.dto.pillInfo;
 
-import jakarta.xml.bind.annotation.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlValue;
 import lombok.Getter;
-import lombok.ToString;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "PARAGRAPH")
 @Getter
-@ToString
+@Schema(description = "Paragraph 태그")
 public class Paragraph {
     @XmlValue
     private String description;
