@@ -1,13 +1,11 @@
 package baeksaitong.sofp.domain.search.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import baeksaitong.sofp.domain.search.dto.pillInfo.Doc;
+import baeksaitong.sofp.domain.search.dto.pillInfo.PillInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Map;
 
 @Getter
 public class PillInfoRes {
@@ -28,51 +26,30 @@ public class PillInfoRes {
     @Schema(description = "알약 유통 기한")
     private String validTerm;
     @Schema(description = "효능효과 문서 데이터")
-    private String efficacyEffect;
+    private Doc efficacyEffect;
     @Schema(description = "용법용량 문서 데이터")
-    private String dosageUsage;
+    private Doc dosageUsage;
     @Schema(description = "주의사항(일반) 문서 데이터")
-    private String cautionGeneral;
+    private Doc cautionGeneral;
     @Schema(description = "주의사항(전문) 문서 데이터")
-    private String cautionProfessional;
+    private Doc cautionProfessional;
 
     @Schema(description = "내 정보와 관련된 경고 사항")
     private List<String> waringInfo;
 
-    @JsonCreator
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public PillInfoRes(@JsonProperty("body") Map<String,Object> body){
-       if((Integer)body.get("totalCount") > 0){
-           Map<String,Object> result = (Map<String, Object>)((List<Object>) body.get("items")).get(0);
-           this.name = (String) result.get("ITEM_NAME");
-           this.enterpriseName = (String) result.get("ENTP_NAME");
-           this.proOrGeneral = (String) result.get("ETC_OTC_CODE");
-           this.permitDate = (String) result.get("ITEM_PERMIT_DATE");
-           this.chart = (String) result.get("CHART");
-           this.material = (String) result.get("MATERIAL_NAME");
-           this.validTerm = (String) result.get("VALID_TERM");
-           this.storageMethod = (String) result.get("STORAGE_METHOD");
-           this.efficacyEffect = (String) result.get("EE_DOC_DATA");
-           this.dosageUsage = (String) result.get("UD_DOC_DATA");
-           this.cautionGeneral = (String) result.get("NB_DOC_DATA");
-           this.cautionProfessional = (String) result.get("PN_DOC_DATA");
-       }
-    }
-
-
-    public void setWaringInfo(List<String> waringInfo){
-        this.waringInfo = waringInfo;
-    }
-
-    public void setEfficacyEffect(String efficacyEffect) {
+    public PillInfoRes(PillInfoDto pillInfoDto, Doc efficacyEffect, Doc dosageUsage, Doc cautionGeneral, Doc cautionProfessional, List<String> allWaring){
+        this.name = pillInfoDto.getName();
+        this.enterpriseName = pillInfoDto.getEnterpriseName();
+        this.proOrGeneral = pillInfoDto.getProOrGeneral();
+        this.permitDate = pillInfoDto.getPermitDate();
+        this.chart = pillInfoDto.getChart();
+        this.material = pillInfoDto.getMaterial();
+        this.storageMethod = pillInfoDto.getStorageMethod();
+        this.validTerm = pillInfoDto.getValidTerm();
         this.efficacyEffect = efficacyEffect;
-    }
-
-    public void setDosageUsage(String dosageUsage) {
         this.dosageUsage = dosageUsage;
-    }
-
-    public void setCautionGeneral(String cautionGeneral) {
         this.cautionGeneral = cautionGeneral;
+        this.cautionProfessional = cautionProfessional;
+        this.waringInfo = allWaring;
     }
 }
