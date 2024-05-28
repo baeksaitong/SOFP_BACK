@@ -34,7 +34,7 @@ public class FavoriteService {
     public void addFavorite(FavoriteReq req, String encryptedProfileId) {
         Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
 
-        Pill pill = pillRepository.findBySerialNumber(req.getPillSeralNumber())
+        Pill pill = pillRepository.findBySerialNumber(req.getPillSerialNumber())
                 .orElseThrow(() -> new BusinessException(PillErrorCode.NO_SUCH_PILL));
 
         Profile profile = profileService.getProfile(profileId);
