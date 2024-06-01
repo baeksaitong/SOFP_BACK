@@ -1,14 +1,14 @@
 package baeksaitong.sofp.domain.pharmacy.feign;
 
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacy;
-import baeksaitong.sofp.global.config.FeignConfig;
+import baeksaitong.sofp.global.config.XmlFeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
 
-@FeignClient(name = "PharmyClient", configuration = FeignConfig.class)
+@FeignClient(name = "PharmyClient", configuration = XmlFeignConfig.class)
 public interface PharmacyFeignClient {
     @GetMapping
     AroundPharmacy getPharmacyInfoByLocation(URI baseUrl,
