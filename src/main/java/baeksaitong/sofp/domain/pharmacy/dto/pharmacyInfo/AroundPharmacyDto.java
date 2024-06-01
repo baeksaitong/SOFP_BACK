@@ -19,7 +19,7 @@ public class AroundPharmacyDto {
         return header.resultCode;
     }
 
-    public List<Item> getItemList(){
+    public List<AroundPharmacyInfoDto> getItemList(){
         return body.items.itemList;
     }
 
@@ -38,27 +38,7 @@ public class AroundPharmacyDto {
     public static class Items {
         @JacksonXmlElementWrapper(useWrapping = false)
         @JacksonXmlProperty(localName = "item")
-        private List<Item> itemList;
-
-    }
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class Item {
-        private int cnt;
-        private double distance;
-        private String dutyAddr;
-        private String dutyDiv;
-        private String dutyDivName;
-        private String dutyFax;
-        private String dutyName;
-        private String dutyTel1;
-        private String endTime;
-        private String hpid;
-        private double latitude;
-        private double longitude;
-        private int rnum;
-        private String startTime;
+        private List<AroundPharmacyInfoDto> itemList;
 
     }
 }
