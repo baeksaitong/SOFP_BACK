@@ -10,7 +10,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +30,11 @@ public class HistoryController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/{profileId}")
+    @GetMapping("/{profileId}")
     public ResponseEntity<HistoryRes> getRecentViewPill(
             @PathVariable @Schema(description = "프로필 ID") String profileId,
             @Schema(description = "조회할 요소 개수 - 입력 가능 범위 : 1~40")
-            @Size(min = 1, max = 40, message = "조회 요소 범위는 1 부터 40 이내의 정수입니다.") @RequestParam int count
+            @Min(value = 1, message = "1 이상의 정수가 필요합니다.") @Max(value = 40,message = "최대 조회 가능 요소는 40입니다.") @RequestParam int count
     ){
         HistoryRes res = historyService.getRecentViewPill(count, profileId);
         return BaseResponse.ok(res);
