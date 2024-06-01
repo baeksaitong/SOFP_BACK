@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.pharmacy.controller;
 
+import baeksaitong.sofp.domain.pharmacy.dto.response.AroundPharmacyRes;
 import baeksaitong.sofp.domain.pharmacy.service.PharmacyService;
 import baeksaitong.sofp.global.common.dto.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class PharmacyController {
     private final PharmacyService pharmacyService;
 
     @GetMapping("/around")
-    public ResponseEntity<String> getAroundPharmacy(@RequestParam Double longitude, @RequestParam Double latitude){
-        pharmacyService.getAroundPharmacy(longitude, latitude);
-        return BaseResponse.ok("전송 성공");
+    public ResponseEntity<AroundPharmacyRes> getAroundPharmacy(@RequestParam Double longitude, @RequestParam Double latitude){
+        AroundPharmacyRes res = pharmacyService.getAroundPharmacy(longitude, latitude);
+        return BaseResponse.ok(res);
     }
 }
