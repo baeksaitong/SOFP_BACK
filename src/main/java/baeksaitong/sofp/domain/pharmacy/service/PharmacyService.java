@@ -22,11 +22,20 @@ public class PharmacyService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
     @Value("${api.public-data.url.around-pharmacy}")
-    private String aroundPharmyUrl;
+    private String aroundPharmacyUrl;
     public void getAroundPharmacy(Double x, Double y) {
+        callAroundPharmacyApi(x, y);
+    }
+
+    private AroundPharmacyDto callAroundPharmacyApi(Double x, Double y) {
         try {
-            AroundPharmacyDto pharmyInfoByLocation = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmyUrl), serviceKey, x, y);
-            log.info("pharmy info : {}", pharmyInfoByLocation.toString());
+            AroundPharmacyDto dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), serviceKey, x, y);
+
+            if(dto.getStatus() != 0 || dto.getItemList() == null){
+                throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+            }
+
+            return dto;
         } catch (URISyntaxException e) {
             throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
         }
