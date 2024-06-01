@@ -1,6 +1,6 @@
 package baeksaitong.sofp.domain.pharmacy.service;
 
-import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.Response;
+import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacyDto;
 import baeksaitong.sofp.domain.pharmacy.error.PharmyErrorCode;
 import baeksaitong.sofp.domain.pharmacy.feign.PharmacyFeignClient;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -25,7 +25,7 @@ public class PharmacyService {
     private String aroundPharmyUrl;
     public void getAroundPharmacy(Double x, Double y) {
         try {
-            Response pharmyInfoByLocation = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmyUrl), serviceKey, x, y);
+            AroundPharmacyDto pharmyInfoByLocation = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmyUrl), serviceKey, x, y);
             log.info("pharmy info : {}", pharmyInfoByLocation.toString());
         } catch (URISyntaxException e) {
             throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);

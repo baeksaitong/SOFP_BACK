@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @JacksonXmlRootElement(localName = "response")
-public class Response {
+public class AroundPharmacyDto {
     private Body body;
 
     @Data
