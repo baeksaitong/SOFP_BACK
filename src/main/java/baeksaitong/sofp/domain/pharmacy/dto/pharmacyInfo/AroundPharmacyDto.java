@@ -10,15 +10,16 @@ import java.util.List;
 @Data
 @JacksonXmlRootElement(localName = "response")
 public class AroundPharmacyDto {
+    private Header header;
     private Body body;
 
     @Data
+    public static class Header {
+        private int resultCode;
+    }
+    @Data
     public static class Body {
         private Items items;
-        private int numOfRows;
-        private int pageNo;
-        private int totalCount;
-
     }
 
     @Data
@@ -36,6 +37,7 @@ public class AroundPharmacyDto {
         private String dutyAddr;
         private String dutyDiv;
         private String dutyDivName;
+        private String dutyFax;
         private String dutyName;
         private String dutyTel1;
         private String endTime;
