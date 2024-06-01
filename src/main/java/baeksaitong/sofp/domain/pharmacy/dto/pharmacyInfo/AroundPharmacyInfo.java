@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AroundPharmacyInfoDto {
+public class AroundPharmacyInfo {
     private int cnt;
     private double distance;
     private String dutyAddr;

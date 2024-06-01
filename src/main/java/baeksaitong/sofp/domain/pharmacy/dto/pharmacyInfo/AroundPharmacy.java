@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @JacksonXmlRootElement(localName = "response")
-public class AroundPharmacyDto {
+public class AroundPharmacy {
     private Header header;
     private Body body;
 
@@ -19,7 +19,7 @@ public class AroundPharmacyDto {
         return header.resultCode;
     }
 
-    public List<AroundPharmacyInfoDto> getItemList(){
+    public List<AroundPharmacyInfo> getItemList(){
         return body.items.itemList;
     }
 
@@ -38,7 +38,7 @@ public class AroundPharmacyDto {
     public static class Items {
         @JacksonXmlElementWrapper(useWrapping = false)
         @JacksonXmlProperty(localName = "item")
-        private List<AroundPharmacyInfoDto> itemList;
+        private List<AroundPharmacyInfo> itemList;
 
     }
 }
