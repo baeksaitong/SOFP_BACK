@@ -54,6 +54,9 @@ dependencies {
 
 	// feign client
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+	implementation 'io.github.openfeign:feign-jackson:9.3.1'
+
 
 	//s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
