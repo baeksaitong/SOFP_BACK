@@ -23,13 +23,13 @@ public class PharmacyService {
     private String serviceKey;
     @Value("${api.public-data.url.around-pharmacy}")
     private String aroundPharmacyUrl;
-    public void getAroundPharmacy(Double x, Double y) {
-        callAroundPharmacyApi(x, y);
+    public void getAroundPharmacy(Double longitude, Double latitude) {
+        callAroundPharmacyApi(longitude, latitude);
     }
 
-    private AroundPharmacyDto callAroundPharmacyApi(Double x, Double y) {
+    private AroundPharmacyDto callAroundPharmacyApi(Double longitude, Double latitude) {
         try {
-            AroundPharmacyDto dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), serviceKey, x, y);
+            AroundPharmacyDto dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), serviceKey, longitude, latitude);
 
             if(dto.getStatus() != 0 || dto.getItemList() == null){
                 throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);

@@ -13,6 +13,6 @@ public interface PharmacyFeignClient {
     @GetMapping
     AroundPharmacyDto getPharmacyInfoByLocation(URI baseUrl,
                                                 @RequestParam String serviceKey,
-                                                @RequestParam(name = "WGS84_LON") Double x,
-                                                @RequestParam(name = "WGS84_LAT") Double y);
+                                                @RequestParam(name = "WGS84_LON") Double longitude,
+                                                @RequestParam(name = "WGS84_LAT") Double latitude);
 }
