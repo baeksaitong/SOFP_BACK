@@ -29,7 +29,7 @@ public class HistoryController {
             @ApiResponse(responseCode = "404", description = "code: U-001 | message: 프로필이 존재하지 않습니다.",
                     content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @PostMapping("/{profileId}")
+    @GetMapping("/{profileId}")
     public ResponseEntity<HistoryRes> getRecentViewPill(
             @PathVariable @Schema(description = "프로필 ID") String profileId,
             @Schema(description = "조회할 요소 개수 - 입력 가능 범위 : 1~40")
