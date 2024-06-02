@@ -7,9 +7,7 @@ import lombok.*;
 
 import java.util.List;
 
-@Getter
 @Setter
-@NoArgsConstructor
 @JacksonXmlRootElement(localName = "response")
 public class AroundPharmacy {
     private Header header;
@@ -20,25 +18,21 @@ public class AroundPharmacy {
     }
 
     public List<AroundPharmacyInfo> getItemList(){
-        return body.items.itemList;
+        return body.aroundPharmacyInfoList;
     }
 
     @Setter
-    @NoArgsConstructor
     public static class Header {
         private int resultCode;
     }
-    @Setter
-    @NoArgsConstructor
-    public static class Body {
-        protected Items items;
-    }
-    @Setter
-    @NoArgsConstructor
-    public static class Items {
-        @JacksonXmlElementWrapper(useWrapping = false)
-        @JacksonXmlProperty(localName = "item")
-        private List<AroundPharmacyInfo> itemList;
 
+    public static class Body {
+        private List<AroundPharmacyInfo> aroundPharmacyInfoList;
+
+        @JacksonXmlElementWrapper(localName = "items")
+        @JacksonXmlProperty(localName = "item")
+        public void setAroundPharmacyInfoList(List<AroundPharmacyInfo> aroundPharmacyInfoList) {
+            this.aroundPharmacyInfoList = aroundPharmacyInfoList;
+        }
     }
 }
