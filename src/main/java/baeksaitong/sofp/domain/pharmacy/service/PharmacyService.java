@@ -2,8 +2,11 @@ package baeksaitong.sofp.domain.pharmacy.service;
 
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacy;
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacyInfo;
+import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.Pharmacy;
+import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.PharmacyInfo;
 import baeksaitong.sofp.domain.pharmacy.dto.response.AroundPharmacyDto;
 import baeksaitong.sofp.domain.pharmacy.dto.response.AroundPharmacyRes;
+import baeksaitong.sofp.domain.pharmacy.dto.response.PharmacyRes;
 import baeksaitong.sofp.domain.pharmacy.error.PharmyErrorCode;
 import baeksaitong.sofp.domain.pharmacy.feign.PharmacyFeignClient;
 import baeksaitong.sofp.global.error.exception.BusinessException;
@@ -27,6 +30,8 @@ public class PharmacyService {
     private String serviceKey;
     @Value("${api.public-data.url.around-pharmacy}")
     private String aroundPharmacyUrl;
+    @Value("${api.public-data.url.pharmacy}")
+    private String pharmacyUrl;
     public AroundPharmacyRes getAroundPharmacy(Double longitude, Double latitude) {
         List<AroundPharmacyDto> aroundPharmacyList = callAroundPharmacyApi(longitude, latitude).stream().map(
                 AroundPharmacyDto::new
@@ -40,6 +45,24 @@ public class PharmacyService {
             AroundPharmacy dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), serviceKey, longitude, latitude);
 
             if(dto.getStatus() != 0 || dto.getItemList() == null){
+                throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+            }
+
+            return dto.getItemList();
+        } catch (URISyntaxException e) {
+            throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+        }
+    }
+
+    public PharmacyRes getPharmacy(String pharmacyId) {
+        return new PharmacyRes(callPharmacyApi(pharmacyId));
+    }
+
+    private PharmacyInfo callPharmacyApi(String hpid) {
+        try {
+            Pharmacy dto = pharmacyFeignClient.getPharmacyInfo(new URI(pharmacyUrl), serviceKey, hpid);
+
+            if(!dto.getStatus()){
                 throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
             }
 
