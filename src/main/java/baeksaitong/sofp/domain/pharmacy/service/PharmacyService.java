@@ -1,5 +1,6 @@
 package baeksaitong.sofp.domain.pharmacy.service;
 
+import baeksaitong.sofp.domain.pharmacy.dto.address.Address;
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacy;
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacyInfo;
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.Pharmacy;
@@ -9,6 +10,7 @@ import baeksaitong.sofp.domain.pharmacy.dto.response.AroundPharmacyRes;
 import baeksaitong.sofp.domain.pharmacy.dto.response.PharmacyRes;
 import baeksaitong.sofp.domain.pharmacy.error.PharmyErrorCode;
 import baeksaitong.sofp.domain.pharmacy.feign.PharmacyFeignClient;
+import baeksaitong.sofp.domain.pharmacy.feign.AddressFeignClient;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +27,19 @@ import java.util.List;
 public class PharmacyService {
 
     private final PharmacyFeignClient pharmacyFeignClient;
+    private final AddressFeignClient addressFeignClient;
 
     @Value("${api.public-data.serviceKey}")
-    private String serviceKey;
+    private String pharmacyServiceKey;
     @Value("${api.public-data.url.around-pharmacy}")
     private String aroundPharmacyUrl;
     @Value("${api.public-data.url.pharmacy}")
     private String pharmacyUrl;
+    @Value("${api.juso.serviceKey}")
+    private String addressServiceKey;
+    @Value("${api.juso.url.road}")
+    private String addressUrl;
+
     public AroundPharmacyRes getAroundPharmacy(Double longitude, Double latitude) {
         List<AroundPharmacyDto> aroundPharmacyList = callAroundPharmacyApi(longitude, latitude).stream().map(
                 AroundPharmacyDto::new
@@ -42,7 +50,7 @@ public class PharmacyService {
 
     private List<AroundPharmacyInfo> callAroundPharmacyApi(Double longitude, Double latitude) {
         try {
-            AroundPharmacy dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), serviceKey, longitude, latitude);
+            AroundPharmacy dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), pharmacyServiceKey, longitude, latitude);
 
             if(dto.getStatus() != 0 || dto.getItemList() == null){
                 throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
@@ -55,18 +63,32 @@ public class PharmacyService {
     }
 
     public PharmacyRes getPharmacy(String pharmacyId) {
-        return new PharmacyRes(callPharmacyApi(pharmacyId));
+        PharmacyInfo pharmacyInfo = callPharmacyApi(pharmacyId);
+        Address address = callRoadAddressApi(pharmacyInfo.getDutyAddr());
+
+        return new PharmacyRes(
+                pharmacyInfo,
+                (address.getAddress() == null) ? pharmacyInfo.getDutyAddr() : address.getAddress()
+        );
     }
 
     private PharmacyInfo callPharmacyApi(String hpid) {
         try {
-            Pharmacy dto = pharmacyFeignClient.getPharmacyInfo(new URI(pharmacyUrl), serviceKey, hpid);
+            Pharmacy dto = pharmacyFeignClient.getPharmacyInfo(new URI(pharmacyUrl), pharmacyServiceKey, hpid);
 
             if(!dto.getStatus()){
                 throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
             }
 
             return dto.getItemList();
+        } catch (URISyntaxException e) {
+            throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+        }
+    }
+
+    private Address callRoadAddressApi(String address){
+        try {
+            return addressFeignClient.getAddress(new URI(addressUrl), addressServiceKey, 1, 1, address, "json");
         } catch (URISyntaxException e) {
             throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
         }

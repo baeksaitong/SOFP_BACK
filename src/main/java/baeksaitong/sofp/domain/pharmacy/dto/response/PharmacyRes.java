@@ -17,9 +17,9 @@ public record PharmacyRes (
         OpeningHourDto sat,
         OpeningHourDto sun
 ) {
-    public PharmacyRes(PharmacyInfo pharmacyInfo) {
+    public PharmacyRes(PharmacyInfo pharmacyInfo, String address) {
         this(
-                pharmacyInfo.getDutyAddr(),
+                address,
                 pharmacyInfo.getDutyAddr(),
                 pharmacyInfo.getDutyTel1(),
                 createOpeningHourDto(pharmacyInfo.getDutyTime1s(), pharmacyInfo.getDutyTime1c()),
