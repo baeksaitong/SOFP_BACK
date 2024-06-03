@@ -24,12 +24,12 @@ public class XmlFeignConfig {
         return xmlMapper;
     }
 
-    @Bean
+    @Bean(name = "xmlFeignDecoder")
     public Encoder feignEncoder(XmlMapper xmlMapper) {
         return new JacksonEncoder(xmlMapper);
     }
 
-    @Bean
+    @Bean(name = "xmlFeignEncoder")
     public Decoder feignDecoder(XmlMapper xmlMapper) {
         return new JacksonDecoder(xmlMapper);
     }
