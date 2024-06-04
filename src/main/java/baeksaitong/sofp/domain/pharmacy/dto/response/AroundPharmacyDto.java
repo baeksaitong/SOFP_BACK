@@ -31,11 +31,16 @@ public record AroundPharmacyDto (
         );
     }
 
-    private static LocalTime parseTime(String time){
-        if ("2400".equals(time)) {
-            return LocalTime.MIDNIGHT;
+    private static LocalTime parseTime(String time) {
+        if (time == null || time.isBlank()) {
+            return null;
+        }
+        int hour = Integer.parseInt(time.substring(0, 2));
+        int minute = Integer.parseInt(time.substring(2, 4));
+        if (hour >= 24) {
+            hour = hour - 24;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HHmm");
-        return LocalTime.parse(time, formatter);
+        return LocalTime.parse(String.format("%02d%02d", hour, minute), formatter);
     }
 }
