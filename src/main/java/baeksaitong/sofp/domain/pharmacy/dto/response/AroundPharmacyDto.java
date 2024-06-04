@@ -1,20 +1,30 @@
 package baeksaitong.sofp.domain.pharmacy.dto.response;
 
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.AroundPharmacyInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public record AroundPharmacyDto (
-    String pharmacyId,
-    String name,
-    String tel,
-    String address,
-    LocalTime startTime,
-    LocalTime endTime,
-    double distance,
-    double latitude,
-    double longitude
+        @Schema(description = "약국 ID")
+        String pharmacyId,
+        @Schema(description = "이름")
+        String name,
+        @Schema(description = "전화 번호")
+        String tel,
+        @Schema(description = "주소")
+        String address,
+        @Schema(description = "영업 시작 시간")
+        LocalTime startTime,
+        @Schema(description = "영업 마감 시간")
+        LocalTime endTime,
+        @Schema(description = "거리")
+        double distance,
+        @Schema(description = "위도")
+        double latitude,
+        @Schema(description = "경도")
+        double longitude
 ){
 
     public AroundPharmacyDto(AroundPharmacyInfo info){

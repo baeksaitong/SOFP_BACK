@@ -1,20 +1,31 @@
 package baeksaitong.sofp.domain.pharmacy.dto.response;
 
 import baeksaitong.sofp.domain.pharmacy.dto.pharmacyInfo.PharmacyInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public record PharmacyRes (
+        @Schema(description = "일반 주소")
         String address,
+        @Schema(description = "도로명 주소")
         String roadAddress,
+        @Schema(description = "전화번호")
         String phone,
+        @Schema(description = "월요일 영업시간")
         OpeningHourDto mon,
+        @Schema(description = "화요일 영업시간")
         OpeningHourDto tue,
+        @Schema(description = "수요일 영업시간")
         OpeningHourDto wed,
+        @Schema(description = "목요일 영업시간")
         OpeningHourDto thu,
+        @Schema(description = "금요일 영업시간")
         OpeningHourDto fri,
+        @Schema(description = "토요일 영업시간")
         OpeningHourDto sat,
+        @Schema(description = "일요일 영업시간")
         OpeningHourDto sun
 ) {
     public PharmacyRes(PharmacyInfo pharmacyInfo, String address) {
