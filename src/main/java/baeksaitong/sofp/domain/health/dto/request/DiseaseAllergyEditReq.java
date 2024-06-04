@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.health.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "마이 페이지에서의 질병 및 알레르기 정보 수정")
 public class DiseaseAllergyEditReq {
     @Schema(description = "추가할 질병 및 알레르기 리스트")
