@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,5 +128,16 @@ public class PharmacyService {
         } catch (URISyntaxException e) {
             throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
         }
+    }
+
+    public AroundPharmacyRes getNightPharmacy(Double longitude, Double latitude, Double distance) {
+        List<AroundPharmacyInfo> itemList = pharmacyInfoListByDistance(longitude, latitude, distance);
+        List<AroundPharmacyDto> aroundPharmacyList = itemList.stream()
+                .map(AroundPharmacyDto::new)
+                .filter(dto -> dto.endTime().isAfter(LocalTime.of(18, 0)))
+                .toList();
+
+
+        return new AroundPharmacyRes(aroundPharmacyList);
     }
 }

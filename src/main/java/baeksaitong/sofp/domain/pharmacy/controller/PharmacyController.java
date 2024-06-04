@@ -21,6 +21,12 @@ public class PharmacyController {
         return BaseResponse.ok(res);
     }
 
+    @GetMapping("/night")
+    public ResponseEntity<AroundPharmacyRes> getNightPharmacy(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam(required = false, defaultValue = "2.0") Double distance){
+        AroundPharmacyRes res = pharmacyService.getNightPharmacy(longitude, latitude, distance);
+        return BaseResponse.ok(res);
+    }
+
     @GetMapping("/{pharmacyId}")
     public ResponseEntity<PharmacyRes> getPharmacy(@PathVariable String pharmacyId){
         PharmacyRes res = pharmacyService.getPharmacy(pharmacyId);
