@@ -30,8 +30,7 @@ public class SecurityConfig {
             "/app/auth/**", "/app/oauth/**",
 
             /* verification */
-            "/app/verification/**",
-            "/app/pharmacy/**"
+            "/app/verification/**"
     };
 
     private final JwtTokenProvider jwtTokenProvider;
