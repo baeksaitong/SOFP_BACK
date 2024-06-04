@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,23 +41,57 @@ public class PharmacyService {
     @Value("${api.juso.url.road}")
     private String addressUrl;
 
-    public AroundPharmacyRes getAroundPharmacy(Double longitude, Double latitude) {
-        List<AroundPharmacyDto> aroundPharmacyList = callAroundPharmacyApi(longitude, latitude).stream().map(
+    public AroundPharmacyRes getAroundPharmacy(Double longitude, Double latitude, Double distance) {
+        List<AroundPharmacyInfo> itemList = pharmacyInfoListByDistance(longitude, latitude, distance);
+        List<AroundPharmacyDto> aroundPharmacyList = itemList.stream().map(
                 AroundPharmacyDto::new
         ).toList();
 
         return new AroundPharmacyRes(aroundPharmacyList);
     }
 
-    private List<AroundPharmacyInfo> callAroundPharmacyApi(Double longitude, Double latitude) {
+    private List<AroundPharmacyInfo> pharmacyInfoListByDistance(Double longitude, Double latitude, double maxDistance){
+        int pageNo = 1;
+        List<AroundPharmacyInfo> allPharmacies = new ArrayList<>();
+
+        while (true) {
+            AroundPharmacy response = callAroundPharmacyApi(longitude, latitude, pageNo);
+            List<AroundPharmacyInfo> pharmacyInfoList = response.getItemList();
+
+            List<AroundPharmacyInfo> filteredPharmacyList = pharmacyInfoList.stream()
+                    .filter(pharmacy -> pharmacy.getDistance() < maxDistance)
+                    .toList();
+
+            allPharmacies.addAll(filteredPharmacyList);
+
+            if (pharmacyInfoList.stream().anyMatch(pharmacy -> pharmacy.getDistance() >= maxDistance) || filteredPharmacyList.isEmpty()) {
+               break;
+            }
+
+            int totalCount = response.getTotalCount();
+            int numOfRows = response.getNumOfRows();
+            int currentPageNo = response.getPageNo();
+            int totalPages = (int) Math.ceil((double) totalCount / numOfRows);
+
+            if ( currentPageNo >= totalPages){
+                break;
+            }
+
+            pageNo++;
+        }
+
+        return allPharmacies;
+    }
+
+    private AroundPharmacy callAroundPharmacyApi(Double longitude, Double latitude, int pageNo) {
         try {
-            AroundPharmacy dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), pharmacyServiceKey, longitude, latitude);
+            AroundPharmacy dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), pharmacyServiceKey, longitude, latitude, 100, pageNo);
 
             if(dto.getStatus() != 0 || dto.getItemList() == null){
                 throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
             }
 
-            return dto.getItemList();
+            return dto;
         } catch (URISyntaxException e) {
             throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
         }

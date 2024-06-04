@@ -16,8 +16,8 @@ public class PharmacyController {
     private final PharmacyService pharmacyService;
 
     @GetMapping("/around")
-    public ResponseEntity<AroundPharmacyRes> getAroundPharmacy(@RequestParam Double longitude, @RequestParam Double latitude){
-        AroundPharmacyRes res = pharmacyService.getAroundPharmacy(longitude, latitude);
+    public ResponseEntity<AroundPharmacyRes> getAroundPharmacy(@RequestParam Double longitude, @RequestParam Double latitude, @RequestParam(required = false, defaultValue = "2.0") Double distance){
+        AroundPharmacyRes res = pharmacyService.getAroundPharmacy(longitude, latitude, distance);
         return BaseResponse.ok(res);
     }
 

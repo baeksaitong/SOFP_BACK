@@ -16,7 +16,9 @@ public class AroundPharmacy {
     public int getStatus(){
         return header.resultCode;
     }
-
+    public int getNumOfRows(){return body.numOfRows;}
+    public int getPageNo(){return body.pageNo;}
+    public int getTotalCount(){return body.totalCount;}
     public List<AroundPharmacyInfo> getItemList(){
         return body.aroundPharmacyInfoList;
     }
@@ -26,8 +28,13 @@ public class AroundPharmacy {
         private int resultCode;
     }
 
+    @Setter
+    @Getter
     public static class Body {
         private List<AroundPharmacyInfo> aroundPharmacyInfoList;
+        private int numOfRows;
+        private int pageNo;
+        private int totalCount;
 
         @JacksonXmlElementWrapper(localName = "items")
         @JacksonXmlProperty(localName = "item")
