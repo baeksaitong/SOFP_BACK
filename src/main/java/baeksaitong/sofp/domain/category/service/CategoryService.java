@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -115,30 +112,61 @@ public class CategoryService {
 
     public CategoryListByDayRes getCategoryListByDay(String encryptedProfileId, String day) {
         Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
-
         Profile profile = profileService.getProfile(profileId);
+
+        List<Profile> targetProfileList = getTargetProfiles(profile);
+        List<IntakeDay> intakeDayList = intakeDayRepository.findAllByDayAndProfileIn(Day.from(day), targetProfileList);
+        Map<ProfileBasicDto, List<IntakeDay>> intakeDaysByProfileDto = mapIntakeDaysByProfileDto(intakeDayList);
+        Map<ProfileBasicDto, List<CategoryDayDto>> categoryDayDtoMap = createCategoryDayDtoMap(intakeDaysByProfileDto);
+
+        return new CategoryListByDayRes(categoryDayDtoMap);
+    }
+
+    private List<Profile> getTargetProfiles(Profile profile) {
         List<Profile> targetProfileList = calendarRepository.findTargetProfilesByOwnerProfile(profile);
         targetProfileList.add(profile);
+        return targetProfileList;
+    }
 
-        List<IntakeDay> intakeDays = intakeDayRepository.findAllByDayAndProfileIn(Day.from(day), targetProfileList);
+    private Map<ProfileBasicDto, List<IntakeDay>> mapIntakeDaysByProfileDto(List<IntakeDay> intakeDays) {
+        Map<Profile, List<IntakeDay>> intakeDaysByProfile = intakeDays.stream()
+                .collect(Collectors.groupingBy(IntakeDay::getProfile));
 
-        List<Category> categoryList = intakeDays.stream()
-                .map(IntakeDay::getCategory)
-                .distinct()
-                .toList();
-        List<IntakeTime> intakeTimes = intakeTimeRepository.findAllByCategoryIn(categoryList);
+        return intakeDaysByProfile.entrySet().stream()
+                .collect(
+                        Collectors.toMap(entry -> new ProfileBasicDto(entry.getKey()), Map.Entry::getValue
+                ));
+    }
 
-        Map<Category, List<IntakeTime>> intakeTimeMap = intakeTimes.stream()
-                .collect(Collectors.groupingBy(IntakeTime::getCategory));
+    private Map<ProfileBasicDto, List<CategoryDayDto>> createCategoryDayDtoMap(Map<ProfileBasicDto, List<IntakeDay>> intakeDayListByProfileDto) {
+        Map<ProfileBasicDto, List<CategoryDayDto>> categoryDayDtoMap = new HashMap<>();
 
-        List<CategoryDayDto> categoryDayDtoList = categoryList.stream()
-                .map(category -> new CategoryDayDto(
-                        category,
-                        intakeTimeMap.getOrDefault(category, List.of()).stream().map(IntakeTime::getTime).collect(Collectors.toList())
-                ))
-                .collect(Collectors.toList());
+        intakeDayListByProfileDto.forEach(
+                (profileDto, profileIntakeDays) -> {
+                    List<Category> categoryList = profileIntakeDays.stream()
+                            .map(IntakeDay::getCategory)
+                            .distinct()
+                            .toList();
 
-        return new CategoryListByDayRes(categoryDayDtoList);
+                    List<IntakeTime> intakeTimeList = intakeTimeRepository.findAllByCategoryIn(categoryList);
+
+                    Map<Category, List<IntakeTime>> intakeTimeMap = intakeTimeList.stream()
+                            .collect(Collectors.groupingBy(IntakeTime::getCategory));
+
+                    List<CategoryDayDto> categoryDayDtoList = categoryList.stream()
+                            .map(category -> new CategoryDayDto(
+                                    category,
+                                    intakeTimeMap.getOrDefault(category, List.of())
+                                            .stream()
+                                            .map(IntakeTime::getTime)
+                                            .toList()
+                            ))
+                            .collect(Collectors.toList());
+
+                    categoryDayDtoMap.put(profileDto, categoryDayDtoList);
+        });
+
+        return categoryDayDtoMap;
     }
 
     public CategoryDetailRes editCategory(String encryptedCategoryId, CategoryEditReq req) {
