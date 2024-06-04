@@ -89,12 +89,12 @@ public class PharmacyService {
             AroundPharmacy dto = pharmacyFeignClient.getPharmacyInfoByLocation(new URI(aroundPharmacyUrl), pharmacyServiceKey, longitude, latitude, 100, pageNo);
 
             if(dto.getStatus() != 0 || dto.getItemList() == null){
-                throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+                throw new BusinessException(PharmyErrorCode.PHARMACY_INFO_ERROR);
             }
 
             return dto;
         } catch (URISyntaxException e) {
-            throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+            throw new BusinessException(PharmyErrorCode.PHARMACY_INFO_ERROR);
         }
     }
 
@@ -113,12 +113,12 @@ public class PharmacyService {
             Pharmacy dto = pharmacyFeignClient.getPharmacyInfo(new URI(pharmacyUrl), pharmacyServiceKey, hpid);
 
             if(!dto.getStatus()){
-                throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+                throw new BusinessException(PharmyErrorCode.PHARMACY_INFO_ERROR);
             }
 
             return dto.getItemList();
         } catch (URISyntaxException e) {
-            throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+            throw new BusinessException(PharmyErrorCode.PHARMACY_INFO_ERROR);
         }
     }
 
@@ -126,7 +126,7 @@ public class PharmacyService {
         try {
             return addressFeignClient.getAddress(new URI(addressUrl), addressServiceKey, 1, 1, address, "json");
         } catch (URISyntaxException e) {
-            throw new BusinessException(PharmyErrorCode.PHARMY_INFO_ERROR);
+            throw new BusinessException(PharmyErrorCode.PHARMACY_INFO_ERROR);
         }
     }
 
