@@ -6,9 +6,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class MovePillReq {
     @NotNull(message = "알약 시리얼 번호가 필요합니다.")
     @Schema(description = "알약 시리얼 번호")

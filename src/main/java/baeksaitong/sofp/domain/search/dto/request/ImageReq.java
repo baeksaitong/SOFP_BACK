@@ -3,11 +3,13 @@ package baeksaitong.sofp.domain.search.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class ImageReq {
     @Schema(description = "검색 이미지")
     @NotNull(message = "이미지가 필요합니다.")
