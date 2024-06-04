@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class PillInfoDto {
     private String name;
     private String enterpriseName;
@@ -24,7 +25,6 @@ public class PillInfoDto {
     private String cautionProfessional;
 
     @JsonCreator
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public PillInfoDto(@JsonProperty("body") Map<String,Object> body){
        if((Integer)body.get("totalCount") > 0){
            Map<String,Object> result = (Map<String, Object>)((List<Object>) body.get("items")).get(0);

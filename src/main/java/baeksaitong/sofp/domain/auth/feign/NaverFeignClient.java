@@ -3,7 +3,7 @@ package baeksaitong.sofp.domain.auth.feign;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverAgreement;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverProfile;
 import baeksaitong.sofp.domain.auth.dto.naver.NaverToken;
-import baeksaitong.sofp.global.config.FeignConfig;
+import baeksaitong.sofp.global.config.JsonFeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URI;
 
-@FeignClient(name = "naverClient", configuration = FeignConfig.class)
+@FeignClient(name = "naverClient", configuration = JsonFeignConfig.class)
 public interface NaverFeignClient {
     @PostMapping
     NaverToken getToken(URI baseUrl,
