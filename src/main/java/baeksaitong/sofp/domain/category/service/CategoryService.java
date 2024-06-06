@@ -123,7 +123,8 @@ public class CategoryService {
     }
 
     private List<Profile> getTargetProfiles(Profile profile) {
-        List<Profile> targetProfileList = calendarRepository.findTargetProfilesByOwnerProfile(profile);
+        //List<Profile> targetProfileList = calendarRepository.findTargetProfilesByOwnerProfile(profile);
+        List<Profile> targetProfileList = new ArrayList<>();
         targetProfileList.add(profile);
         return targetProfileList;
     }
