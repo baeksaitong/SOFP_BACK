@@ -10,9 +10,6 @@ on:
       - develop
     types:
       - closed
-  push:
-    branches:
-      - feature/ci-cd-change
 
 jobs:
   backend-docker-build-and-push:
