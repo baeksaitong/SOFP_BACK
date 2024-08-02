@@ -5,6 +5,11 @@ env:
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - develop
+    types:
+      - closed
   push:
     branches:
       - feature/ci-cd-change
