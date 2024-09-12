@@ -22,6 +22,7 @@ import baeksaitong.sofp.global.redis.service.RedisService;
 import baeksaitong.sofp.global.s3.service.AwsS3Service;
 import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -126,9 +127,11 @@ public class ProfileService {
 
         Profile profile = getProfile(profileId);
 
+        Hibernate.initialize(profile.getMember());
+
         profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());
 
-        if(profile.getImgUrl() != null){
+        if(req.getProfileImg() != null){
             setProfileImg(profile, req.getProfileImg());
         }
 
