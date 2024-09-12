@@ -128,7 +128,7 @@ public class ProfileService {
 
         profile.edit(req.getName(), req.getBirthday(), req.getGender(), req.getColor());
 
-        if(profile.getImgUrl() != null){
+        if(req.getProfileImg() != null){
             setProfileImg(profile, req.getProfileImg());
         }
 
