@@ -6,12 +6,14 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static baeksaitong.sofp.global.common.constants.Constants.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class CheckEmailCodeReq {
 
     @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 일치하지 않습니다.")

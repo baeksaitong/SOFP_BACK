@@ -6,11 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class MemberEditReq {
     @NotBlank(message = "비밀번호가 필요합니다.")
     @Schema(description = "비밀번호")

@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@ToString
 public class KeywordSearchDto {
     @Schema(description = "검색 키워드 - 알약 이름, 성분, 효능 정보",example = "가스디알정")
     private String keyword;

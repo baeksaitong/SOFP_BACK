@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ProfileReq {
     @NotNull(message = "이름이 필요합니다.")
     @Schema(description = "이름")

@@ -7,10 +7,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class MovePillReq {
     @NotNull(message = "알약 시리얼 번호가 필요합니다.")
     @Schema(description = "알약 시리얼 번호")
