@@ -1,0 +1,16 @@
+<included>
+    <appender name="CLOUD-WATCH" class="ca.pjer.logback.AwsLogsAppender">
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+        <logGroupName>${PROFILE}</logGroupName>
+        <logStreamUuidPrefix>${PROFILE}-log</logStreamUuidPrefix>
+        <logRegion>ap-northeast-2</logRegion>
+        <maxBatchLogEvents>50</maxBatchLogEvents>
+        <maxFlushTimeMillis>30000</maxFlushTimeMillis>
+        <maxBlockTimeMillis>5000</maxBlockTimeMillis>
+        <retentionTimeDays>0</retentionTimeDays>
+        <accessKeyId>${AWS_CLOUDWATCH_ACCESS_KEY}</accessKeyId>
+        <secretAccessKey>${AWS_CLOUDWATCH_SECRET_KEY}</secretAccessKey>
+    </appender>
+</included>
