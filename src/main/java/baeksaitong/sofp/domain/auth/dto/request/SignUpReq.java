@@ -16,6 +16,7 @@ import static baeksaitong.sofp.global.common.constants.Constants.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class SignUpReq {
     @NotBlank(message = "이름은 공백일 수 없습니다.")
     @Schema(description = "이름")

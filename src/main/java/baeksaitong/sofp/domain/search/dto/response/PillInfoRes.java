@@ -4,10 +4,12 @@ import baeksaitong.sofp.domain.search.dto.pillInfo.Doc;
 import baeksaitong.sofp.domain.search.dto.pillInfo.PillInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
+@ToString
 public class PillInfoRes {
     @Schema(description = "알약 이름")
     private String name;

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class CategoryEditReq {
     @Schema(description = "카테고리 이름")
     @NotNull(message = "카테고리 이름이 필요합니다.")

@@ -11,6 +11,7 @@ import static baeksaitong.sofp.global.common.constants.Constants.EMAIL_REGEXP;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class LoginReq {
     @Pattern(regexp = EMAIL_REGEXP, message = "이메일 형식이 일치하지 않습니다.")
     @Schema(description = "아이디(이메일)", example = "example@example.com")

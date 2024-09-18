@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import static baeksaitong.sofp.global.common.constants.Constants.EMAIL_REGEXP;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

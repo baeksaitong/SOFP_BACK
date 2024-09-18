@@ -4,10 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
+@ToString
 public class FavoriteReq {
     @Schema(description = "알약 고유 번호", example = "200808876")
     @NotNull(message = "알약 고유 번호가 필요합니다.")
