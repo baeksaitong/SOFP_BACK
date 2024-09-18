@@ -28,16 +28,18 @@ public class ExecutionLoggingAop {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = 0L;
+        String userName = "";
         if (!authentication.getPrincipal().equals("anonymousUser")) {
             Member customAuthUser = (Member) authentication.getPrincipal();
             userId = customAuthUser.getId();
+            userName = customAuthUser.getUsername();
         }
 
         String className = pjp.getSignature().getDeclaringType().getSimpleName();
         String methodName = pjp.getSignature().getName();
         String task = className + "." + methodName;
 
-        log.info("[Call Method] " + httpMethod + ": " + task + " | Request userId=" + userId.toString());
+        log.info("[Call Method] " + httpMethod + ": " + task + " | Request userId=" + userId.toString() + ", userName=" + userName);
 
         Object[] paramArgs = pjp.getArgs();
         StringBuilder loggingMessage = new StringBuilder();
