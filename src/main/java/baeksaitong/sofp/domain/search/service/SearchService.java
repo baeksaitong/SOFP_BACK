@@ -55,10 +55,13 @@ public class SearchService {
     @Value("${api.public-data.serviceKey}")
     private String serviceKey;
 
-    public KeywordRes findByKeyword(String encryptedProfileId, int limit, Long lastId, String keyword, String shape, String sign, String color, String formulation, String line) {
+    public KeywordRes findByKeyword(String encryptedProfileId, int limit, String encryptedLastId, String keyword, String shape, String sign, String color, String formulation, String line) {
         Long profileId = EncryptionUtil.decrypt(encryptedProfileId);
+        Long lastId = EncryptionUtil.decrypt(encryptedLastId);
 
         Profile profile = profileService.getProfile(profileId);
+
+        log.info("[Test] lastID : {}",lastId);
 
         KeywordSearchDto req = KeywordSearchDto.builder()
                 .keyword(keyword)
