@@ -38,7 +38,7 @@ public class SearchController {
     public ResponseEntity<KeywordRes> findByKeyword(
             @RequestParam @Schema(description = "프로필 ID") String profileId,
             @RequestParam(required = false, defaultValue = "10") @Schema(description = "결과 요소 갯수 - 기본값 : 10") int limit,
-            @RequestParam(required = false) @Schema(description = "추가 요청시 이전 결과의 마지막 알약 요소 ID") Long lastId,
+            @RequestParam(required = false) @Schema(description = "추가 요청시 이전 결과의 마지막 알약 요소 ID") String lastId,
             @RequestParam(required = false) @Schema(description = "검색 키워드 - 알약 이름, 성분, 효능 정보",example = "가스디알정") String keyword,
             @RequestParam(required = false) @Schema(description = "알약 모양", example = "원형") String shape,
             @RequestParam(required = false) @Schema(description = "알약에 적힌 기호", example = "IDG") String sign,
