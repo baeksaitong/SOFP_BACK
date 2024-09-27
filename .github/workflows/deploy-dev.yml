@@ -1,4 +1,4 @@
-name: ✨ SOFP backend CD ✨
+name: ✨ SOFP Backend - CI/CD(Dev) ✨
 
 env:
   DOCKER_HUB_REPOSITORY: baeksaitong/sofp-back
@@ -15,6 +15,7 @@ jobs:
   backend-docker-build-and-push:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    environment: Dev
 
     steps:
       - name: ✨ Checkout repository
@@ -46,10 +47,10 @@ jobs:
           
           # yml 파일 생성
           touch ./application.yml
-          echo "$APPLICATION_DEV" > ./application.yml
+          echo "$APPLICATION" > ./application.yml
 
         env:
-          APPLICATION_DEV: ${{ secrets.APPLICATION_DEV }}
+          APPLICATION: ${{ secrets.APPLICATION }}
         shell: bash
 
       - name: ✨ Gradlew 권한 설정
@@ -74,7 +75,7 @@ jobs:
           tags: ${{ env.DOCKER_HUB_REPOSITORY }}:latest
 
   backend-docker-pull-and-run:
-    runs-on: [self-hosted, prod]
+    runs-on: [self-hosted, dev]
     if: ${{ needs.backend-docker-build-and-push.result == 'success' }}
     needs: [ backend-docker-build-and-push ]
     steps:
