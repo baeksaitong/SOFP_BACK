@@ -1,7 +1,7 @@
 name: ✨ SOFP Backend - CI/CD(Test) ✨
 
 env:
-  DOCKER_HUB_REPOSITORY: baeksaitong/sofp-back
+  DOCKER_HUB_REPOSITORY: ${{ secrets.DOCKER_HUB_REPOSITORY }}
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 jobs:
   backend-docker-build-and-push:
     runs-on: ubuntu-latest
-    environment: Prod
+    environment: Test
 
     steps:
       - name: ✨ Checkout repository
@@ -47,7 +47,7 @@ jobs:
           echo "APPLICATION_PROD" > ./application.yml
 
         env:
-          APPLICATION_PROD: ${{ secrets.APPLICATION_PROD }}
+          APPLICATION_PROD: ${{ secrets.APPLICATION }}
         shell: bash
 
       - name: ✨ Gradlew 권한 설정

@@ -1,7 +1,7 @@
 name: ✨ SOFP Backend - CI/CD(Prod) ✨
 
 env:
-  DOCKER_HUB_REPOSITORY: baeksaitong/sofp-back
+  DOCKER_HUB_REPOSITORY: 102satong2/sofp-prod
 
 on:
   workflow_dispatch:
