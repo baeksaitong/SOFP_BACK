@@ -17,8 +17,6 @@ import baeksaitong.sofp.domain.profile.entity.Profile;
 import baeksaitong.sofp.domain.profile.error.ProfileErrorCode;
 import baeksaitong.sofp.domain.profile.repository.ProfileRepository;
 import baeksaitong.sofp.global.error.exception.BusinessException;
-import baeksaitong.sofp.global.redis.constants.RedisPrefix;
-import baeksaitong.sofp.global.redis.service.RedisService;
 import baeksaitong.sofp.global.s3.service.AwsS3Service;
 import baeksaitong.sofp.global.util.EncryptionUtil;
 import lombok.RequiredArgsConstructor;
@@ -43,27 +41,10 @@ public class ProfileService {
     private final IntakeTimeRepository intakeTimeRepository;
     private final IntakeDayRepository intakeDayRepository;
     private final AwsS3Service awsS3Service;
-    private final RedisService redisService;
 
     public Profile getProfile(Long id){
-        if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
-            return (Profile) redisService.get(RedisPrefix.PROFILE, String.valueOf(id));
-        }
-
-        Profile profile = profileRepository.findById(id)
+        return profileRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProfileErrorCode.NO_SUCH_PROFILE));
-
-        profile.initialize();
-
-        redisService.save(RedisPrefix.PROFILE, String.valueOf(id), profile, RedisPrefix.PROFILE.getDuration());
-
-        return profile;
-    }
-
-    private void deleteProfileCache(Long id){
-        if(redisService.hasKey(RedisPrefix.PROFILE, String.valueOf(id))){
-            redisService.delete(RedisPrefix.PROFILE, String.valueOf(id));
-        }
     }
 
     public ProfileListRes getProfileList(Member member) {
@@ -119,7 +100,6 @@ public class ProfileService {
         historyRepository.deleteById(profileId);
 
         profileRepository.delete(profile);
-        deleteProfileCache(profileId);
     }
 
     public ProfileDetailRes editProfile(ProfileReq req, String encryptedProfileId) {
@@ -136,8 +116,6 @@ public class ProfileService {
         }
 
         profileRepository.save(profile);
-
-        deleteProfileCache(profileId);
 
         return new ProfileDetailRes(profile);
     }
