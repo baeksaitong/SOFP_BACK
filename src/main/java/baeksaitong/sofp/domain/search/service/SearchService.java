@@ -6,14 +6,14 @@ import baeksaitong.sofp.domain.health.repository.ProfileDiseaseAllergyRepository
 import baeksaitong.sofp.domain.history.service.HistoryService;
 import baeksaitong.sofp.domain.pill.repository.PillRepository;
 import baeksaitong.sofp.domain.profile.service.ProfileService;
+import baeksaitong.sofp.domain.search.dto.ai.AIAnalyzeDto;
 import baeksaitong.sofp.domain.search.dto.pillInfo.Doc;
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
 import baeksaitong.sofp.domain.search.dto.KeywordSearchDto;
-import baeksaitong.sofp.domain.search.dto.response.KeywordDto;
-import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
+import baeksaitong.sofp.domain.search.dto.response.*;
 import baeksaitong.sofp.domain.search.dto.pillInfo.PillInfoDto;
-import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.error.SearchErrorCode;
+import baeksaitong.sofp.domain.search.feign.AIFeignClient;
 import baeksaitong.sofp.domain.search.feign.PillFeignClient;
 import baeksaitong.sofp.domain.favorite.entity.Favorite;
 import baeksaitong.sofp.domain.pill.entity.Pill;
@@ -44,6 +44,7 @@ public class SearchService {
 
     private final PillRepository pillRepository;
     private final PillFeignClient pillFeignClient;
+    private final AIFeignClient aiFeignClient;
     private final FavoriteRepository favoriteRepository;
     private final HistoryService historyService;
     private final ProfileService profileService;
@@ -60,8 +61,6 @@ public class SearchService {
         Long lastId = EncryptionUtil.decrypt(encryptedLastId);
 
         Profile profile = profileService.getProfile(profileId);
-
-        log.info("[Test] lastID : {}",lastId);
 
         KeywordSearchDto req = KeywordSearchDto.builder()
                 .keyword(keyword)
@@ -141,7 +140,15 @@ public class SearchService {
         }
     }
 
-    public void findByImage(ImageReq req) {
+    public ImageRes findByImage(ImageReq req) {
+
+        AIAnalyzeDto aiAnalyzeReq = aiFeignClient.getAIAnalyze(req.getImages().get(0));
+
+        List<KeywordDto> result = findByKeyword(req.getProfileId(), req.getLimit(), req.getLastId(), null, aiAnalyzeReq.getShape(), null, aiAnalyzeReq.getColor().get(0), null, null).result();
+        return new ImageRes(
+                new FilterDto(aiAnalyzeReq.getShape(), null, null, null, null, aiAnalyzeReq.getColor().get(0), null),
+                result
+        );
 
     }
 

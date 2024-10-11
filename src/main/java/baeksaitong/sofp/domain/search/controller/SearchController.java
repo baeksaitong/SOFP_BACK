@@ -1,6 +1,7 @@
 package baeksaitong.sofp.domain.search.controller;
 
 import baeksaitong.sofp.domain.search.dto.request.ImageReq;
+import baeksaitong.sofp.domain.search.dto.response.ImageRes;
 import baeksaitong.sofp.domain.search.dto.response.KeywordRes;
 import baeksaitong.sofp.domain.search.dto.response.PillInfoRes;
 import baeksaitong.sofp.domain.search.service.SearchService;
@@ -71,8 +72,8 @@ public class SearchController {
             @ApiResponse(responseCode = "200", description = "검색 결과에 따른 알약 리스트 및 경고 여부를 제공합니다.")
     })
     @PostMapping(value = "/image", consumes = "multipart/form-data")
-    public ResponseEntity<?> findByImage(@ModelAttribute @Validated ImageReq req){
-        searchService.findByImage(req);
-        return BaseResponse.ok(req.getPage().toString() + ", " + req.getLimit().toString());
+    public ResponseEntity<ImageRes> findByImage(@ModelAttribute @Validated ImageReq req){
+        ImageRes res = searchService.findByImage(req);
+        return BaseResponse.ok(res);
     }
 }
