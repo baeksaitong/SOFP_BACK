@@ -23,7 +23,10 @@ public record KeywordDto(
         @Schema(description = "경고 여부")
         Boolean isWaring,
         @Schema(description = "즐겨찾기에 존재 시 저장된 즐겨찾기 ID")
-        Long FavoriteId
+        Long FavoriteId,
+        @Schema(description = "알약 필터 정보")
+        FilterDto filter
+
 ) {
         public KeywordDto(Pill pill, Boolean isWaring, Long favoriteId){
                 this(pill.getEncryptedId(),
@@ -35,7 +38,8 @@ public record KeywordDto(
                         pill.getChart(),
                         pill.getEnterprise(),
                         isWaring,
-                        favoriteId
+                        favoriteId,
+                        new FilterDto(pill)
                 );
         }
 }
