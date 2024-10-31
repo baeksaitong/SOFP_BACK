@@ -1,5 +1,7 @@
 package baeksaitong.sofp.domain.verification.service;
 
+import baeksaitong.sofp.domain.auth.dto.request.CheckIdReq;
+import baeksaitong.sofp.domain.auth.service.AuthService;
 import baeksaitong.sofp.domain.verification.error.MailErrorCode;
 import baeksaitong.sofp.global.error.exception.BusinessException;
 import baeksaitong.sofp.global.redis.service.RedisService;
@@ -16,6 +18,7 @@ public class VerificationService {
 
     private final MailService mailService;
     private final RedisService redisService;
+    private final AuthService authService;
 
     public void sendEmailCode(String email) {
         String code = makeRandomNumber(6);
@@ -25,6 +28,7 @@ public class VerificationService {
                         "<br> 유효시간은 " +  SING_UP.getDuration().toMinutes() + "분 입니다." +
                         "<br> 인증번호를 제대로 입력해주세요";
 
+        authService.checkId(new CheckIdReq(email));
         mailService.mailSend(email,title,content);
         redisService.save(SING_UP, email, code, SING_UP.getDuration());
     }

@@ -146,7 +146,7 @@ public class SearchService {
 
         List<KeywordDto> result = findByKeyword(req.getProfileId(), req.getLimit(), req.getLastId(), null, aiAnalyzeReq.getShape(), null, aiAnalyzeReq.getColor().get(0), null, null).result();
         return new ImageRes(
-                new FilterDto(aiAnalyzeReq.getShape(), null, null, null, null, aiAnalyzeReq.getColor().get(0), null),
+                new FilterDto(aiAnalyzeReq.getShape(), null, null, null, null, aiAnalyzeReq.getColor().get(0), null, null),
                 result
         );
 
