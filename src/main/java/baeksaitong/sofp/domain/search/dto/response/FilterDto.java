@@ -17,7 +17,9 @@ public record FilterDto(
         @Schema(description = "앞면 색상")
         String colorFront,
         @Schema(description = "뒷면 색상")
-        String colorBack
+        String colorBack,
+        @Schema(description = "제형 정보")
+        String formClassification
 ) {
     public FilterDto(Pill pill) {
         this(pill.getShape(),
@@ -26,6 +28,8 @@ public record FilterDto(
                 pill.getLineFront(),
                 pill.getLineBack(),
                 pill.getColorFront(),
-                pill.getColorBack());
+                pill.getColorBack(),
+                pill.getFormClassification()
+        );
     }
 }
