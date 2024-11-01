@@ -144,9 +144,9 @@ public class SearchService {
 
         AIAnalyzeDto aiAnalyzeReq = aiFeignClient.getAIAnalyze(req.getImages().get(0));
 
-        List<KeywordDto> result = findByKeyword(req.getProfileId(), req.getLimit(), req.getLastId(), null, aiAnalyzeReq.getShape(), null, aiAnalyzeReq.getColor().get(0), null, null).result();
+        List<KeywordDto> result = findByKeyword(req.getProfileId(), req.getLimit(), req.getLastId(), null, aiAnalyzeReq.getColorList().get(1), null, aiAnalyzeReq.color(), null, null).result();
         return new ImageRes(
-                new FilterDto(aiAnalyzeReq.getShape(), null, null, null, null, aiAnalyzeReq.getColor().get(0), null, null),
+                new FilterDto(aiAnalyzeReq.shape(), null, null, null, null, aiAnalyzeReq.getColorList().get(1), aiAnalyzeReq.getColorList().get(1), null),
                 result
         );
 
