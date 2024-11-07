@@ -143,10 +143,17 @@ public class SearchService {
     public ImageRes findByImage(ImageReq req) {
 
         AIAnalyzeDto aiAnalyzeReq = aiFeignClient.getAIAnalyze(req.getImages().get(0));
+        List<KeywordDto> result = null;
 
-        List<KeywordDto> result = findByKeyword(req.getProfileId(), req.getLimit(), req.getLastId(), null, aiAnalyzeReq.getColorList().get(1), null, aiAnalyzeReq.color(), null, null).result();
+        String color = aiAnalyzeReq.getColorList().get(0);
+        for(String c : aiAnalyzeReq.getColorList()) {
+            color = c;
+            result = findByKeyword(req.getProfileId(), req.getLimit(), req.getLastId(), null, aiAnalyzeReq.shape(), null, color, null, null).result();
+
+            if(!result.isEmpty()) break;
+        }
         return new ImageRes(
-                new FilterDto(aiAnalyzeReq.shape(), null, null, null, null, aiAnalyzeReq.getColorList().get(1), aiAnalyzeReq.getColorList().get(1), null),
+                new FilterDto(aiAnalyzeReq.shape(), null, null, null, null, color, color, null),
                 result
         );
 
